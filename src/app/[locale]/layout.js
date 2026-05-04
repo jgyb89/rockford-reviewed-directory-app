@@ -6,6 +6,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Preloader from "@/components/common/Preloader";
 import BackToTop from "@/components/common/BackToTop";
+import CookieConsent from "@/components/common/CookieConsent";
 import { getViewer } from "@/lib/auth";
 import { getDictionary } from "@/lib/dictionaries";
 import Link from "next/link";
@@ -47,6 +48,7 @@ export default async function RootLayout({ children, params }) {
         <main>{children}</main>
         <Footer locale={locale} />
         <BackToTop />
+        <CookieConsent />
         <SpeedInsights />
       </body>
     </html>
