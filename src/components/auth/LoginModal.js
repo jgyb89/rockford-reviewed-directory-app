@@ -4,6 +4,7 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import PropTypes from "prop-types";
+import { useSearchParams } from 'next/navigation';
 import { handleLogin, handleGoogleLogin } from "@/lib/actions";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import Link from "next/link";
@@ -15,6 +16,8 @@ export default function LoginModal({ isOpen, onClose, dict = {}, locale = "en" }
   const [isUpdating, setIsUpdating] = useState(false);
   const [error, setError] = useState(null);
   const [mounted, setMounted] = useState(false);
+  const searchParams = useSearchParams();
+  const activationStatus = searchParams ? searchParams.get('activation') : null;
 
   useEffect(() => {
     setMounted(true);
@@ -87,6 +90,26 @@ export default function LoginModal({ isOpen, onClose, dict = {}, locale = "en" }
         </p>
 
         {error && <div className={styles['login-modal__error']}>{error}</div>}
+
+        {activationStatus === 'success' && (
+          <div style={{ 
+            backgroundColor: '#dcfce7', color: '#065f46', border: '1px solid #10b981',
+            padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem', 
+            textAlign: 'center', fontWeight: '500', fontSize: '0.9rem'
+          }}>
+            Account successfully activated! Please log in to continue.
+          </div>
+        )}
+
+        {activationStatus === 'invalid' && (
+          <div style={{ 
+            backgroundColor: '#fee2e2', color: '#991b1b', border: '1px solid #ef4444',
+            padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem', 
+            textAlign: 'center', fontWeight: '500', fontSize: '0.9rem'
+          }}>
+            This activation link is invalid or has already been used. If you already activated your account, you can log in below.
+          </div>
+        )}
 
         <form className={styles['login-modal__form']} onSubmit={handleSubmit}>
           <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
