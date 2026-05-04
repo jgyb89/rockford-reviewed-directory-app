@@ -16,11 +16,17 @@ const nextConfig = {
         port: "",
         pathname: "/wp-content/uploads/**",
       },
+      {
+        protocol: "https",
+        hostname: "wp.capecoralreviewed.com",
+        port: "",
+        pathname: "/wp-content/uploads/**",
+      },
     ],
   },
   experimental: {
     serverActions: {
-      allowedOrigins: ["capecoralreviewed.com", "staging.capecoralreviewed.com"],
+      allowedOrigins: ["capecoralreviewed.com", "staging.capecoralreviewed.com", "wp.capecoralreviewed.com"],
     },
   },
   async headers() {
