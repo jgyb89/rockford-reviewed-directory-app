@@ -223,8 +223,8 @@ export default function SearchModal({ isOpen, onClose, dict = {}, locale = "en" 
                           return (
                             <div key={`cat-${cat.slug}`} className={styles['search-modal__result-item']}>
                               <Link href={categoryHref} className={styles['search-modal__result-link']} onClick={onClose}>
-                                <span className={styles['search-modal__result-type']}>Category</span>
                                 <span className={styles['search-modal__result-title']}>{cat.name}</span>
+                                <span className={styles['search-modal__result-type']}>Category</span>
                               </Link>
                             </div>
                           );
@@ -234,8 +234,8 @@ export default function SearchModal({ isOpen, onClose, dict = {}, locale = "en" 
                         {searchResults.listings.map((listing) => (
                           <div key={`listing-${listing.slug}`} className={styles['search-modal__result-item']}>
                             <Link href={`/${locale}/listing/${listing.slug}`} className={styles['search-modal__result-link']} onClick={onClose}>
-                              <span className={styles['search-modal__result-type']}>Listing</span>
                               <span className={styles['search-modal__result-title']}>{listing.title}</span>
+                              <span className={styles['search-modal__result-type']}>Listing</span>
                             </Link>
                           </div>
                         ))}

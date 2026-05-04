@@ -9,26 +9,56 @@
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
+  width: 100%; /* FIX: Force full width */
 }
 
 .desktop-filters {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-  flex: 1;
+  justify-content: space-between; /* Pushes the two main groups apart */
+  width: 100%; /* FIX: Force full width */
+  flex: 1; /* FIX: Allow the container itself to stretch */
+  gap: 2rem;
 }
 
+/* The new left group containing Search and Open Now */
+.left-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex: 1; /* This forces the search bar area to stretch */
+}
+
+/* The new right group containing Sort, Rating, and Clear */
 .right-controls {
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-shrink: 0; /* Prevents the dropdowns from getting squished */
 }
 
-.mobile-controls {
-  display: none;
-  width: 100%;
-  justify-content: space-between;
+/* Ensure the search bar itself actually grows to fill the new space */
+.filter-group-search {
+  display: flex;
   align-items: center;
+  gap: 0.5rem;
+  flex: 1; 
+}
+
+.filter-input {
+  width: 100%; /* Stretch inside the growing container */
+  padding: 0.5rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #1e293b;
+  background: #ffffff;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.filter-input:focus {
+  border-color: #e04c4c;
 }
 
 .filter-group {
@@ -43,19 +73,95 @@
   color: #475569;
 }
 
-.filter-input, .filter-select {
+/* Custom Select Dropdown Container */
+.custom-select {
+  position: relative;
+  min-width: 160px;
+}
+
+/* The Clickable Button */
+.custom-select__button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
   padding: 0.5rem 1rem;
+  background: #ffffff;
   border: 1px solid #cbd5e1;
   border-radius: 8px;
   font-size: 0.95rem;
   color: #1e293b;
-  background: #fff;
-  outline: none;
-  transition: border-color 0.2s;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.filter-input:focus, .filter-select:focus {
+.custom-select__button:hover {
+  border-color: #94a3b8;
+}
+
+.custom-select__button:focus {
+  outline: none;
   border-color: #e04c4c;
+  box-shadow: 0 0 0 2px rgba(224, 76, 76, 0.1);
+}
+
+.custom-select__button[aria-expanded="true"] {
+  border-color: #e04c4c;
+}
+
+/* The Dropdown Menu List */
+.custom-select__menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  padding: 0.5rem 0;
+  z-index: 100;
+  list-style: none;
+  margin: 0;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+/* The Options Inside the Menu */
+.custom-select__option {
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  color: #334155;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.custom-select__option:hover,
+.custom-select__option:focus {
+  background-color: #f1f5f9;
+  color: #1e293b;
+  outline: none;
+}
+
+.custom-select__option--selected {
+  background-color: #fff1f1;
+  color: #e04c4c;
+  font-weight: 600;
+}
+
+.custom-select__option--selected:hover {
+  background-color: #ffe4e4;
+}
+
+/* Star Icons specific to Rating */
+.star-icon {
+  color: #f59e0b; /* Golden Yellow */
+  font-size: 1.1rem;
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
 }
 
 /* Custom Toggle Switch */
@@ -170,7 +276,16 @@ input:checked + .slider:before { transform: translateX(20px); }
   padding-bottom: 1rem;
 }
 
-@media (max-width: 900px) {
+@media (min-width: 768px) {
+  .mobile-controls {
+    display: none !important;
+  }
+  .desktop-filters {
+    display: flex !important;
+  }
+}
+
+@media (max-width: 767px) {
   .desktop-filters { display: none; }
   .btn-clear.desktop-only { display: none; }
   .mobile-controls { display: flex; }

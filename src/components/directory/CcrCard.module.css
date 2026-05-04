@@ -39,7 +39,7 @@
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
 }
 
-.ccr-card__image-container {
+.ccr-card__image-wrapper {
   width: 100%;
   height: 220px;
   position: relative;
@@ -47,6 +47,25 @@
   /* overflow: hidden; Removed to allow author avatar overlap */
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
+}
+
+.ccr-card__image {
+  object-fit: cover;
+  border-radius: 12px 12px 0 0;
+}
+
+/* Image Link Wrapper - Clickable only on Desktop */
+.ccr-card__image-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1; /* Keeps it below absolute badges and the favorite button */
+  pointer-events: none; /* Disabled on mobile by default to prevent accidental scroll-clicks */
+}
+
+@media (min-width: 768px) {
+  .ccr-card__image-link {
+    pointer-events: auto; /* Enabled on tablet/desktop */
+  }
 }
 
 /* Author Avatar Overlay */

@@ -55,16 +55,18 @@ export default function CcrCard({ listing, currentUser, locale = 'en' }) {
         className={styles['ccr-card']} 
         style={{ position: 'relative', zIndex: toastMessage ? 50 : 1 }}
       >
-        <div className={styles['ccr-card__image-container']}>
+        <div className={styles['ccr-card__image-wrapper']}>
           {isFeatured && <div className={styles['ccr-card__badge']}>Featured</div>}
-          <Image
-            src={imageUrl}
-            alt={imageAlt}
-            fill
-            style={{ objectFit: "cover", borderRadius: '12px 12px 0 0' }}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            priority={false}
-          />
+          <Link href={listingUrl} className={styles['ccr-card__image-link']} tabIndex="-1" aria-hidden="true">
+            <Image
+              src={imageUrl}
+              alt={imageAlt}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className={styles['ccr-card__image']}
+              priority={false}
+            />
+          </Link>
           {/* Author Avatar Overlay */}
           <div className={`${styles['ccr-card__author-wrapper']} ${isVerified ? styles['ccr-card__author-wrapper--verified'] : ''}`}>
             <div className={styles['ccr-card__author-img-container']}>
