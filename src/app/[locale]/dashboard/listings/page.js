@@ -2,9 +2,14 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import DeleteListingButton from '@/components/dashboard/DeleteListingButton';
+import Pagination from '@/components/common/Pagination';
 
-export default async function MyListingsPage({ params }) {
+export default async function MyListingsPage({ params, searchParams }) {
   const { locale } = await params;
+  const resolvedSearchParams = await searchParams;
+  const page = parseInt(resolvedSearchParams?.page || '1', 10);
+  const ITEMS_PER_PAGE = 10;
+  
   const cookieStore = await cookies();
   const authToken = cookieStore.get('authToken')?.value;
 
@@ -51,6 +56,7 @@ export default async function MyListingsPage({ params }) {
   }
 
   const listings = viewer.ccrlistings?.nodes || [];
+  const paginatedListings = listings.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
   return (
     <div className="my-listings-page">
@@ -75,7 +81,7 @@ export default async function MyListingsPage({ params }) {
         </div>
       ) : (
         <div className="listings-grid" style={{ display: 'grid', gap: '1.5rem' }}>
-          {listings.map((listing) => (
+          {paginatedListings.map((listing) => (
             <div key={listing.databaseId} className="listing-item" style={{ backgroundColor: '#ffffff', padding: '1.5rem 2rem', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)', border: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
                 <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.2rem' }}>{listing.title}</h3>
@@ -96,6 +102,7 @@ export default async function MyListingsPage({ params }) {
               </div>
             </div>
           ))}
+          <Pagination totalItems={listings.length} itemsPerPage={ITEMS_PER_PAGE} />
         </div>
       )}
     </div>

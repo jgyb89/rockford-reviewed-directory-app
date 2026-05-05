@@ -5,10 +5,12 @@ import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { deleteUserReview } from '@/lib/actions';
 import ReviewModal from '../directory/ReviewModal';
+import Pagination from '../common/Pagination';
 import styles from './MyReviews.module.css';
 
 export default function MyReviews({ reviews: initialReviews, locale = 'en' }) {
   const [reviews, setReviews] = useState(initialReviews || []);
+
   const [editingReview, setEditingReview] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   
@@ -16,6 +18,10 @@ export default function MyReviews({ reviews: initialReviews, locale = 'en' }) {
   const [reviewToDelete, setReviewToDelete] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
+  const paginatedReviews = reviews.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
   const handleDeleteClick = (review) => {
     setReviewToDelete(review);
@@ -77,7 +83,7 @@ export default function MyReviews({ reviews: initialReviews, locale = 'en' }) {
   return (
     <div className={styles['my-reviews']}>
       <ul className={styles['my-reviews__list']}>
-        {reviews.map((review) => {
+        {paginatedReviews.map((review) => {
           const listing = review.reviewFields?.relatedListing?.nodes?.[0];
           const listingUrl = listing ? `/${locale}/listing/${listing.slug}` : '#';
           const formattedDate = review.date ? new Date(review.date).toLocaleDateString('en-US', {
@@ -161,6 +167,13 @@ export default function MyReviews({ reviews: initialReviews, locale = 'en' }) {
           );
         })}
       </ul>
+
+      <Pagination 
+        totalItems={reviews.length} 
+        itemsPerPage={ITEMS_PER_PAGE} 
+        currentPageProp={currentPage} 
+        onPageChange={setCurrentPage} 
+      />
 
       {/* Edit Review Modal */}
       <ReviewModal

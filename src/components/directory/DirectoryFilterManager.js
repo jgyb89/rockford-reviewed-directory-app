@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import PropTypes from "prop-types";
 import CcrCardGrid from "./CcrCardGrid";
 import DirectoryFilters from "./DirectoryFilters";
+import Pagination from "../common/Pagination";
 import styles from "./DirectoryFilterManager.module.css";
 import { checkIfOpenNow } from '@/lib/timeUtils';
 
@@ -29,19 +30,20 @@ export default function DirectoryFilterManager({ listings, currentUser, dict = {
   const openNowFilter = searchParams.get('open') === 'true';
   const sortByFilter = searchParams.get('sort') || 'newest';
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 12;
+
   const filteredAndSortedListings = useMemo(() => {
     let result = [...listings];
-
+    // ... filtering and sorting logic
+    // (I will keep the logic as is but I need to make sure I don't break the useMemo)
+    
     // Filter by In-Page Category or Directory Type
     if (categoryFilter) {
       const filterTarget = categoryFilter.toLowerCase();
       result = result.filter((listing) => {
-        // Check if it matches a directoryType slug
         const matchesDirType = listing.directoryTypes?.nodes?.some(node => node.slug === filterTarget);
-        
-        // Check if it matches a specific category slug
         const matchesCategory = listing.ccrlistingcategories?.nodes?.some(node => node.slug === filterTarget);
-        
         return matchesDirType || matchesCategory;
       });
     }
@@ -50,13 +52,9 @@ export default function DirectoryFilterManager({ listings, currentUser, dict = {
     if (textSearchFilter) {
       const target = textSearchFilter.toLowerCase();
       result = result.filter((listing) => {
-        // Search Title
         if (listing.title?.toLowerCase().includes(target)) return true;
-        // Search Description/Content
         if (listing.content?.toLowerCase().includes(target)) return true;
-        // Search Sub-Categories
         if (listing.ccrlistingcategories?.nodes?.some(node => node.name.toLowerCase().includes(target))) return true;
-
         return false;
       });
     }
@@ -88,6 +86,11 @@ export default function DirectoryFilterManager({ listings, currentUser, dict = {
     return result;
   }, [listings, categoryFilter, textSearchFilter, ratingFilter, openNowFilter, sortByFilter]);
 
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [categoryFilter, textSearchFilter, ratingFilter, openNowFilter, sortByFilter]);
+
   return (
     <div className={styles['directory-filter-manager']}>
       {/* The Revamped Filter Bar */}
@@ -105,7 +108,19 @@ export default function DirectoryFilterManager({ listings, currentUser, dict = {
           </p>
         </div>
       ) : (
-        <CcrCardGrid listings={filteredAndSortedListings} currentUser={currentUser} locale={locale} />
+        <>
+          <CcrCardGrid 
+            listings={filteredAndSortedListings.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)} 
+            currentUser={currentUser} 
+            locale={locale} 
+          />
+          <Pagination 
+            totalItems={filteredAndSortedListings.length} 
+            itemsPerPage={ITEMS_PER_PAGE} 
+            currentPageProp={currentPage} 
+            onPageChange={setCurrentPage} 
+          />
+        </>
       )}
     </div>
   );
