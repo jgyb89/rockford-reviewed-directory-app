@@ -86,7 +86,7 @@ export default function CookieConsent() {
               <details className={styles.accordion}>
                 <summary className={styles.accordionSummary}>
                   Preferences
-                  <label className={styles.toggle} onClick={e => e.stopPropagation()}>
+                  <label className={styles.toggle} onClick={e => e.stopPropagation()} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') e.stopPropagation(); }}>
                     <input type="checkbox" checked={preferences.preferences} onChange={() => togglePref('preferences')} />
                     <span className={styles.slider}></span>
                   </label>
@@ -99,7 +99,7 @@ export default function CookieConsent() {
               <details className={styles.accordion}>
                 <summary className={styles.accordionSummary}>
                   Statistics
-                  <label className={styles.toggle} onClick={e => e.stopPropagation()}>
+                  <label className={styles.toggle} onClick={e => e.stopPropagation()} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') e.stopPropagation(); }}>
                     <input type="checkbox" checked={preferences.statistics} onChange={() => togglePref('statistics')} />
                     <span className={styles.slider}></span>
                   </label>
@@ -112,7 +112,7 @@ export default function CookieConsent() {
               <details className={styles.accordion}>
                 <summary className={styles.accordionSummary}>
                   Marketing
-                  <label className={styles.toggle} onClick={e => e.stopPropagation()}>
+                  <label className={styles.toggle} onClick={e => e.stopPropagation()} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') e.stopPropagation(); }}>
                     <input type="checkbox" checked={preferences.marketing} onChange={() => togglePref('marketing')} />
                     <span className={styles.slider}></span>
                   </label>

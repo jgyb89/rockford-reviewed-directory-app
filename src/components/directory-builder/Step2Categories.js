@@ -176,10 +176,19 @@ const Step2Categories = ({ formData, updateFormData, nextStep, prevStep }) => {
                 {searchResults.map(suggestion => (
                   <li
                     key={suggestion.slug}
+                    tabIndex={0}
+                    role="button"
                     onMouseDown={(e) => {
                       e.preventDefault();
                       handleCategoryToggle(suggestion.slug);
                       setCatInput('');
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleCategoryToggle(suggestion.slug);
+                        setCatInput('');
+                      }
                     }}
                     style={{
                       padding: '0.6rem 1rem', cursor: 'pointer',
@@ -187,6 +196,8 @@ const Step2Categories = ({ formData, updateFormData, nextStep, prevStep }) => {
                     }}
                     onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f1f5f9'}
                     onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                    onFocus={(e) => e.currentTarget.style.backgroundColor = '#f1f5f9'}
+                    onBlur={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                   >
                     <span style={{ fontWeight: 600 }}>{suggestion.name.slice(0, catInput.length)}</span>
                     <span>{suggestion.name.slice(catInput.length)}</span>

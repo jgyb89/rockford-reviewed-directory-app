@@ -273,9 +273,17 @@ export default function DirectoryFilters() {
                     <li 
                       key={option.value}
                       className={`${styles['custom-select__option']} ${currentRating.toString() === option.value ? styles['custom-select__option--selected'] : ''}`}
+                      tabIndex={0}
+                      role="button"
                       onClick={() => {
                         updateFilter('rating', option.value === '0' ? '' : option.value);
                         setOpenDropdown(null);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          updateFilter('rating', option.value === '0' ? '' : option.value);
+                          setOpenDropdown(null);
+                        }
                       }}
                       style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '2px' }}
                     >
@@ -354,9 +362,17 @@ export default function DirectoryFilters() {
                     <li 
                       key={option.value}
                       className={`${styles['custom-select__option']} ${currentSort === option.value ? styles['custom-select__option--selected'] : ''}`}
+                      tabIndex={0}
+                      role="button"
                       onClick={() => {
                         updateFilter('sort', option.value);
                         setOpenDropdown(null);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          updateFilter('sort', option.value);
+                          setOpenDropdown(null);
+                        }
                       }}
                     >
                       {option.label}
@@ -390,9 +406,17 @@ export default function DirectoryFilters() {
                     <li 
                       key={option.value}
                       className={`${styles['custom-select__option']} ${currentRating.toString() === option.value ? styles['custom-select__option--selected'] : ''}`}
+                      tabIndex={0}
+                      role="button"
                       onClick={() => {
                         updateFilter('rating', option.value === '0' ? '' : option.value);
                         setOpenDropdown(null);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          updateFilter('rating', option.value === '0' ? '' : option.value);
+                          setOpenDropdown(null);
+                        }
                       }}
                       style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '2px' }}
                     >
