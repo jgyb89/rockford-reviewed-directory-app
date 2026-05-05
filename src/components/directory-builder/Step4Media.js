@@ -52,6 +52,10 @@ function FeaturedImageSection({
             borderRadius: "12px",
             textAlign: "center",
             transition: "all 0.2s ease",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "0.75rem",
           }}
         >
           <span
@@ -59,12 +63,11 @@ function FeaturedImageSection({
             style={{
               fontSize: "2.5rem",
               color: "#94a3b8",
-              marginBottom: "0.5rem",
             }}
           >
             add_photo_alternate
           </span>
-          <p style={{ margin: "0 0 1rem 0", color: "#475569" }}>
+          <p style={{ margin: 0, color: "#475569" }}>
             Drag & drop your featured image here, or
           </p>
           <input
@@ -80,11 +83,12 @@ function FeaturedImageSection({
               cursor: "pointer",
               backgroundColor: "#fff",
               border: "1px solid #cbd5e1",
-              padding: "0.5rem 1rem",
+              padding: "0.5rem 1.25rem",
               borderRadius: "6px",
               color: "#1e293b",
               fontWeight: 600,
               display: "inline-block",
+              fontSize: "0.9rem",
             }}
           >
             Browse Files
@@ -291,18 +295,26 @@ function GallerySection({
             )}
           </div>
         ) : (
-          <div style={{ textAlign: "center", padding: "1rem 0" }}>
+          <div
+            style={{
+              textAlign: "center",
+              padding: "1rem 0",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "0.75rem",
+            }}
+          >
             <span
               className="material-symbols-outlined"
               style={{
                 fontSize: "2.5rem",
                 color: "#94a3b8",
-                marginBottom: "0.5rem",
               }}
             >
               collections
             </span>
-            <p style={{ margin: "0 0 1rem 0", color: "#475569" }}>
+            <p style={{ margin: 0, color: "#475569" }}>
               Drag & drop your gallery images here
             </p>
             <input
@@ -319,11 +331,12 @@ function GallerySection({
                 cursor: "pointer",
                 backgroundColor: "#fff",
                 border: "1px solid #cbd5e1",
-                padding: "0.5rem 1rem",
+                padding: "0.5rem 1.25rem",
                 borderRadius: "6px",
                 color: "#1e293b",
                 fontWeight: 600,
                 display: "inline-block",
+                fontSize: "0.9rem",
               }}
             >
               Browse Files

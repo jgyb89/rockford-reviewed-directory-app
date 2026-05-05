@@ -201,17 +201,29 @@ function useEditListingForm(initialData) {
   const [pendingCrop, setPendingCrop] = useState(null); // { file, fieldType }
 
   // Hierarchical Category States
+  const allInitialSlugs = useMemo(() => initialData.ccrlistingcategories?.nodes?.map((n) => n.slug) || [], [initialData]);
+  
+  const initialMainCat = useMemo(() => {
+    // 1. Check if a parent slug is already in our list of categories
+    const parent = ALL_CATEGORIES.find(c => c.isParent && allInitialSlugs.includes(c.slug));
+    if (parent) return parent;
+    
+    // 2. Otherwise, find the parent of the first child category found
+    const firstSub = ALL_CATEGORIES.find(c => !c.isParent && allInitialSlugs.includes(c.slug));
+    if (firstSub?.parentSlug) {
+      return ALL_CATEGORIES.find(p => p.slug === firstSub.parentSlug);
+    }
+    return null;
+  }, [allInitialSlugs]);
+
   const initialDirectoryType =
     initialData.directoryTypes?.nodes?.[0]?.slug || "";
-  const initialCategories =
-    initialData.ccrlistingcategories?.nodes?.map((n) => n.slug) || [];
-  const [selectedParentCategory, setSelectedParentCategory] = useState(null);
 
   const [formData, setFormData] = useState({
     title: initialData.title || "",
     content: formatContentForTextarea(initialData.content),
     category: initialDirectoryType,
-    categories: initialCategories,
+    categories: allInitialSlugs.filter(slug => slug !== initialMainCat?.slug),
     addressStreet: initialData.listingdata?.addressStreet || "",
     addressCity: initialData.listingdata?.addressCity || "",
     addressState: initialData.listingdata?.addressState || "",
@@ -229,19 +241,9 @@ function useEditListingForm(initialData) {
     }, {}),
   });
 
-  // Initialize selectedParentCategory
-  useEffect(() => {
-    if (formData.categories?.length > 0) {
-      const firstCatSlug = formData.categories[0];
-      const childCat = ALL_CATEGORIES.find((c) => c.slug === firstCatSlug);
-      if (childCat?.parentSlug) {
-        const parent = ALL_CATEGORIES.find(
-          (c) => c.slug === childCat.parentSlug,
-        );
-        setSelectedParentCategory(parent);
-      }
-    }
-  }, []);
+  const [selectedParentCategory, setSelectedParentCategory] = useState(initialMainCat);
+
+  // No longer need the initialization useEffect since we do it in useState
 
   const [socialErrors, setSocialErrors] = useState(
     formData.socialUrls.map(() => ""),
@@ -453,12 +455,18 @@ function useEditListingForm(initialData) {
         return acc;
       }, {});
 
+      // Capture both category fields from your form state
+      const categorySelections = [
+        selectedParentCategory?.slug,
+        ...(formData.categories || [])
+      ].filter(Boolean);
+
       const payload = {
         title: formData.title,
         content: formData.content,
         featuredImageId,
         category: formData.category,
-        categories: formData.categories,
+        categories: categorySelections,
         listingdata: {
           ...formData,
           socialUrl: formData.socialUrls.filter((u) => u.trim()).join(","),
@@ -968,6 +976,7 @@ const MediaGallerySection = ({
     featured: false,
     gallery: false,
   });
+  const [isHoveringFeatured, setIsHoveringFeatured] = useState(false);
 
   const handleDragOver = (e, field) => {
     e.preventDefault();
@@ -999,8 +1008,21 @@ const MediaGallerySection = ({
             textAlign: "center",
           }}
         >
+          <input
+            type="file"
+            id="fi"
+            accept="image/*"
+            onChange={(e) => handleFileChange(e.target.files, "featured")}
+            style={{ display: "none" }}
+            disabled={disabled}
+          />
+
           {existingFeatured || newFeatured ? (
             <div
+              className="featured-image-container"
+              onMouseEnter={() => setIsHoveringFeatured(true)}
+              onMouseLeave={() => setIsHoveringFeatured(false)}
+              onClick={() => !disabled && document.getElementById("fi").click()}
               style={{
                 position: "relative",
                 width: "200px",
@@ -1009,6 +1031,7 @@ const MediaGallerySection = ({
                 borderRadius: "8px",
                 overflow: "hidden",
                 border: "1px solid #e2e8f0",
+                cursor: disabled ? "default" : "pointer",
               }}
             >
               <Image
@@ -1022,10 +1045,61 @@ const MediaGallerySection = ({
                 unoptimized={!!newFeatured}
                 style={{ objectFit: "cover" }}
               />
+
+              {!disabled && (
+                <div
+                  className="featured-image-overlay"
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    backgroundColor: "rgba(0, 0, 0, 0.6)",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "0.5rem",
+                    color: "#ffffff",
+                    opacity: isHoveringFeatured ? 1 : 0,
+                    transition: "opacity 0.2s ease",
+                    zIndex: 10,
+                    padding: "1rem",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: "0.9rem",
+                      fontWeight: "500",
+                      textAlign: "center",
+                      textShadow: "0 2px 4px rgba(0,0,0,0.5)",
+                      lineHeight: "1.2",
+                    }}
+                  >
+                    Click to change Featured Image
+                  </span>
+
+                  <div
+                    style={{
+                      padding: "0.4rem 1rem",
+                      backgroundColor: "#e04c4c",
+                      color: "white",
+                      borderRadius: "6px",
+                      fontWeight: "600",
+                      fontSize: "0.8rem",
+                      boxShadow: "0 4px 6px rgba(0,0,0,0.2)",
+                    }}
+                  >
+                    Change Image
+                  </div>
+                </div>
+              )}
+
               {!disabled && (
                 <button
                   type="button"
-                  onClick={handleRemoveFeatured}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemoveFeatured();
+                  }}
                   style={{
                     position: "absolute",
                     top: "0.5rem",
@@ -1037,6 +1111,7 @@ const MediaGallerySection = ({
                     width: "28px",
                     height: "28px",
                     cursor: "pointer",
+                    zIndex: 20,
                   }}
                 >
                   <span
@@ -1049,35 +1124,39 @@ const MediaGallerySection = ({
               )}
             </div>
           ) : (
-            <>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "0.75rem",
+              }}
+            >
               <span
                 className="material-symbols-outlined"
                 style={{ fontSize: "2.5rem", color: "#94a3b8" }}
               >
                 add_photo_alternate
               </span>
-              <p>Drag & drop featured image, or</p>
-              <input
-                type="file"
-                id="fi"
-                accept="image/*"
-                onChange={(e) => handleFileChange(e.target.files, "featured")}
-                style={{ display: "none" }}
-                disabled={disabled}
-              />
+              <p style={{ margin: 0, color: "#475569", fontSize: "0.95rem" }}>
+                Drag & drop featured image, or
+              </p>
               <label
                 htmlFor="fi"
                 style={{
                   cursor: disabled ? "not-allowed" : "pointer",
                   backgroundColor: "#fff",
                   border: "1px solid #cbd5e1",
-                  padding: "0.5rem 1rem",
+                  padding: "0.5rem 1.25rem",
                   borderRadius: "6px",
+                  fontSize: "0.9rem",
+                  fontWeight: "600",
+                  display: "inline-block",
                 }}
               >
                 Browse Files
               </label>
-            </>
+            </div>
           )}
         </div>
       </div>

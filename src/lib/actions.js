@@ -322,6 +322,16 @@ export async function getListingForEdit(databaseId) {
           hoursMonday hoursTuesday hoursWednesday hoursThursday
           hoursFriday hoursSaturday hoursSunday
         }
+        directoryTypes {
+          nodes {
+            slug
+          }
+        }
+        ccrlistingcategories {
+          nodes {
+            slug
+          }
+        }
       }
     }
   `;
@@ -367,6 +377,7 @@ function mapPayloadToAcf(payload) {
     hours_friday: ld.hoursFriday || payload.hoursFriday || "",
     hours_saturday: ld.hoursSaturday || payload.hoursSaturday || "",
     hours_sunday: ld.hoursSunday || payload.hoursSunday || "",
+    ccrlistingcategories: payload.categories || [],
   };
 }
 
