@@ -191,3 +191,29 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 1.1rem !important;
   }
 }
+
+/* Home Page Grid Layout */
+.home-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+@media (min-width: 1024px) {
+  .home-layout-grid {
+    grid-template-columns: 1fr 3fr;
+  }
+}
+.home-sidebar-wrapper {
+  order: 2;
+}
+.home-feed-wrapper {
+  order: 1;
+}
+@media (min-width: 1024px) {
+  .home-sidebar-wrapper {
+    order: 1;
+  }
+  .home-feed-wrapper {
+    order: 2;
+  }
+}
