@@ -6,19 +6,31 @@ import { ALL_CATEGORIES } from "@/lib/constants";
 import styles from "./SearchModal.module.css";
 
 const TOP_CATEGORIES = [
-  { name: 'Restaurants', slug: 'restaurants-en', parentSlug: 'food-drink' },
-  { name: 'Plumbers', slug: 'plumbers-en', parentSlug: 'home-local-services' },
-  { name: 'Pizza', slug: 'pizza-en', parentSlug: 'food-drink' },
-  { name: 'Real Estate', slug: 'real-estate-en', parentSlug: 'home-local-services' },
-  { name: 'Coffee & Tea', slug: 'coffee-tea-en', parentSlug: 'food-drink' },
-  { name: 'Roofing', slug: 'roofing-contractors-en', parentSlug: 'home-local-services' },
-  { name: 'Seafood', slug: 'seafood-en', parentSlug: 'food-drink' },
-  { name: 'Auto Repair', slug: 'auto-repair-mechanics-en', parentSlug: 'home-local-services' }
+  { name: "Restaurants", slug: "restaurants-en", parentSlug: "food-drink" },
+  { name: "Plumbers", slug: "plumbers-en", parentSlug: "home-local-services" },
+  { name: "Pizza", slug: "pizza-en", parentSlug: "food-drink" },
+  {
+    name: "Real Estate",
+    slug: "real-estate-en",
+    parentSlug: "home-local-services",
+  },
+  { name: "Coffee & Tea", slug: "coffee-tea-en", parentSlug: "food-drink" },
+  {
+    name: "Roofing",
+    slug: "roofing-contractors-en",
+    parentSlug: "home-local-services",
+  },
+  { name: "Seafood", slug: "seafood-en", parentSlug: "food-drink" },
+  {
+    name: "Auto Repair",
+    slug: "auto-repair-mechanics-en",
+    parentSlug: "home-local-services",
+  },
 ];
 
 const getCategoryRoute = (slug) => {
-  const category = ALL_CATEGORIES.find(c => c.slug === slug);
-  if (!category) return '/directory';
+  const category = ALL_CATEGORIES.find((c) => c.slug === slug);
+  if (!category) return "/directory";
 
   // If it has a direct directoryType, use it
   if (category.directoryType) {
@@ -27,7 +39,7 @@ const getCategoryRoute = (slug) => {
 
   // If it's a child, find the parent's directoryType
   if (category.parentSlug) {
-    const parent = ALL_CATEGORIES.find(p => p.slug === category.parentSlug);
+    const parent = ALL_CATEGORIES.find((p) => p.slug === category.parentSlug);
     if (parent && parent.directoryType) {
       return `/directory/${parent.directoryType}/${category.slug}`;
     }
@@ -40,11 +52,19 @@ const getCategoryRoute = (slug) => {
  * SearchModal Component
  * A predictive search modal for the Cape Coral Directory.
  */
-export default function SearchModal({ isOpen, onClose, dict = {}, locale = "en" }) {
+export default function SearchModal({
+  isOpen,
+  onClose,
+  dict = {},
+  locale = "en",
+}) {
   // State management as requested
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [searchResults, setSearchResults] = useState({ listings: [], categories: [] });
+  const [searchResults, setSearchResults] = useState({
+    listings: [],
+    categories: [],
+  });
 
   const t = dict?.search || {};
   const navT = dict?.nav || {};
@@ -131,15 +151,15 @@ export default function SearchModal({ isOpen, onClose, dict = {}, locale = "en" 
   const handleSearch = (e) => {
     e.preventDefault();
     if (!searchTerm.trim()) return;
-    
+
     // Force redirect to root directory with search param
-    import('next/navigation').then(({ useRouter }) => {
-      // Note: Since this is a client component inside a hook-less or potentially complex structure, 
-      // we'll assume the useRouter is available via the component scope if we refactor slightly, 
+    import("next/navigation").then(({ useRouter }) => {
+      // Note: Since this is a client component inside a hook-less or potentially complex structure,
+      // we'll assume the useRouter is available via the component scope if we refactor slightly,
       // but for now, we'll use window.location if necessary or pass router down.
       // Re-reading: SearchModal is a functional component, we can use useRouter hook.
     });
-    
+
     // Actually, let's use the router from the component scope.
   };
 
@@ -159,9 +179,11 @@ export default function SearchModal({ isOpen, onClose, dict = {}, locale = "en" 
   if (!isOpen) return null;
 
   return (
-    <div className={`${styles['search-modal']} ${isOpen ? styles['search-modal--open'] : ""}`}>
-      <div 
-        className={styles['search-modal__overlay']} 
+    <div
+      className={`${styles["search-modal"]} ${isOpen ? styles["search-modal--open"] : ""}`}
+    >
+      <div
+        className={styles["search-modal__overlay"]}
         onClick={onClose}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
@@ -172,30 +194,36 @@ export default function SearchModal({ isOpen, onClose, dict = {}, locale = "en" 
         tabIndex="-1"
         aria-label="Close modal"
       ></div>
-      
-      <div className={styles['search-modal__container']}>
-        <div className={styles['search-modal__header']}>
-          <h2 className={styles['search-modal__title']}>{t.title || "Search Cape Coral"}</h2>
-          <button onClick={onClose} className={styles['search-modal__close']}>
+
+      <div className={styles["search-modal__container"]}>
+        <div className={styles["search-modal__header"]}>
+          <h2 className={styles["search-modal__title"]}>
+            {t.title || "Search Cape Coral"}
+          </h2>
+          <button onClick={onClose} className={styles["search-modal__close"]}>
             <span className="material-symbols-outlined">close</span>
           </button>
         </div>
 
-        <div className={styles['search-modal__body']}>
+        <div className={styles["search-modal__body"]}>
           {/* 1. Search Bar */}
-          <form 
+          <form
             onSubmit={(e) => {
               e.preventDefault();
               if (!searchTerm.trim()) return;
               window.location.href = `/${locale}/directory?search=${encodeURIComponent(searchTerm.trim())}`;
               onClose();
             }}
-            className={styles['search-modal__input-wrapper']}
+            className={styles["search-modal__input-wrapper"]}
           >
-            <span className={`material-symbols-outlined ${styles['search-modal__search-icon']}`}>search</span>
+            <span
+              className={`material-symbols-outlined ${styles["search-modal__search-icon"]}`}
+            >
+              search
+            </span>
             <input
               type="text"
-              className={styles['search-modal__input']}
+              className={styles["search-modal__input"]}
               placeholder={t.placeholder || "What are you looking for?"}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -204,12 +232,12 @@ export default function SearchModal({ isOpen, onClose, dict = {}, locale = "en" 
           </form>
 
           {/* 2. Top Category Pills */}
-          <div className={styles['search-modal__pills-wrapper']}>
-            {TOP_CATEGORIES.map(cat => (
-              <Link 
+          <div className={styles["search-modal__pills-wrapper"]}>
+            {TOP_CATEGORIES.map((cat) => (
+              <Link
                 key={cat.slug}
-                href={`/${locale}/directory/${cat.parentSlug}/${cat.slug}`} 
-                className={styles['search-modal__pill']}
+                href={`/${locale}/directory/${cat.parentSlug}/${cat.slug}`}
+                className={styles["search-modal__pill"]}
                 onClick={onClose}
               >
                 {cat.name}
@@ -218,32 +246,60 @@ export default function SearchModal({ isOpen, onClose, dict = {}, locale = "en" 
           </div>
 
           {/* 3. Results Container or Empty State */}
-          <div className={styles['search-modal__results-container']}>
+          <div className={styles["search-modal__results-container"]}>
             {!searchTerm.trim() ? (
               /* EMPTY STATE */
-              <div className={styles['search-modal__empty-state']}>
-                <span className={`material-symbols-outlined ${styles['search-modal__empty-icon']}`}>search_insights</span>
-                <p className={styles['search-modal__empty-text']}>Start typing to find businesses, services, or categories!</p>
+              <div className={styles["search-modal__empty-state"]}>
+                <span
+                  className={`material-symbols-outlined ${styles["search-modal__empty-icon"]}`}
+                >
+                  search_insights
+                </span>
+                <p className={styles["search-modal__empty-text"]}>
+                  Start typing to find businesses, services, or categories!
+                </p>
               </div>
             ) : (
               /* RESULTS STATE */
               <>
                 {isLoading ? (
-                  <div className={styles['search-modal__loading']}>Searching...</div>
+                  <div className={styles["search-modal__loading"]}>
+                    Searching...
+                  </div>
                 ) : (
-                  <div className={styles['search-modal__results']}>
-                    {(searchResults.listings.length > 0 || searchResults.categories.length > 0) ? (
-                      <div className={styles['search-modal__results-list']}>
+                  <div className={styles["search-modal__results"]}>
+                    {searchResults.listings.length > 0 ||
+                    searchResults.categories.length > 0 ? (
+                      <div className={styles["search-modal__results-list"]}>
                         {/* Categories Results */}
                         {searchResults.categories.map((cat) => {
                           const route = getCategoryRoute(cat.slug);
                           const categoryHref = `/${locale}${route}`;
 
                           return (
-                            <div key={`cat-${cat.slug}`} className={styles['search-modal__result-item']}>
-                              <Link href={categoryHref} className={styles['search-modal__result-link']} onClick={onClose}>
-                                <span className={styles['search-modal__result-title']}>{cat.name}</span>
-                                <span className={styles['search-modal__result-type']}>Category</span>
+                            <div
+                              key={`cat-${cat.slug}`}
+                              className={styles["search-modal__result-item"]}
+                            >
+                              <Link
+                                href={categoryHref}
+                                className={styles["search-modal__result-link"]}
+                                onClick={onClose}
+                              >
+                                <span
+                                  className={
+                                    styles["search-modal__result-title"]
+                                  }
+                                >
+                                  {cat.name}
+                                </span>
+                                <span
+                                  className={
+                                    styles["search-modal__result-type"]
+                                  }
+                                >
+                                  Category
+                                </span>
                               </Link>
                             </div>
                           );
@@ -251,16 +307,33 @@ export default function SearchModal({ isOpen, onClose, dict = {}, locale = "en" 
 
                         {/* Listings Results */}
                         {searchResults.listings.map((listing) => (
-                          <div key={`listing-${listing.slug}`} className={styles['search-modal__result-item']}>
-                            <Link href={`/${locale}/listing/${listing.slug}`} className={styles['search-modal__result-link']} onClick={onClose}>
-                              <span className={styles['search-modal__result-title']}>{listing.title}</span>
-                              <span className={styles['search-modal__result-type']}>Listing</span>
+                          <div
+                            key={`listing-${listing.slug}`}
+                            className={styles["search-modal__result-item"]}
+                          >
+                            <Link
+                              href={`/${locale}/listing/${listing.slug}`}
+                              className={styles["search-modal__result-link"]}
+                              onClick={onClose}
+                            >
+                              <span
+                                className={styles["search-modal__result-title"]}
+                              >
+                                {listing.title}
+                              </span>
+                              <span
+                                className={styles["search-modal__result-type"]}
+                              >
+                                Listing
+                              </span>
                             </Link>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <div className={styles['search-modal__no-results']}>No results found for "{searchTerm}"</div>
+                      <div className={styles["search-modal__no-results"]}>
+                        No results found for &quot;{searchTerm}&quot;
+                      </div>
                     )}
                   </div>
                 )}
