@@ -32,37 +32,6 @@ export default async function HomePage({ params }) {
           padding: "0 2vw",
         }}
       >
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `
-          .home-layout-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 40px;
-          }
-          @media (min-width: 1024px) {
-            .home-layout-grid {
-              grid-template-columns: 1fr 3fr;
-            }
-          }
-          .home-sidebar-wrapper {
-            order: 2;
-          }
-          .home-feed-wrapper {
-            order: 1;
-          }
-          @media (min-width: 1024px) {
-            .home-sidebar-wrapper {
-              order: 1;
-            }
-            .home-feed-wrapper {
-              order: 2;
-            }
-          }
-        `,
-          }}
-        />
-
         <div className="home-layout-grid">
           {/* Sidebar (Left on Desktop, Bottom on Mobile) */}
           <div className="home-sidebar-wrapper">

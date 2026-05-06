@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { ALL_CATEGORIES } from '@/lib/constants';
 import styles from './DirectoryFilters.module.css';
@@ -43,8 +44,85 @@ export default function DirectoryFilters() {
   const searchParams = useSearchParams();
 
   const [isMobileModalOpen, setIsMobileModalOpen] = useState(false);
-  const [catInput, setCatInput] = useState('');
-  const [isCatFocused, setIsCatFocused] = useState(false);
+  
+  // Unified Predictive Search State
+  const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
+  const [debouncedSearch, setDebouncedSearch] = useState(searchTerm);
+  const [searchResults, setSearchResults] = useState({ listings: [], categories: [] });
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+  // 1. Debounce input and filter the current directory grid
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+      updateFilter('search', searchTerm);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  // 2. Fetch Global Predictive Results (Categories & Listings)
+  useEffect(() => {
+    if (debouncedSearch.length < 2) {
+      setSearchResults({ listings: [], categories: [] });
+      return;
+    }
+
+    const fetchResults = async () => {
+      setIsLoading(true);
+      
+      const query = `
+        query SearchQuery($searchTerm: String!) {
+          ccrlistings(where: {search: $searchTerm}) {
+            nodes {
+              title
+              slug
+            }
+          }
+          ccrlistingcategories(where: {search: $searchTerm}) {
+            nodes {
+              name
+              slug
+              parent {
+                node {
+                  slug
+                }
+              }
+            }
+          }
+        }
+      `;
+
+      try {
+        const response = await fetch(process.env.NEXT_PUBLIC_WORDPRESS_API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            query,
+            variables: { searchTerm: debouncedSearch },
+          }),
+        });
+
+        const json = await response.json();
+
+        if (json.data) {
+          setSearchResults({
+            listings: json.data.ccrlistings?.nodes || [],
+            categories: json.data.ccrlistingcategories?.nodes || [],
+          });
+        }
+      } catch (error) {
+        console.error("Predictive search error:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchResults();
+  }, [debouncedSearch]);
+
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [openDropdown, setOpenDropdown] = useState(null); // 'sort' or 'rating' or null
@@ -105,23 +183,9 @@ export default function DirectoryFilters() {
 
   const clearFilters = () => {
     router.push(pathname);
-    setCatInput('');
+    setSearchTerm('');
     setIsMobileModalOpen(false);
   };
-
-  const handleCategorySelect = (slug) => {
-    const route = getCategoryRoute(slug);
-    const locale = pathname.split('/')[1] || 'en';
-    router.push(`/${locale}${route}`);
-    setIsCatFocused(false);
-    setCatInput('');
-    setIsMobileModalOpen(false);
-  };
-
-  // Predictive search across the massive array
-  const filteredCategories = ALL_CATEGORIES.filter(cat => 
-    cat.name.toLowerCase().includes(catInput.toLowerCase())
-  );
 
   const handleCategoryClick = (slug) => {
     const locale = pathname.split('/')[1] || 'en';
@@ -199,6 +263,48 @@ export default function DirectoryFilters() {
     );
   };
 
+  const renderPredictiveDropdown = () => {
+    if (!isSearchFocused || debouncedSearch.length < 2) return null;
+
+    const locale = pathname.split('/')[1] || 'en';
+    const hasCategories = searchResults.categories && searchResults.categories.length > 0;
+    const hasListings = searchResults.listings && searchResults.listings.length > 0;
+    const hasResults = hasCategories || hasListings;
+
+    return (
+      <div className={styles['predictive-dropdown']}>
+        {isLoading ? (
+          <div className={styles['predictive-message']}>Searching...</div>
+        ) : !hasResults ? (
+          <div className={styles['predictive-message']}>No results found</div>
+        ) : (
+          <ul className={styles['predictive-list']}>
+            {hasCategories && searchResults.categories.map(cat => {
+              const route = getCategoryRoute(cat.slug);
+              const categoryHref = `/${locale}${route}`;
+              return (
+                <li key={`cat-${cat.slug}`} className={styles['predictive-item']}>
+                  <Link href={categoryHref} className={styles['predictive-link']}>
+                    <span className={styles['predictive-title']}>{cat.name}</span>
+                    <span className={styles['predictive-type']}>Category</span>
+                  </Link>
+                </li>
+              );
+            })}
+            {hasListings && searchResults.listings.map(listing => (
+              <li key={`list-${listing.slug}`} className={styles['predictive-item']}>
+                <Link href={`/${locale}/listing/${listing.slug}`} className={styles['predictive-link']}>
+                  <span className={styles['predictive-title']}>{listing.title}</span>
+                  <span className={styles['predictive-type']}>Listing</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    );
+  };
+
   const renderFilters = (isMobile = false) => {
     const sortOptions = [
       { value: 'newest', label: 'Newest' },
@@ -220,34 +326,18 @@ export default function DirectoryFilters() {
     if (isMobile) {
       return (
         <div className={styles['mobile-filter-list']}>
-          <div className={styles['autocomplete-wrapper']} style={{ width: '100%' }}>
-            <div className={styles['filter-group']}>
-              <span className="material-symbols-outlined" style={{ color: '#94a3b8' }}>search</span>
-              <input 
-                type="text" 
-                placeholder="Search categories..." 
-                className={styles['filter-input']}
-                value={catInput}
-                onChange={(e) => { setCatInput(e.target.value); setIsCatFocused(true); }}
-                onFocus={() => setIsCatFocused(true)}
-                onBlur={() => setTimeout(() => setIsCatFocused(false), 200)}
-                style={{ width: '100%' }}
-              />
-            </div>
-            {isCatFocused && catInput && filteredCategories.length > 0 && (
-              <ul className={styles['autocomplete-list']} style={{ width: '100%' }}>
-                {filteredCategories.map(cat => (
-                  <li 
-                    key={cat.slug} 
-                    className={styles['autocomplete-item']}
-                    onMouseDown={(e) => { e.preventDefault(); handleCategorySelect(cat.slug); }}
-                  >
-                    <span style={{ fontWeight: 600 }}>{cat.name.slice(0, catInput.length)}</span>
-                    <span>{cat.name.slice(catInput.length)}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
+          <div className={styles['filter-group-search']} style={{ position: 'relative', width: '100%', marginBottom: '1rem' }}>
+            <input 
+              type="text" 
+              placeholder="Search businesses or categories..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onFocus={() => setIsSearchFocused(true)}
+              onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+              className={styles['filter-input']}
+              style={{ width: '100%' }}
+            />
+            {renderPredictiveDropdown()}
           </div>
 
           {/* Custom Rating Dropdown (Mobile) */}
@@ -323,33 +413,18 @@ export default function DirectoryFilters() {
       <div className={styles['desktop-filters']}>
         {/* LEFT SIDE: Search & Open Now (Stretches) */}
         <div className={styles['left-controls']}>
-          <div className={styles['autocomplete-wrapper']} style={{ flex: 1 }}>
-            <div className={styles['filter-group-search']}>
-              <span className="material-symbols-outlined" style={{ color: '#94a3b8' }}>search</span>
-              <input 
-                type="text" 
-                placeholder="Search categories..." 
-                className={styles['filter-input']}
-                value={catInput}
-                onChange={(e) => { setCatInput(e.target.value); setIsCatFocused(true); }}
-                onFocus={() => setIsCatFocused(true)}
-                onBlur={() => setTimeout(() => setIsCatFocused(false), 200)}
-              />
-            </div>
-            {isCatFocused && catInput && filteredCategories.length > 0 && (
-              <ul className={styles['autocomplete-list']} style={{ width: '100%' }}>
-                {filteredCategories.map(cat => (
-                  <li 
-                    key={cat.slug} 
-                    className={styles['autocomplete-item']}
-                    onMouseDown={(e) => { e.preventDefault(); handleCategorySelect(cat.slug); }}
-                  >
-                    <span style={{ fontWeight: 600 }}>{cat.name.slice(0, catInput.length)}</span>
-                    <span>{cat.name.slice(catInput.length)}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
+          <div className={styles['filter-group-search']} style={{ position: 'relative' }}>
+            <input 
+              type="text" 
+              placeholder="Search businesses or categories..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onFocus={() => setIsSearchFocused(true)}
+              onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+              className={styles['filter-input']}
+              style={{ width: '100%' }}
+            />
+            {renderPredictiveDropdown()}
           </div>
         </div>
 

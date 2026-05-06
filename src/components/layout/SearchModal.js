@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { ALL_CATEGORIES } from "@/lib/constants";
 import styles from "./SearchModal.module.css";
 
 const TOP_CATEGORIES = [
@@ -14,6 +15,26 @@ const TOP_CATEGORIES = [
   { name: 'Seafood', slug: 'seafood-en', parentSlug: 'food-drink' },
   { name: 'Auto Repair', slug: 'auto-repair-mechanics-en', parentSlug: 'home-local-services' }
 ];
+
+const getCategoryRoute = (slug) => {
+  const category = ALL_CATEGORIES.find(c => c.slug === slug);
+  if (!category) return '/directory';
+
+  // If it has a direct directoryType, use it
+  if (category.directoryType) {
+    return `/directory/${category.directoryType}/${category.slug}`;
+  }
+
+  // If it's a child, find the parent's directoryType
+  if (category.parentSlug) {
+    const parent = ALL_CATEGORIES.find(p => p.slug === category.parentSlug);
+    if (parent && parent.directoryType) {
+      return `/directory/${parent.directoryType}/${category.slug}`;
+    }
+  }
+
+  return `/directory`; // Fallback
+};
 
 /**
  * SearchModal Component
@@ -215,10 +236,8 @@ export default function SearchModal({ isOpen, onClose, dict = {}, locale = "en" 
                       <div className={styles['search-modal__results-list']}>
                         {/* Categories Results */}
                         {searchResults.categories.map((cat) => {
-                          const parentSlug = cat.parent?.node?.slug;
-                          const categoryHref = parentSlug 
-                            ? `/${locale}/directory/${parentSlug}/${cat.slug}`
-                            : `/${locale}/directory/${cat.slug}`;
+                          const route = getCategoryRoute(cat.slug);
+                          const categoryHref = `/${locale}${route}`;
 
                           return (
                             <div key={`cat-${cat.slug}`} className={styles['search-modal__result-item']}>
