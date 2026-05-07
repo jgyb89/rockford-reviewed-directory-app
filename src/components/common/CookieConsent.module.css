@@ -15,7 +15,7 @@
   padding: 1.5rem;
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  z-index: 99999;
+  z-index: 9900;
   font-family: inherit;
   border: 1px solid #f1f5f9;
 }
@@ -33,7 +33,7 @@
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-  z-index: 99999;
+  z-index: 9900;
 }
 
 .title {
