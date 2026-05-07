@@ -2,39 +2,12 @@
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 2rem;
+  padding: 1.5rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  width: 100%; /* FIX: Force full width */
-}
-
-.desktop-filters {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* Pushes the two main groups apart */
-  width: 100%; /* FIX: Force full width */
-  flex: 1; /* FIX: Allow the container itself to stretch */
-  gap: 2rem;
-}
-
-/* The new left group containing Search and Open Now */
-.left-controls {
-  display: flex;
-  align-items: center;
+  flex-direction: column; /* Changed from row */
   gap: 1.5rem;
-  flex: 1; /* This forces the search bar area to stretch */
-}
-
-/* The new right group containing Sort, Rating, and Clear */
-.right-controls {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-shrink: 0; /* Prevents the dropdowns from getting squished */
+  width: 100%; 
 }
 
 /* Ensure the search bar itself actually grows to fill the new space */
@@ -223,51 +196,36 @@ input:checked + .slider:before { transform: translateX(20px); }
   cursor: pointer;
 }
 
-/* Autocomplete Dropdown */
-.autocomplete-wrapper { position: relative; }
-.autocomplete-list {
-  position: absolute;
-  top: 100%; left: 0;
-  width: 250px;
-  background: #fff;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-  list-style: none;
-  padding: 0.5rem 0;
-  margin-top: 0.25rem;
-  z-index: 50;
-  max-height: 200px;
-  overflow-y: auto;
-}
-.autocomplete-item {
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  font-size: 0.95rem;
-  transition: background 0.2s;
-}
-.autocomplete-item:hover { background: #f8fafc; }
-
-/* Mobile Modal Styles */
+/* Universal Modal Styles (Left Slide) */
 .modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.5);
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start; /* Forces it to the left */
   z-index: 10000;
+  backdrop-filter: blur(4px);
 }
+
 .modal-content {
-  background: #fff;
+  background: #ffffff;
   width: 85%;
-  max-width: 400px;
+  max-width: 350px;
   height: 100%;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   overflow-y: auto;
+  box-shadow: 5px 0 25px rgba(0,0,0,0.1);
+  animation: slideInLeft 0.3s ease-out forwards;
 }
+
+ @keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
 .modal-header {
   display: flex;
   justify-content: space-between;
@@ -276,41 +234,13 @@ input:checked + .slider:before { transform: translateX(20px); }
   padding-bottom: 1rem;
 }
 
-@media (min-width: 768px) {
-  .mobile-controls {
-    display: none !important;
-  }
-  .desktop-filters {
-    display: flex !important;
-  }
-}
-
-@media (max-width: 767px) {
-  .desktop-filters { display: none; }
-  .btn-clear.desktop-only { display: none; }
-  .mobile-controls { display: flex; }
-  
-  /* Bulletproof hiding of desktop pills on mobile */
-  .category-pills-desktop { 
-    display: none !important; 
-    margin: 0 !important;
-    padding: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-  } 
-}
-
-/* Desktop Pills (Horizontal Scroll) */
+/* Desktop Pills (Wrapped, no horizontal scroll) */
 .category-pills-desktop {
   display: flex;
-  gap: 0.75rem;
-  overflow-x: auto;
+  flex-wrap: wrap; /* Allows pills to drop to the next line */
+  gap: 0.5rem;
   padding-bottom: 0.5rem;
   margin-bottom: 1.5rem;
-  scrollbar-width: none; /* Firefox */
-}
-.category-pills-desktop::-webkit-scrollbar {
-  display: none; /* Safari and Chrome */
 }
 
 /* Mobile Modal Pills (Wrapped) */
@@ -342,38 +272,6 @@ input:checked + .slider:before { transform: translateX(20px); }
   background-color: #e04c4c;
   color: #ffffff;
   border-color: #e04c4c;
-}
-
-.scroll-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: #000000;
-  color: #ffffff;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  transition: background-color 0.2s ease, transform 0.2s ease;
-}
-
-.scroll-arrow:hover {
-  background-color: #e04c4c; /* Brand Red */
-  transform: translateY(-50%) scale(1.1);
-}
-
-.scroll-arrow-left {
-  left: -16px;
-}
-
-.scroll-arrow-right {
-  right: -16px;
 }
 
 /* Unified Predictive Dropdown */

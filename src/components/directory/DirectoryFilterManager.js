@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import PropTypes from "prop-types";
 import CcrCardGrid from "./CcrCardGrid";
 import DirectoryFilters from "./DirectoryFilters";
@@ -19,9 +19,23 @@ const getListingRating = (listing) => {
   return sum / reviews.length;
 };
 
-export default function DirectoryFilterManager({ listings, currentUser, dict = {}, locale = "en" }) {
+const DirectoryFilterManager = ({ listings, currentUser, dict = {}, locale = "en" }) => {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const t = dict?.directory || {};
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const updateFilter = (key, value) => {
+    const params = new URLSearchParams(searchParams);
+    if (value && value !== '0') {
+      params.set(key, value);
+    } else {
+      params.delete(key);
+    }
+    router.push(`${pathname}?${params.toString()}`);
+  };
 
   // Current Filters from URL
   const categoryFilter = searchParams.get('category') || '';
@@ -35,8 +49,6 @@ export default function DirectoryFilterManager({ listings, currentUser, dict = {
 
   const filteredAndSortedListings = useMemo(() => {
     let result = [...listings];
-    // ... filtering and sorting logic
-    // (I will keep the logic as is but I need to make sure I don't break the useMemo)
     
     // Filter by In-Page Category or Directory Type
     if (categoryFilter) {
@@ -74,6 +86,8 @@ export default function DirectoryFilterManager({ listings, currentUser, dict = {
       switch (sortByFilter) {
         case "az":
           return a.title.localeCompare(b.title);
+        case "za":
+          return b.title.localeCompare(a.title);
         case "highest_rated":
           return getListingRating(b) - getListingRating(a);
         case "newest":
@@ -93,14 +107,38 @@ export default function DirectoryFilterManager({ listings, currentUser, dict = {
 
   return (
     <div className={styles['directory-filter-manager']}>
-      {/* The Revamped Filter Bar */}
-      <DirectoryFilters />
+      {/* New Universal Top Bar */}
+      <div className={styles['top-controls']}>
+        <button 
+          className={styles['toggle-filters-btn']}
+          onClick={() => setIsModalOpen(true)}
+        >
+          <span className="material-symbols-outlined">tune</span>
+          Filters
+        </button>
 
-      <div className={styles['results-count']}>
-        {filteredAndSortedListings.length}{" "}
-        {t.listingsFound || "listings found"}
+        <span className={styles['results-count']}>
+          {filteredAndSortedListings.length} {t.listingsFound || "Results"}
+        </span>
+
+        <div className={styles['search-wrapper']}>
+          {/* The Search Bar physically lives here, but controls the modal via props */}
+          <DirectoryFilters isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+        </div>
+
+        <select 
+          className={styles['sort-dropdown']}
+          value={sortByFilter}
+          onChange={(e) => updateFilter('sort', e.target.value)}
+        >
+          <option value="newest">Newest First</option>
+          <option value="az">A-Z</option>
+          <option value="za">Z-A</option>
+          <option value="highest_rated">Highest Rated</option>
+        </select>
       </div>
 
+      {/* Main Feed */}
       {filteredAndSortedListings.length === 0 ? (
         <div style={{ textAlign: "center", padding: "4rem", border: "1px dashed #ccc", borderRadius: "12px", marginTop: "2rem" }}>
           <p style={{ fontSize: "1.1rem", color: "#64748b" }}>
@@ -124,13 +162,6 @@ export default function DirectoryFilterManager({ listings, currentUser, dict = {
       )}
     </div>
   );
-}
-
-DirectoryFilterManager.propTypes = {
-  listings: PropTypes.array.isRequired,
-  currentUser: PropTypes.object,
-  dict: PropTypes.object,
-  locale: PropTypes.string,
 };
 
 DirectoryFilterManager.propTypes = {
@@ -139,3 +170,5 @@ DirectoryFilterManager.propTypes = {
   dict: PropTypes.object,
   locale: PropTypes.string,
 };
+
+export default DirectoryFilterManager;
