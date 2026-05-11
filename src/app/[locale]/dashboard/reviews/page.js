@@ -1,4 +1,5 @@
 // src/app/dashboard/reviews/page.js
+import PropTypes from 'prop-types';
 import { getViewer } from '@/lib/auth';
 import MyReviews from '@/components/dashboard/MyReviews';
 import Link from 'next/link';
@@ -41,3 +42,7 @@ export default async function ReviewsPage({ params }) {
     </div>
   );
 }
+
+ReviewsPage.propTypes = {
+  params: PropTypes.object.isRequired,
+};

@@ -26,6 +26,7 @@ export async function loginUser(username, password) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
       },
       body: JSON.stringify({
         query: mutation,
@@ -159,6 +160,7 @@ export async function getViewer() {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
       },
       body: JSON.stringify({ query }),
       cache: "no-store",

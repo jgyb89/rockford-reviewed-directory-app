@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { getListingForEdit } from "@/lib/actions";
 import EditListingForm from "@/components/dashboard/EditListingForm";
 import Link from "next/link";
@@ -14,7 +15,7 @@ export default async function EditListingPage({ params }) {
   return (
     <div className="edit-listing-page">
       <Link href={`/${locale}/dashboard`} className="dashboard-back-btn">
-        <span className="material-symbols-outlined">arrow_back</span> Back to Dashboard
+        <span className="material-symbols-outlined">arrow_back</span>{" "}Back to Dashboard
       </Link>
       <div style={{ marginBottom: "2rem" }}>
         <Link 
@@ -28,7 +29,7 @@ export default async function EditListingPage({ params }) {
             fontWeight: "600"
           }}
         >
-          <span className="material-symbols-outlined">arrow_back</span>
+          <span className="material-symbols-outlined">arrow_back</span>{" "}
           Back to My Listings
         </Link>
       </div>
@@ -46,3 +47,7 @@ export default async function EditListingPage({ params }) {
     </div>
   );
 }
+
+EditListingPage.propTypes = {
+  params: PropTypes.object.isRequired,
+};

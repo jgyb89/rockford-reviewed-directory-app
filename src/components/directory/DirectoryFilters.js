@@ -95,6 +95,7 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "User-Agent": "CCR-NextJS-Frontend/1.0"
           },
           body: JSON.stringify({
             query,
@@ -267,8 +268,24 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
 
       {/* 2. Universal Left Slide-Out Modal */}
       {isModalOpen && (
-        <div className={styles['modal-overlay']} onClick={() => setIsModalOpen(false)}>
-          <div className={styles['modal-content']} onClick={(e) => e.stopPropagation()}>
+        <div 
+          className={styles['modal-overlay']} 
+          onClick={() => setIsModalOpen(false)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              setIsModalOpen(false);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label="Close filters"
+        >
+          <div 
+            className={styles['modal-content']} 
+            onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => e.stopPropagation()}
+            role="presentation"
+          >
             <div className={styles['modal-header']}>
               <h3 style={{ margin: 0, fontSize: '1.25rem', fontFamily: 'var(--font-heading)' }}>Filters</h3>
               <button onClick={() => setIsModalOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}>

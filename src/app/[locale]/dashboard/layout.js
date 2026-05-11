@@ -41,4 +41,5 @@ export default async function DashboardLayout({ children, params }) {
 
 DashboardLayout.propTypes = {
   children: PropTypes.node.isRequired,
+  params: PropTypes.object.isRequired,
 };

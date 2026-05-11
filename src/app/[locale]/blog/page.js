@@ -1,4 +1,5 @@
 /* src/app/blog/page.js */
+import PropTypes from "prop-types";
 import BlogView from "@/components/blog/BlogView";
 import { getBlogPosts } from "@/lib/actions";
 import { getDictionary } from "@/lib/dictionaries";
@@ -55,3 +56,7 @@ export default async function BlogPage({ params }) {
     </main>
   );
 }
+
+BlogPage.propTypes = {
+  params: PropTypes.object.isRequired,
+};

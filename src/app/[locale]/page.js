@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { getListings } from "@/lib/api";
 import { getViewer } from "@/lib/auth";
 import { getDictionary } from "@/lib/dictionaries";
@@ -57,3 +58,7 @@ export default async function HomePage({ params }) {
     </main>
   );
 }
+
+HomePage.propTypes = {
+  params: PropTypes.object.isRequired,
+};

@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import Link from "next/link";
 import { getListingsByCategory } from "@/lib/api";
 import { getViewer } from "@/lib/auth";
@@ -20,8 +21,6 @@ export default async function CategoryPage({ params }) {
   const dict = await getDictionary(locale);
   const listings = await getListingsByCategory(categorySlug, directoryType);
   const currentUser = await getViewer();
-
-  const t = dict?.directory || {};
 
   // Derive category name from the first listing if available, or use the slug
   const categoryName = listings[0]?.ccrlistingcategories?.nodes?.find(n => n.slug === categorySlug)?.name || categorySlug.replace(/-/g, ' ');
@@ -48,3 +47,7 @@ export default async function CategoryPage({ params }) {
     </main>
   );
 }
+
+CategoryPage.propTypes = {
+  params: PropTypes.object.isRequired,
+};

@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import Link from "next/link";
 import { getListingsByDirectoryType } from "@/lib/api";
 import { getViewer } from "@/lib/auth";
@@ -19,8 +20,6 @@ export default async function DirectoryTypePage({ params }) {
   const dict = await getDictionary(locale);
   const listings = await getListingsByDirectoryType(directoryType);
   const currentUser = await getViewer();
-
-  const t = dict?.directory || {};
 
   // Derive directory type name from the first listing if available, or use the slug
   const typeName = listings[0]?.directoryTypes?.nodes.find(n => n.slug === directoryType)?.name || directoryType.replace(/-/g, ' ');
@@ -47,3 +46,7 @@ export default async function DirectoryTypePage({ params }) {
     </main>
   );
 }
+
+DirectoryTypePage.propTypes = {
+  params: PropTypes.object.isRequired,
+};
