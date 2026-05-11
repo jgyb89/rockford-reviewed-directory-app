@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
@@ -40,6 +41,7 @@ export default async function MyListingsPage({ params, searchParams }) {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${authToken}`,
+      'User-Agent': 'CCR-NextJS-Frontend/1.0',
     },
     body: JSON.stringify({ query }),
     cache: 'no-store',
@@ -76,7 +78,7 @@ export default async function MyListingsPage({ params, searchParams }) {
   return (
     <div className="my-listings-page">
       <Link href={`/${locale}/dashboard`} className="dashboard-back-btn">
-        <span className="material-symbols-outlined">arrow_back</span> Back to Dashboard
+        <span className="material-symbols-outlined">arrow_back</span>{" "}Back to Dashboard
       </Link>
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', paddingBottom: '1rem', borderBottom: '1px solid #f1f5f9' }}>
         <div>
@@ -84,7 +86,7 @@ export default async function MyListingsPage({ params, searchParams }) {
           <p style={{ margin: 0 }}>Manage your business listings and update their details.</p>
         </div>
         <Link href={`/${locale}/submit-listing`} className="listing-primary-btn" style={{ textDecoration: 'none' }}>
-          <span className="material-symbols-outlined">add_business</span>
+          <span className="material-symbols-outlined">add_business</span>{" "}
           Add New Listing
         </Link>
       </header>
@@ -126,3 +128,8 @@ export default async function MyListingsPage({ params, searchParams }) {
     </div>
   );
 }
+
+MyListingsPage.propTypes = {
+  params: PropTypes.object.isRequired,
+  searchParams: PropTypes.object.isRequired,
+};

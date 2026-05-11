@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import DOMPurify from "isomorphic-dompurify";
@@ -85,3 +86,7 @@ export default async function BlogPostPage({ params }) {
     </div>
   );
 }
+
+BlogPostPage.propTypes = {
+  params: PropTypes.object.isRequired,
+};

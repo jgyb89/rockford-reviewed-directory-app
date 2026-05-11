@@ -132,7 +132,10 @@ export default function RegisterForm({ dict = {}, locale = "en" }) {
     try {
       const res = await fetch(GRAPHQL_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "User-Agent": "CCR-NextJS-Frontend/1.0"
+        },
         body: JSON.stringify({
           query: mutation,
           variables: {

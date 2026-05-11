@@ -57,4 +57,5 @@ export default async function RootLayout({ children, params }) {
 
 RootLayout.propTypes = {
   children: PropTypes.node.isRequired,
+  params: PropTypes.object.isRequired,
 };

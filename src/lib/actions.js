@@ -90,6 +90,7 @@ export async function updateUserProfile(formData) {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
       },
       body: JSON.stringify({
         query: mutation,
@@ -139,6 +140,7 @@ export async function deleteUserReview(reviewId) {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
       },
       body: JSON.stringify({ query: mutation, variables: { id: reviewId } }),
     });
@@ -181,6 +183,7 @@ export async function removeFavoriteListing(listingId) {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
       },
       body: JSON.stringify({
         query: mutation,
@@ -229,6 +232,7 @@ export async function toggleFavoriteListing(listingId) {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
       },
       body: JSON.stringify({
         query: mutation,
@@ -274,6 +278,7 @@ export async function submitUserReview(formData) {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
       },
       body: JSON.stringify({
         query: mutation,
@@ -342,6 +347,7 @@ export async function getListingForEdit(databaseId) {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
       },
       body: JSON.stringify({ query, variables: { id: databaseId } }),
     });
@@ -425,6 +431,7 @@ export async function updateUserListing(databaseId, payload) {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${authToken}`,
+      "User-Agent": "CCR-NextJS-Frontend/1.0"
     },
     body: JSON.stringify({ query, variables }),
   });
@@ -463,6 +470,7 @@ export async function deleteUserListing(listingId) {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
       },
       body: JSON.stringify({ query: mutation, variables: { id: listingId } }),
     });
@@ -500,6 +508,7 @@ export async function updateUserReview(reviewId, formData) {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
       },
       body: JSON.stringify({
         query: mutation,
@@ -540,7 +549,10 @@ export async function submitBugReport(formData) {
   try {
     const res = await fetch(GRAPHQL_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
+      },
       body: JSON.stringify({
         query: mutation,
         variables: {
@@ -584,7 +596,10 @@ export async function submitListing(formData) {
   `;
 
   try {
-    const headers = { "Content-Type": "application/json" };
+    const headers = { 
+      "Content-Type": "application/json",
+      "User-Agent": "CCR-NextJS-Frontend/1.0"
+    };
     if (authToken) headers["Authorization"] = `Bearer ${authToken}`;
 
     const res = await fetch(GRAPHQL_URL, {
@@ -658,7 +673,10 @@ export async function registerBusiness(fieldValues) {
   try {
     const res = await fetch(GRAPHQL_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
+      },
       body: JSON.stringify({ query: mutation, variables: { input: { id: 7, fieldValues } } }),
     });
 
@@ -696,6 +714,9 @@ async function moderateImage(file) {
   try {
     const modRes = await fetch("https://api.sightengine.com/1.0/check.json", {
       method: "POST",
+      headers: {
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
+      },
       body: moderationFormData,
     });
 
@@ -748,7 +769,10 @@ export async function uploadWPImage(formData, postId = null) {
   const baseUrl = GRAPHQL_URL.replace("/graphql", "");
   const res = await fetch(`${baseUrl}/wp-json/wp/v2/media`, {
     method: "POST",
-    headers: { Authorization: `Bearer ${authToken}` },
+    headers: { 
+      Authorization: `Bearer ${authToken}`,
+      "User-Agent": "CCR-NextJS-Frontend/1.0"
+    },
     body: wpFormData,
   });
 
@@ -767,7 +791,10 @@ export async function deleteWPMedia(attachmentId) {
   const baseUrl = GRAPHQL_URL.replace("/graphql", "");
   const res = await fetch(`${baseUrl}/wp-json/wp/v2/media/${attachmentId}?force=true`, {
     method: "DELETE",
-    headers: { Authorization: `Bearer ${authToken}` },
+    headers: { 
+      Authorization: `Bearer ${authToken}`,
+      "User-Agent": "CCR-NextJS-Frontend/1.0"
+    },
   });
 
   const data = await res.json();
@@ -794,7 +821,10 @@ export async function getBlogPosts() {
   try {
     const res = await fetch(GRAPHQL_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
+      },
       body: JSON.stringify({ query }),
       next: { revalidate: 60 },
     });
@@ -825,7 +855,10 @@ export async function getBlogPostBySlug(slug) {
   try {
     const res = await fetch(GRAPHQL_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
+      },
       body: JSON.stringify({ query, variables: { id: slug } }),
       next: { revalidate: 60 },
     });
@@ -858,7 +891,10 @@ export async function getSidebarListings() {
   try {
     const res = await fetch(GRAPHQL_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
+      },
       body: JSON.stringify({ query }),
       next: { revalidate: 60 },
     });
@@ -902,7 +938,10 @@ export async function submitClaimForm(formData) {
   try {
     const res = await fetch(GRAPHQL_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
+      },
       body: JSON.stringify({ query: mutation, variables }),
     });
 
@@ -936,7 +975,10 @@ export async function requestPasswordReset(usernameOrEmail) {
   try {
     const res = await fetch(process.env.NEXT_PUBLIC_WORDPRESS_API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
+      },
       body: JSON.stringify({
         query,
         variables: { username: usernameOrEmail },
@@ -967,7 +1009,10 @@ export async function handleGoogleLogin(credential) {
 
     const res = await fetch(backendUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
+      },
       body: JSON.stringify({ token: credential }),
     });
 

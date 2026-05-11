@@ -99,6 +99,7 @@ export async function getListingBySlug(slug) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
       },
       body: JSON.stringify({
         query,
@@ -214,6 +215,7 @@ export async function getListings(categorySlug = null) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
       },
       body: JSON.stringify({
         query,
@@ -323,6 +325,7 @@ export async function getListingsByCategory(categorySlug, directoryType = null) 
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
       },
       body: JSON.stringify({
         query,
@@ -433,6 +436,7 @@ export async function getListingsByDirectoryType(directoryTypeSlug) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
       },
       body: JSON.stringify({
         query,
@@ -485,7 +489,8 @@ export async function updateUserFavorites(userId, favoriteIdsArray, authToken) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${authToken}`
+        "Authorization": `Bearer ${authToken}`,
+        "User-Agent": "CCR-NextJS-Frontend/1.0"
       },
       body: JSON.stringify({ query: mutation, variables }),
     });

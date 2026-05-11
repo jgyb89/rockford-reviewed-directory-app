@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import DOMPurify from "isomorphic-dompurify";
 import Script from "next/script";
 import { getListingBySlug } from "@/lib/api";
@@ -190,8 +191,6 @@ export default async function DirectoryListingPage({ params }) {
         .filter((s) => s !== "")
     : [];
 
-  const isFeatured = !!listing.author?.node?.userData?.isFeaturedUser;
-
   return (
     <div className="listing-layout">
       <Script
@@ -215,7 +214,7 @@ export default async function DirectoryListingPage({ params }) {
               text={`Check out ${listing.title} on Cape Coral Reviewed!`}
             />
             <button className="listing-action-btn">
-              <span className="material-symbols-outlined">flag</span>
+              <span className="material-symbols-outlined">flag</span>{" "}
               <span className="listing-action-btn__text">
                 {t.report || "Report"}
               </span>
@@ -251,13 +250,13 @@ export default async function DirectoryListingPage({ params }) {
 
         <section className="listing-card">
           <h2 className="listing-card__title">
-            <span className="material-symbols-outlined">info</span>
+            <span className="material-symbols-outlined">info</span>{" "}
             Business Info
           </h2>
           <div className="listing-card__item">
             <span className="material-symbols-outlined listing-card__icon">
               location_on
-            </span>
+            </span>{" "}
             <span className="listing-card__text">
               {listingdata.addressStreet}, {listingdata.addressCity},{" "}
               {listingdata.addressState} {listingdata.addressZipCode}
@@ -266,14 +265,14 @@ export default async function DirectoryListingPage({ params }) {
           <div className="listing-card__item">
             <span className="material-symbols-outlined listing-card__icon">
               call
-            </span>
+            </span>{" "}
             <span className="listing-card__text">{listingdata.phoneNumber}</span>
           </div>
           {listingdata.websiteUrl && (
             <div className="listing-card__item">
               <span className="material-symbols-outlined listing-card__icon">
                 language
-              </span>
+              </span>{" "}
               <a
                 href={listingdata.websiteUrl}
                 className="listing-card__link"
@@ -310,13 +309,13 @@ export default async function DirectoryListingPage({ params }) {
                   style={{ fontSize: "1.25rem" }}
                 >
                   share_reviews
-                </span>
+                </span>{" "}
                 Connect with us
               </h3>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
-                {socialLinks.map((url, idx) => (
+                {socialLinks.map((url) => (
                   <a
-                    key={idx}
+                    key={url}
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -332,7 +331,7 @@ export default async function DirectoryListingPage({ params }) {
                       style={{ fontSize: "1.1rem" }}
                     >
                       link
-                    </span>
+                    </span>{" "}
                     {getSocialPlatform(url)}
                   </a>
                 ))}
@@ -343,7 +342,7 @@ export default async function DirectoryListingPage({ params }) {
 
         <section className="listing-card">
           <h2 className="listing-card__title">
-            <span className="material-symbols-outlined">schedule</span>
+            <span className="material-symbols-outlined">schedule</span>{" "}
             {t.businessHours || "Business Hours"}
           </h2>
           {hours.map((h) => (
@@ -360,7 +359,7 @@ export default async function DirectoryListingPage({ params }) {
 
         <section className="listing-card">
           <h2 className="listing-card__title">
-            <span className="material-symbols-outlined">description</span>
+            <span className="material-symbols-outlined">description</span>{" "}
             {t.aboutBusiness || "About the Business"}
           </h2>
           <div
@@ -373,85 +372,60 @@ export default async function DirectoryListingPage({ params }) {
         {videoEmbedUrl && (
           <section className="listing-card">
             <h2 className="listing-card__title">
-              <span className="material-symbols-outlined">play_circle</span>
+              <span className="material-symbols-outlined">play_circle</span>{" "}
               Featured Video
             </h2>
             <div
               style={{
-                width: "100%",
-                aspectRatio: "16/9",
-                borderRadius: "8px",
+                position: "relative",
+                paddingBottom: "56.25%",
+                height: 0,
                 overflow: "hidden",
-                background: "#000",
+                borderRadius: "8px",
               }}
             >
               <iframe
-                width="100%"
-                height="100%"
                 src={videoEmbedUrl}
-                title="Business Video"
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                }}
                 frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
-              ></iframe>
+                title="Featured Business Video"
+              />
             </div>
           </section>
         )}
 
-        <section className="listing-card">
-          <header
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "1.5rem",
-              paddingBottom: "1rem",
-              borderBottom: "1px solid #e2e8f0",
-              flexWrap: "wrap",
-              gap: "1rem",
-            }}
-          >
-            <h2
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                margin: 0,
-                fontSize: "1.25rem",
-                fontWeight: "700",
-                color: "var(--color-text)",
-              }}
-            >
-              <span className="material-symbols-outlined">reviews</span>
-              {t.recommendedReviews || "Recommended Reviews"}
-            </h2>
-            <div>
-              <ReviewActionManager
-                currentUser={currentUser}
-                listingId={listing.databaseId}
-                listingSlug={slug}
-                dict={dict}
-                locale={locale}
-              />
-            </div>
-          </header>
-          <ReviewList
-            reviews={listing.reviews}
-            noReviewsYet={t.noReviewsYet}
+        <section id="reviews" className="listing-card">
+          <ReviewActionManager
+            listingId={listing.databaseId}
+            listingTitle={listing.title}
             currentUser={currentUser}
+            dict={dict}
           />
+          <ReviewList reviews={reviewNodes} dict={dict} />
         </section>
       </main>
 
       <aside className="listing-sidebar">
-        <div style={{ position: "sticky", top: "2rem" }}>
-          <ClaimListing
-            listingTitle={listing.title}
-            listingSlug={listing.slug}
-          />
-          <BlogSidebar />
-        </div>
+        <ClaimListing
+          listingId={listing.databaseId}
+          listingTitle={listing.title}
+          isClaimed={listing.listingdata?.isClaimed === "true"}
+          dict={dict}
+        />
+        <BlogSidebar locale={locale} />
       </aside>
     </div>
   );
 }
+
+DirectoryListingPage.propTypes = {
+  params: PropTypes.object.isRequired,
+};

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Poppins, Open_Sans } from 'next/font/google';
 import { getViewer } from '@/lib/auth';
 import Navbar from '@/components/layout/Navbar';
@@ -23,7 +24,7 @@ export default async function NotFound() {
   const viewer = await getViewer();
 
   return (
-    <html suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>
         {/* SAFE WRAPPER: All fonts and global styles are applied here instead of HTML/Body tags */}
         <div 
@@ -47,19 +48,19 @@ export default async function NotFound() {
                 <div className={styles['not-found__actions']}>
                   {/* Using <a> tags to force a hard reload and prevent HTML layout nesting errors */}
                   <a href="/" className={`${styles['not-found__btn']} ${styles['not-found__btn--primary']}`}>
-                    <span className="material-symbols-outlined">home</span>
+                    <span className="material-symbols-outlined">home</span>{" "}
                     Back to Homepage
                   </a>
                   
                   {/* Conditional Button based on Auth State */}
                   {viewer ? (
                     <a href="/dashboard" className={`${styles['not-found__btn']} ${styles['not-found__btn--secondary']}`}>
-                      <span className="material-symbols-outlined">person</span>
+                      <span className="material-symbols-outlined">person</span>{" "}
                       Go to Profile
                     </a>
                   ) : (
                     <a href="/directory" className={`${styles['not-found__btn']} ${styles['not-found__btn--secondary']}`}>
-                      <span className="material-symbols-outlined">storefront</span>
+                      <span className="material-symbols-outlined">storefront</span>{" "}
                       View Directory
                     </a>
                   )}

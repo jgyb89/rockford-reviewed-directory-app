@@ -1,4 +1,5 @@
 // src/app/dashboard/favorites/page.js
+import PropTypes from 'prop-types';
 import { getViewer } from '@/lib/auth';
 import FavoriteListings from '@/components/dashboard/FavoriteListings';
 import Link from 'next/link';
@@ -41,3 +42,7 @@ export default async function FavoritesPage({ params }) {
     </div>
   );
 }
+
+FavoritesPage.propTypes = {
+  params: PropTypes.object.isRequired,
+};

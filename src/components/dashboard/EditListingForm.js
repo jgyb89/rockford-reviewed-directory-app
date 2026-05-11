@@ -1023,6 +1023,15 @@ const MediaGallerySection = ({
               onMouseEnter={() => setIsHoveringFeatured(true)}
               onMouseLeave={() => setIsHoveringFeatured(false)}
               onClick={() => !disabled && document.getElementById("fi").click()}
+              onKeyDown={(e) => {
+                if (!disabled && (e.key === "Enter" || e.key === " ")) {
+                  e.preventDefault();
+                  document.getElementById("fi").click();
+                }
+              }}
+              role="button"
+              tabIndex={disabled ? -1 : 0}
+              aria-label="Change featured image"
               style={{
                 position: "relative",
                 width: "200px",

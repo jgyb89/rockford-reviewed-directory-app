@@ -1,4 +1,5 @@
 // src/app/[locale]/dashboard/profile/page.js
+import PropTypes from 'prop-types';
 import { getViewer } from '@/lib/auth';
 import ProfileForm from '@/components/dashboard/ProfileForm';
 import Link from 'next/link';
@@ -42,3 +43,7 @@ export default async function ProfilePage({ params }) {
     </div>
   );
 }
+
+ProfilePage.propTypes = {
+  params: PropTypes.object.isRequired,
+};

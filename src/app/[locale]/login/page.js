@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { getDictionary } from '@/lib/dictionaries';
 import LoginForm from '@/components/auth/LoginForm';
 import RecoverPasswordForm from '@/components/auth/RecoverPasswordForm';
@@ -9,7 +10,6 @@ export const metadata = {
 
 export default async function LoginPage({ params, searchParams }) {
   const { locale } = await params;
-  const dict = await getDictionary(locale);
   
   // Safely await searchParams in Next.js 15+
   const resolvedSearchParams = await searchParams;
@@ -61,3 +61,8 @@ export default async function LoginPage({ params, searchParams }) {
     </main>
   );
 }
+
+LoginPage.propTypes = {
+  params: PropTypes.object.isRequired,
+  searchParams: PropTypes.object.isRequired,
+};
