@@ -20,37 +20,32 @@ export function middleware(request) {
   const authToken = request.cookies.get('authToken')?.value;
   const ip = request.ip || request.headers.get('x-forwarded-for') || 'anonymous';
 
-  // --- 1. LOCALE REDIRECTION ---
-  const pathnameIsMissingLocale = locales.every(
-    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
-  );
-
-  if (pathnameIsMissingLocale) {
-    // Check if it's a static file or API route that shouldn't be localized
-    const isExcluded = pathname.startsWith('/_next') || 
-                       pathname.startsWith('/api') || 
-                       pathname.includes('.'); // Very basic check for file extensions
-    
-    if (!isExcluded) {
-      return NextResponse.redirect(
-        new URL(`/${defaultLocale}${pathname}`, request.url)
-      );
-    }
-  }
-
-  // Helper to check path regardless of locale
-  const matchesPath = (path) => {
-    return locales.some(locale => 
-      pathname === `/${locale}${path}` || pathname.startsWith(`/${locale}${path}/`)
-    );
-  };
-
+  // --- 1. LOCALE & REDIRECTION LOGIC ---
   const getLocale = () => {
     const segment = pathname.split('/')[1];
     return locales.includes(segment) ? segment : defaultLocale;
   };
 
   const currentLocale = getLocale();
+  const pathnameIsMissingLocale = locales.every(
+    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
+  );
+
+  // If the pathname explicitly starts with /en, 301 redirect to clean version
+  if (pathname === '/en' || pathname.startsWith('/en/')) {
+    const newPathname = pathname.replace('/en', '') || '/';
+    return NextResponse.redirect(new URL(newPathname, request.url), 301);
+  }
+
+  // Helper to check path regardless of locale
+  const matchesPath = (path) => {
+    // Check if it's the root path (missing locale)
+    if (pathname === path || pathname.startsWith(`${path}/`)) return true;
+    // Or if it has a locale prefix
+    return locales.some(locale => 
+      pathname === `/${locale}${path}` || pathname.startsWith(`/${locale}${path}/`)
+    );
+  };
 
   // --- 2. RATE LIMITING LOGIC ---
   const sensitivePaths = [
@@ -91,18 +86,35 @@ export function middleware(request) {
   // --- 3. ROUTE PROTECTION LOGIC ---
   if (matchesPath('/dashboard')) {
     if (!authToken) {
-      return NextResponse.redirect(new URL(`/${currentLocale}/login`, request.url));
+      const loginPath = currentLocale === 'en' ? '/login' : `/${currentLocale}/login`;
+      return NextResponse.redirect(new URL(loginPath, request.url));
     }
   }
 
   if (matchesPath('/submit-listing')) {
     if (!authToken) {
-      return NextResponse.redirect(new URL(`/${currentLocale}/login`, request.url));
+      const loginPath = currentLocale === 'en' ? '/login' : `/${currentLocale}/login`;
+      return NextResponse.redirect(new URL(loginPath, request.url));
     }
   }
 
   // --- 4. SUCCESS & SECURITY HEADERS ---
-  const response = NextResponse.next();
+  let response;
+  
+  // Create an exclusion check for API routes and static files
+  const isExcluded = pathname.startsWith('/_next') || 
+                     pathname.startsWith('/api') || 
+                     pathname.includes('.'); // Detects file extensions like .xml, .svg, .jpg
+
+  if (pathnameIsMissingLocale && !isExcluded) {
+    // Secretly rewrite to /en under the hood for Next.js routing
+    response = NextResponse.rewrite(
+      new URL(`/${defaultLocale}${pathname}${request.nextUrl.search}`, request.url)
+    );
+  } else {
+    response = NextResponse.next();
+  }
+
   response.headers.set("X-Frame-Options", "DENY");
   response.headers.set("X-Content-Type-Options", "nosniff");
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");

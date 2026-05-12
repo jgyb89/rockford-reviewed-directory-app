@@ -4,6 +4,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import Image from "next/image";
 import Link from "next/link";
+import { getLocalizedUrl } from "@/lib/constants";
 import styles from "./CcrCard.module.css";
 import heartStyles from '@/components/common/HeartButton.module.css';
 import { toggleFavoriteListing } from '@/lib/actions';
@@ -26,7 +27,7 @@ export default function CcrCard({ listing, currentUser, locale = 'en' }) {
   const { title, slug, featuredImage } = listing;
   const listingdata = listing.listingdata || {};
 
-  const listingUrl = `/${locale}/listing/${slug}`;
+  const listingUrl = getLocalizedUrl(`/listing/${slug}`, locale);
 
   // Image handling
   const imageUrl = formatImageUrl(featuredImage?.node?.sourceUrl);

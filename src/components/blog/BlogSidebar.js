@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getSidebarListings } from "@/lib/actions";
 import { formatImageUrl } from "@/lib/formatImageUrl";
+import { getLocalizedUrl } from "@/lib/constants";
 
 export default async function BlogSidebar({ locale = "en" }) {
   const listings = await getSidebarListings();
@@ -26,7 +27,7 @@ export default async function BlogSidebar({ locale = "en" }) {
 
             return (
               <Link 
-                href={`/${locale || 'en'}/listing/${listing.slug}`} 
+                href={getLocalizedUrl(`/listing/${listing.slug}`, locale)} 
                 key={listing.databaseId || listing.slug} 
                 style={{ display: 'flex', gap: '1rem', textDecoration: 'none', color: 'inherit', marginBottom: '1.5rem', alignItems: 'center' }}
               >

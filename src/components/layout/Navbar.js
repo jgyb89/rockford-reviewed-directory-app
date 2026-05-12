@@ -7,6 +7,7 @@ import SearchModal from "@/components/layout/SearchModal";
 import styles from "./Navbar.module.css";
 import capeCoralLogo from "../../../public/cape-coral-reviewed-logo.svg";
 import Image from "next/image";
+import { getLocalizedUrl } from "@/lib/constants";
 import {
   Utensils,
   HeartPulse,
@@ -113,13 +114,13 @@ export default function Navbar({ currentUser, dict, locale }) {
   };
 
   const getSubmitHref = () => {
-    if (!currentUser) return `/${locale}/register-business`;
+    if (!currentUser) return getLocalizedUrl("/register-business", locale);
     const userRoles =
       currentUser.roles?.nodes?.map((node) => node.name.toLowerCase()) || [];
     if (userRoles.includes("business") || userRoles.includes("administrator")) {
-      return `/${locale}/submit-listing`;
+      return getLocalizedUrl("/submit-listing", locale);
     }
-    return `/${locale}/user-to-business`;
+    return getLocalizedUrl("/user-to-business", locale);
   };
 
   const submitHref = getSubmitHref();
@@ -132,7 +133,7 @@ export default function Navbar({ currentUser, dict, locale }) {
   return (
     <>
       <nav className={styles['main-nav']}>
-        <Link href={`/${locale}`} className={styles['nav-brand']}>
+        <Link href={getLocalizedUrl("/", locale)} className={styles['nav-brand']}>
           <Image
             src={capeCoralLogo}
             alt="Cape Coral Reviewed Logo"
@@ -184,7 +185,7 @@ export default function Navbar({ currentUser, dict, locale }) {
             onFocus={() => setIsListingsOpen(true)}
             onBlur={() => setIsListingsOpen(false)}
           >
-            <Link href={`/${locale}/directory`} className={`${styles['nav-link']} ${styles['nav-link__trigger']}`}>
+            <Link href={getLocalizedUrl("/directory", locale)} className={`${styles['nav-link']} ${styles['nav-link__trigger']}`}>
               {t.allListings || "All Listings"}{" "}
               <span className={`material-symbols-outlined ${styles['nav-link__icon']}`}>
                 expand_more
@@ -203,7 +204,7 @@ export default function Navbar({ currentUser, dict, locale }) {
                         {cat.subs.map((sub) => (
                           <Link
                             key={sub.slug}
-                            href={`/${locale}/directory/${cat.slug}/${sub.slug}`}
+                            href={getLocalizedUrl(`/directory/${cat.slug}/${sub.slug}`, locale)}
                             className={styles['mega-menu-sub-link']}
                             onClick={() => setIsListingsOpen(false)}
                           >
@@ -216,7 +217,7 @@ export default function Navbar({ currentUser, dict, locale }) {
                 </div>
                 <div className={styles['mega-menu-footer']}>
                   <Link 
-                    href={`/${locale}/directory`} 
+                    href={getLocalizedUrl("/directory", locale)} 
                     className={styles['mega-menu-all-link']} 
                     onClick={() => setIsListingsOpen(false)}
                   >
@@ -227,7 +228,7 @@ export default function Navbar({ currentUser, dict, locale }) {
             )}
           </div>
 
-          <Link href={`/${locale}/blog`} className={styles['nav-link']}>
+          <Link href={getLocalizedUrl("/blog", locale)} className={styles['nav-link']}>
             {t.news || "News & Reviews"}
           </Link>
 
@@ -259,11 +260,11 @@ export default function Navbar({ currentUser, dict, locale }) {
                 </div>
                 {isAccountOpen && (
                   <div className={styles['nav-dropdown']}>
-                    <Link href={`/${locale}/dashboard`}>{t.profile || "Profile"}</Link>
-                    <Link href={`/${locale}/dashboard/favorites`}>{t.favorites || "Favorites"}</Link>
-                    <Link href={`/${locale}/dashboard/reviews`}>{t.myReviews || "My Reviews"}</Link>
+                    <Link href={getLocalizedUrl("/dashboard", locale)}>{t.profile || "Profile"}</Link>
+                    <Link href={getLocalizedUrl("/dashboard/favorites", locale)}>{t.favorites || "Favorites"}</Link>
+                    <Link href={getLocalizedUrl("/dashboard/reviews", locale)}>{t.myReviews || "My Reviews"}</Link>
                     {isBusinessOrAdmin && (
-                      <Link href={`/${locale}/dashboard/listings`}>{t.myListings || "My Listings"}</Link>
+                      <Link href={getLocalizedUrl("/dashboard/listings", locale)}>{t.myListings || "My Listings"}</Link>
                     )}
                     <button onClick={() => setIsLogoutModalOpen(true)}>
                       {t.signOut || "Sign Out"}
@@ -285,7 +286,7 @@ export default function Navbar({ currentUser, dict, locale }) {
                 {t.login || "Log in"}
               </button>
               <div className={styles['sign-up-button']}>
-                <Link href={`/${locale}/register`}>{t.joinCommunity || "Join Community"}</Link>
+                <Link href={getLocalizedUrl("/register", locale)}>{t.joinCommunity || "Join Community"}</Link>
               </div>
               <div className={styles['business-signup']}>
                 <Link href={submitHref}>{t.submitBusiness || "Submit your Business"}</Link>
@@ -315,7 +316,7 @@ export default function Navbar({ currentUser, dict, locale }) {
           data-level={mobileLevel}
         >
           <div className={styles['flyout-header']}>
-            <Link href={`/${locale}`} className={styles['flyout-brand']} onClick={closeMobileMenu}>
+            <Link href={getLocalizedUrl("/", locale)} className={styles['flyout-brand']} onClick={closeMobileMenu}>
               Cape Coral Directory
             </Link>
             <button className={styles['flyout-close']} onClick={closeMobileMenu}>
@@ -359,7 +360,7 @@ export default function Navbar({ currentUser, dict, locale }) {
                 </li>
                 <li className={styles['flyout-item']}>
                   <Link
-                    href={`/${locale}/blog`}
+                    href={getLocalizedUrl("/blog", locale)}
                     className={styles['flyout-link']}
                     onClick={closeMobileMenu}
                   >
@@ -410,7 +411,7 @@ export default function Navbar({ currentUser, dict, locale }) {
               <div className={styles['flyout-cta-wrap']}>
                 {!currentUser && (
                   <div className={styles['sign-up-button']}>
-                    <Link href={`/${locale}/register`} onClick={closeMobileMenu}>
+                    <Link href={getLocalizedUrl("/register", locale)} onClick={closeMobileMenu}>
                       {t.joinCommunity || "Join Community"}
                     </Link>
                   </div>
@@ -438,7 +439,7 @@ export default function Navbar({ currentUser, dict, locale }) {
                   <ul className={styles['flyout-list']}>
                     <li className={styles['flyout-item']}>
                       <Link
-                        href={`/${locale}/directory`}
+                        href={getLocalizedUrl("/directory", locale)}
                         className={styles['flyout-link']}
                         onClick={closeMobileMenu}
                       >
@@ -473,7 +474,7 @@ export default function Navbar({ currentUser, dict, locale }) {
                   <ul className={styles['flyout-list']}>
                     <li className={styles['flyout-item']}>
                       <Link
-                        href={`/${locale}/dashboard`}
+                        href={getLocalizedUrl("/dashboard", locale)}
                         className={styles['flyout-link']}
                         onClick={closeMobileMenu}
                       >
@@ -482,7 +483,7 @@ export default function Navbar({ currentUser, dict, locale }) {
                     </li>
                     <li className={styles['flyout-item']}>
                       <Link
-                        href={`/${locale}/dashboard/favorites`}
+                        href={getLocalizedUrl("/dashboard/favorites", locale)}
                         className={styles['flyout-link']}
                         onClick={closeMobileMenu}
                       >
@@ -491,7 +492,7 @@ export default function Navbar({ currentUser, dict, locale }) {
                     </li>
                     <li className={styles['flyout-item']}>
                       <Link
-                        href={`/${locale}/dashboard/reviews`}
+                        href={getLocalizedUrl("/dashboard/reviews", locale)}
                         className={styles['flyout-link']}
                         onClick={closeMobileMenu}
                       >
@@ -501,7 +502,7 @@ export default function Navbar({ currentUser, dict, locale }) {
                     {isBusinessOrAdmin && (
                       <li className={styles['flyout-item']}>
                         <Link
-                          href={`/${locale}/dashboard/listings`}
+                          href={getLocalizedUrl("/dashboard/listings", locale)}
                           className={styles['flyout-link']}
                           onClick={closeMobileMenu}
                         >
@@ -541,7 +542,7 @@ export default function Navbar({ currentUser, dict, locale }) {
                     {/* NEW: View All Category Link */}
                     <li className={styles['flyout-item']}>
                       <Link
-                        href={`/${locale}/directory/${activeCategory.slug}`}
+                        href={getLocalizedUrl(`/directory/${activeCategory.slug}`, locale)}
                         className={styles['flyout-link']}
                         onClick={closeMobileMenu}
                       >
@@ -554,7 +555,7 @@ export default function Navbar({ currentUser, dict, locale }) {
                     {activeCategory.subs.map((sub) => (
                       <li key={sub.slug} className={styles['flyout-item']}>
                         <Link
-                          href={`/${locale}/directory/${activeCategory.slug}/${sub.slug}`}
+                          href={getLocalizedUrl(`/directory/${activeCategory.slug}/${sub.slug}`, locale)}
                           className={styles['flyout-link']}
                           onClick={closeMobileMenu}
                         >
@@ -597,7 +598,7 @@ export default function Navbar({ currentUser, dict, locale }) {
             </p>
             <div className={styles['logout-modal__actions']}>
               <a
-                href={`/${locale}/logout`}
+                href={getLocalizedUrl("/logout", locale)}
                 className={`${styles['logout-modal__button']} ${styles['logout-modal__button--confirm']}`}
               >
                 Yes, Log Out
