@@ -76,7 +76,7 @@ export default async function DashboardRoot({ params }) {
                 <h3>Recommend a Business</h3>
               </div>
               <p>Know a great local spot that isn't listed? Let us know so we can add them!</p>
-              <Link href={`/${locale}/recommend`} className="bento-link">Submit Idea &rarr;</Link>
+              <Link href={`/${locale}/submit-listing`} className="bento-link">Submit Idea &rarr;</Link>
             </div>
           </div>
           <div className="bento-col-large">

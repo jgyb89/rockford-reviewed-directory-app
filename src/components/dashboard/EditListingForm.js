@@ -465,8 +465,8 @@ function useEditListingForm(initialData) {
         title: formData.title,
         content: formData.content,
         featuredImageId,
-        category: formData.category,
-        categories: categorySelections,
+        selectedDirectoryType: formData.category,
+        selectedCategories: categorySelections,
         listingdata: {
           ...formData,
           socialUrl: formData.socialUrls.filter((u) => u.trim()).join(","),

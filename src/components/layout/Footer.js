@@ -41,7 +41,7 @@ export default function Footer({ locale = "en" }) {
               </li>
               <li>
                 <Link
-                  href={`/${locale}/categories/restaurants`}
+                  href={`/${locale}/directory/food-drink`}
                   className={styles["footer__link"]}
                 >
                   Restaurants & Dining
@@ -49,7 +49,7 @@ export default function Footer({ locale = "en" }) {
               </li>
               <li>
                 <Link
-                  href={`/${locale}/categories/home-services`}
+                  href={`/${locale}/directory/home-local-services`}
                   className={styles["footer__link"]}
                 >
                   Home Services
@@ -57,7 +57,7 @@ export default function Footer({ locale = "en" }) {
               </li>
               <li>
                 <Link
-                  href={`/${locale}/recommend`}
+                  href={`/${locale}/submit-listing`}
                   className={styles["footer__link"]}
                 >
                   Recommend a Business

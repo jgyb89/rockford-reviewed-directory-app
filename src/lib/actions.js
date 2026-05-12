@@ -401,7 +401,13 @@ export async function updateUserListing(databaseId, payload) {
 
   const query = `
     mutation UpdateUserListing($input: UpdateCcrlistingInput!) {
-      updateCcrlisting(input: $input) { ccrlisting { databaseId } }
+      updateCcrlisting(input: $input) {
+        ccrlisting {
+          databaseId
+          directoryTypes { nodes { slug } }
+          ccrlistingcategories { nodes { slug } }
+        }
+      }
     }
   `;
 
@@ -415,14 +421,12 @@ export async function updateUserListing(databaseId, payload) {
       content: payload.content,
       featuredImageId: payload.featuredImageId,
       listingDataJson: JSON.stringify(acfData),
-      directoryTypes: {
-        append: false,
-        nodes: payload.category ? [{ id: payload.category }] : []
-      },
-      ccrlistingcategories: {
-        append: false,
-        nodes: payload.categories?.map(slug => ({ id: slug })) || []
-      }
+      directoryTypes: payload.selectedDirectoryType
+        ? { append: false, nodes: [{ slug: payload.selectedDirectoryType }] }
+        : { append: false, nodes: [] },
+      ccrlistingcategories: payload.selectedCategories?.length > 0
+        ? { append: false, nodes: payload.selectedCategories.map(slug => ({ slug })) }
+        : { append: false, nodes: [] }
     },
   };
 
