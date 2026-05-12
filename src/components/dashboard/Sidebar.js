@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import PropTypes from 'prop-types';
 import ProfileAvatar from './ProfileAvatar';
+import { getLocalizedUrl } from "@/lib/constants";
 
 export default function Sidebar({ user, userRoles, locale }) {
   const pathname = usePathname();
@@ -11,17 +12,17 @@ export default function Sidebar({ user, userRoles, locale }) {
 
   const links = [
     {
-      href: `/${locale}/dashboard/profile`,
+      href: getLocalizedUrl("/dashboard/profile", locale),
       label: 'Profile Settings',
       icon: 'person'
     },
     {
-      href: `/${locale}/dashboard/favorites`,
+      href: getLocalizedUrl("/dashboard/favorites", locale),
       label: 'Favorite Listings',
       icon: 'favorite'
     },
     {
-      href: `/${locale}/dashboard/reviews`,
+      href: getLocalizedUrl("/dashboard/reviews", locale),
       label: 'My Reviews',
       icon: 'rate_review'
     }
@@ -29,7 +30,7 @@ export default function Sidebar({ user, userRoles, locale }) {
 
   if (isAdminOrBusiness) {
     links.push({
-      href: `/${locale}/dashboard/listings`,
+      href: getLocalizedUrl("/dashboard/listings", locale),
       label: 'My Listings',
       icon: 'storefront'
     });
@@ -63,7 +64,7 @@ export default function Sidebar({ user, userRoles, locale }) {
         })}
 
         <li className="dashboard-nav__item" style={{ marginTop: 'auto' }}>
-          <a href={`/${locale}/logout`} className="dashboard-nav__link dashboard-nav__link--signout">
+          <a href={getLocalizedUrl("/logout", locale)} className="dashboard-nav__link dashboard-nav__link--signout">
             <div className="dashboard-nav__link-left">
               <span className="material-symbols-outlined">logout</span>
               <span>Sign Out</span>

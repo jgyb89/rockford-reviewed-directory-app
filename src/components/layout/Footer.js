@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { getLocalizedUrl } from "@/lib/constants";
 import styles from "./Footer.module.css";
 
 export default function Footer({ locale = "en" }) {
@@ -12,7 +13,7 @@ export default function Footer({ locale = "en" }) {
         <div className={styles["footer__top"]}>
           {/* Column 1: Brand & About */}
           <div className={styles["footer__col"]}>
-            <Link href={`/${locale}`} className={styles["footer__logo"]}>
+            <Link href={getLocalizedUrl("/", locale)} className={styles["footer__logo"]}>
               <Image
                 src="/cape-coral-reviewed-logo.webp"
                 alt="Cape Coral Reviewed"
@@ -33,7 +34,7 @@ export default function Footer({ locale = "en" }) {
             <ul className={styles["footer__list"]}>
               <li>
                 <Link
-                  href={`/${locale}/directory`}
+                  href={getLocalizedUrl("/directory", locale)}
                   className={styles["footer__link"]}
                 >
                   Business Directory
@@ -41,7 +42,7 @@ export default function Footer({ locale = "en" }) {
               </li>
               <li>
                 <Link
-                  href={`/${locale}/directory/food-drink`}
+                  href={getLocalizedUrl("/directory/food-drink", locale)}
                   className={styles["footer__link"]}
                 >
                   Restaurants & Dining
@@ -49,7 +50,7 @@ export default function Footer({ locale = "en" }) {
               </li>
               <li>
                 <Link
-                  href={`/${locale}/directory/home-local-services`}
+                  href={getLocalizedUrl("/directory/home-local-services", locale)}
                   className={styles["footer__link"]}
                 >
                   Home Services
@@ -57,7 +58,7 @@ export default function Footer({ locale = "en" }) {
               </li>
               <li>
                 <Link
-                  href={`/${locale}/submit-listing`}
+                  href={getLocalizedUrl("/submit-listing", locale)}
                   className={styles["footer__link"]}
                 >
                   Recommend a Business
@@ -72,7 +73,7 @@ export default function Footer({ locale = "en" }) {
             <ul className={styles["footer__list"]}>
               <li>
                 <Link
-                  href={`/${locale}/about`}
+                  href={getLocalizedUrl("/about", locale)}
                   className={styles["footer__link"]}
                 >
                   About Us
@@ -80,7 +81,7 @@ export default function Footer({ locale = "en" }) {
               </li>
               <li>
                 <Link
-                  href={`/${locale}/contact`}
+                  href={getLocalizedUrl("/contact", locale)}
                   className={styles["footer__link"]}
                 >
                   Contact
@@ -88,7 +89,7 @@ export default function Footer({ locale = "en" }) {
               </li>
               <li>
                 <Link
-                  href={`/${locale}/login`}
+                  href={getLocalizedUrl("/login", locale)}
                   className={styles["footer__link"]}
                 >
                   Business Login
@@ -96,7 +97,7 @@ export default function Footer({ locale = "en" }) {
               </li>
               <li>
                 <Link
-                  href={`/${locale}/register`}
+                  href={getLocalizedUrl("/register", locale)}
                   className={styles["footer__link"]}
                 >
                   Create an Account
@@ -141,14 +142,14 @@ export default function Footer({ locale = "en" }) {
 
           <div className={styles["footer__legal"]}>
             <Link
-              href={`/${locale}/privacy-policy`}
+              href={getLocalizedUrl("/privacy-policy", locale)}
               className={styles["footer__legal-link"]}
             >
               Privacy Policy
             </Link>
             <span className={styles["footer__legal-sep"]}>|</span>
             <Link
-              href={`/${locale}/terms-of-service`}
+              href={getLocalizedUrl("/terms-of-service", locale)}
               className={styles["footer__legal-link"]}
             >
               Terms of Service

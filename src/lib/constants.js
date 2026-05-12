@@ -87,5 +87,8 @@ export const ALL_CATEGORIES = [
   { name: 'Apartments & Property Mgmt', slug: 'apartments-property-mgmt-en', parentSlug: 'real-estate-en' },
   { name: 'Realtors & Agents', slug: 'realtors-en', parentSlug: 'real-estate-en' },
 
-  { name: 'Pest Control', slug: 'pest-control-en', directoryType: 'home-local-services', isParent: true },
-];
+
+export function getLocalizedUrl(path, locale) {
+  if (locale === 'en') return path;
+  return `/${locale}${path}`;
+}

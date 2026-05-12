@@ -3,9 +3,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { getLocalizedUrl } from "@/lib/constants";
 import styles from "./Blog.module.css";
 
-export default function BlogCard({ post }) {
+export default function BlogCard({ post, locale = "en" }) {
   const { title, categories, excerpt, slug, imageUrl } = post;
 
   return (
@@ -23,7 +24,7 @@ export default function BlogCard({ post }) {
         <div className={styles['blog-card__categories']}>{categories.join(", ")}</div>
         <h3 className={styles['blog-card__title']}>{title}</h3>
         <p className={styles['blog-card__excerpt']}>{excerpt}</p>
-        <Link href={`/blog/${slug}`} className={styles['blog-card__read-more']}>
+        <Link href={getLocalizedUrl(`/blog/${slug}`, locale)} className={styles['blog-card__read-more']}>
           Read More &rarr;
         </Link>
       </div>
