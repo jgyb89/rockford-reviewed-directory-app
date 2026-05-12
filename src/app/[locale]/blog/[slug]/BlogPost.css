@@ -258,3 +258,67 @@
     margin-bottom: 1.5rem;
   }
 }
+
+/* =========================================
+   Responsive Videos & Embeds
+   ========================================= */
+.blog-post-main .wp-block-embed,
+.blog-post-main .wp-block-video {
+  margin: 3rem 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  clear: both; /* Ensure it clears any floated images */
+}
+
+.blog-post-main .wp-block-embed__wrapper {
+  position: relative;
+  width: 100%;
+  /* Modern browsers support aspect-ratio directly on the container */
+  aspect-ratio: 16 / 9;
+}
+
+.blog-post-main .wp-block-embed__wrapper iframe,
+.blog-post-main .wp-block-embed__wrapper video,
+.blog-post-main .wp-block-video video {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  border: none;
+  display: block;
+}
+
+/* Aspect Ratio Modifiers */
+.blog-post-main .wp-embed-aspect-16-9 .wp-block-embed__wrapper {
+  aspect-ratio: 16 / 9;
+}
+
+.blog-post-main .wp-embed-aspect-9-16 .wp-block-embed__wrapper {
+  aspect-ratio: 9 / 16;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.blog-post-main .wp-embed-aspect-4-3 .wp-block-embed__wrapper {
+  aspect-ratio: 4 / 3;
+}
+
+.blog-post-main .wp-embed-aspect-1-1 .wp-block-embed__wrapper {
+  aspect-ratio: 1 / 1;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Fallback for embeds without specific aspect ratio classes */
+.blog-post-main
+  .wp-block-embed:not(.wp-has-aspect-ratio)
+  .wp-block-embed__wrapper {
+  aspect-ratio: 16 / 9;
+}
+
+/* Fix for WordPress adding extra padding/height in some environments */
+.blog-post-main .wp-block-embed iframe {
+  max-width: 100% !important;
+}
