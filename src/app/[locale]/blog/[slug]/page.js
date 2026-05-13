@@ -43,7 +43,23 @@ export default async function BlogPostPage({ params }) {
     ?.map((cat) => cat.name)
     .join(", ");
 
-  const sanitizedContent = DOMPurify.sanitize(post.content || "");
+  const sanitizedContent = DOMPurify.sanitize(post.content || "", {
+    ADD_TAGS: ["iframe", "video", "source", "track"],
+    ADD_ATTR: [
+      "allow",
+      "allowfullscreen",
+      "frameborder",
+      "scrolling",
+      "src",
+      "type",
+      "controls",
+      "autoplay",
+      "muted",
+      "loop",
+      "playsinline",
+      "poster",
+    ],
+  });
 
   const jsonLd = {
     "@context": "https://schema.org",

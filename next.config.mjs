@@ -65,7 +65,7 @@ const nextConfig = {
           {
             key: "Content-Security-Policy",
             value:
-              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://accounts.google.com https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' blob: data: https://*.capecoralreviewed.com https://i.ytimg.com https://*.youtube.com; connect-src 'self' https://*.capecoralreviewed.com https://accounts.google.com; font-src 'self' data: https://fonts.gstatic.com; frame-src 'self' https://www.youtube.com https://player.vimeo.com https://accounts.google.com;",
+              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://accounts.google.com https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' blob: data: https://*.capecoralreviewed.com https://i.ytimg.com https://*.youtube.com; connect-src 'self' https://*.capecoralreviewed.com https://accounts.google.com; font-src 'self' data: https://fonts.gstatic.com; frame-src 'self' https://www.youtube.com https://player.vimeo.com https://accounts.google.com; media-src 'self' https://wp.capecoralreviewed.com;",
           },
         ],
       },
