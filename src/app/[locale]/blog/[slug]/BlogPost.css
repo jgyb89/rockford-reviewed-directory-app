@@ -322,3 +322,29 @@
 .blog-post-main .wp-block-embed iframe {
   max-width: 100% !important;
 }
+
+/* Final Clean Video Wrapper */
+.blog-post-main .wp-block-video,
+.blog-post-main .wp-block-embed {
+  margin: 2rem auto !important;
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: auto !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+/* Final Clean Native Video */
+.blog-post-main .wp-block-video video,
+.blog-post__content video {
+  width: 100% !important;
+  max-width: 450px !important; /* Perfect width for vertical mobile videos */
+  height: auto !important;
+  max-height: none !important;
+  border-radius: 12px;
+  object-fit: cover !important;
+  display: block !important;
+  margin: 0 auto !important;
+  background: transparent !important;
+}
