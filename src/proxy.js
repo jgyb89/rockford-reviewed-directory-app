@@ -15,92 +15,100 @@ const rateLimitMap = new Map();
 const locales = ['en', 'es'];
 const defaultLocale = 'en';
 
-export function middleware(request) {
-  const { pathname } = request.nextUrl;
-  const authToken = request.cookies.get('authToken')?.value;
-  const ip = request.ip || request.headers.get('x-forwarded-for') || 'anonymous';
+// --- HELPERS ---
 
-  // --- 1. LOCALE & REDIRECTION LOGIC ---
-  const getLocale = () => {
-    const segment = pathname.split('/')[1];
-    return locales.includes(segment) ? segment : defaultLocale;
-  };
-
-  const currentLocale = getLocale();
-  const pathnameIsMissingLocale = locales.every(
-    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
+/**
+ * Helper to check path regardless of locale
+ */
+function matchesPath(pathname, path) {
+  // Check if it's the root path (missing locale)
+  if (pathname === path || pathname.startsWith(`${path}/`)) return true;
+  // Or if it has a locale prefix
+  return locales.some(locale => 
+    pathname === `/${locale}${path}` || pathname.startsWith(`/${locale}${path}/`)
   );
+}
 
-  // If the pathname explicitly starts with /en, 301 redirect to clean version
-  if (pathname === '/en' || pathname.startsWith('/en/')) {
-    const newPathname = pathname.replace('/en', '') || '/';
-    return NextResponse.redirect(new URL(newPathname, request.url), 301);
-  }
+/**
+ * Get the current locale from the pathname
+ */
+function getLocale(pathname) {
+  const segment = pathname.split('/')[1];
+  return locales.includes(segment) ? segment : defaultLocale;
+}
 
-  // Helper to check path regardless of locale
-  const matchesPath = (path) => {
-    // Check if it's the root path (missing locale)
-    if (pathname === path || pathname.startsWith(`${path}/`)) return true;
-    // Or if it has a locale prefix
-    return locales.some(locale => 
-      pathname === `/${locale}${path}` || pathname.startsWith(`/${locale}${path}/`)
-    );
-  };
-
-  // --- 2. RATE LIMITING LOGIC ---
+/**
+ * 1. Rate Limiting Logic
+ */
+function applyRateLimit(ip, pathname) {
   const sensitivePaths = [
     '/register-business',
     '/register',
     '/api/auth',
   ];
 
-  const isSensitive = sensitivePaths.some((path) => matchesPath(path) || pathname.startsWith(path));
+  const isSensitive = sensitivePaths.some((path) => matchesPath(pathname, path) || pathname.startsWith(path));
 
-  if (isSensitive) {
-    const limit = 10; // Max requests per minute
-    const windowMs = 60 * 1000;
-    const now = Date.now();
-    const userUsage = rateLimitMap.get(ip) || { count: 0, lastReset: now };
+  if (!isSensitive) return null;
 
-    if (now - userUsage.lastReset > windowMs) {
-      userUsage.count = 1;
-      userUsage.lastReset = now;
-    } else {
-      userUsage.count++;
-    }
+  const limit = 10; // Max requests per minute
+  const windowMs = 60 * 1000;
+  const now = Date.now();
+  const userUsage = rateLimitMap.get(ip) || { count: 0, lastReset: now };
 
-    rateLimitMap.set(ip, userUsage);
-
-    if (userUsage.count > limit) {
-      return new NextResponse('Too Many Requests', {
-        status: 429,
-        statusText: 'Too Many Requests',
-        headers: {
-          'Content-Type': 'text/plain',
-          'Retry-After': '60',
-        },
-      });
-    }
+  if (now - userUsage.lastReset > windowMs) {
+    userUsage.count = 1;
+    userUsage.lastReset = now;
+  } else {
+    userUsage.count++;
   }
 
-  // --- 3. ROUTE PROTECTION LOGIC ---
-  if (matchesPath('/dashboard')) {
-    if (!authToken) {
-      const loginPath = currentLocale === 'en' ? '/login' : `/${currentLocale}/login`;
-      return NextResponse.redirect(new URL(loginPath, request.url));
-    }
-  }
+  rateLimitMap.set(ip, userUsage);
 
-  if (matchesPath('/submit-listing')) {
-    if (!authToken) {
-      const loginPath = currentLocale === 'en' ? '/login' : `/${currentLocale}/login`;
-      return NextResponse.redirect(new URL(loginPath, request.url));
-    }
+  if (userUsage.count > limit) {
+    return new NextResponse('Too Many Requests', {
+      status: 429,
+      statusText: 'Too Many Requests',
+      headers: {
+        'Content-Type': 'text/plain',
+        'Retry-After': '60',
+      },
+    });
   }
-
-  // --- 4. SUCCESS & SECURITY HEADERS ---
-  let response;
   
+  return null;
+}
+
+/**
+ * 2. Authentication / Protected Route Logic
+ */
+function handleAuthRedirects(request, pathname, authToken) {
+  const protectedPaths = ['/dashboard', '/submit-listing'];
+  const isProtected = protectedPaths.some(path => matchesPath(pathname, path));
+
+  if (isProtected && !authToken) {
+    const currentLocale = getLocale(pathname);
+    const loginPath = currentLocale === 'en' ? '/login' : `/${currentLocale}/login`;
+    return NextResponse.redirect(new URL(loginPath, request.url));
+  }
+  
+  return null;
+}
+
+/**
+ * 3. Locale / Internationalization Rewrite Logic
+ */
+function handleLocaleRouting(request, pathname) {
+  // If the pathname explicitly starts with /en, 301 redirect to clean version
+  if (pathname === '/en' || pathname.startsWith('/en/')) {
+    const newPathname = pathname.replace('/en', '') || '/';
+    return NextResponse.redirect(new URL(newPathname, request.url), 301);
+  }
+
+  const pathnameIsMissingLocale = locales.every(
+    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
+  );
+
   // Create an exclusion check for API routes and static files
   const isExcluded = pathname.startsWith('/_next') || 
                      pathname.startsWith('/api') || 
@@ -108,13 +116,34 @@ export function middleware(request) {
 
   if (pathnameIsMissingLocale && !isExcluded) {
     // Secretly rewrite to /en under the hood for Next.js routing
-    response = NextResponse.rewrite(
+    return NextResponse.rewrite(
       new URL(`/${defaultLocale}${pathname}${request.nextUrl.search}`, request.url)
     );
-  } else {
-    response = NextResponse.next();
   }
 
+  return NextResponse.next();
+}
+
+/**
+ * Main Middleware Export
+ */
+export function middleware(request) {
+  const { pathname } = request.nextUrl;
+  const authToken = request.cookies.get('authToken')?.value;
+  const ip = request.ip || request.headers.get('x-forwarded-for') || 'anonymous';
+
+  // 1. Apply Rate Limiting
+  const rateLimitResponse = applyRateLimit(ip, pathname);
+  if (rateLimitResponse) return rateLimitResponse;
+
+  // 2. Handle Protected Route Redirects
+  const authResponse = handleAuthRedirects(request, pathname, authToken);
+  if (authResponse) return authResponse;
+
+  // 3. Handle Locale Routing & Rewrites
+  const response = handleLocaleRouting(request, pathname);
+
+  // 4. Add Security Headers
   response.headers.set("X-Frame-Options", "DENY");
   response.headers.set("X-Content-Type-Options", "nosniff");
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
