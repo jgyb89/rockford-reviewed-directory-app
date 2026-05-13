@@ -101,7 +101,7 @@ export default function MyReviews({ reviews: initialReviews, locale = 'en' }) {
 
   return (
     <div className={styles['my-reviews']}>
-      <DashboardSortDropdown currentSortProp={sortBy} onSortChange={(val) => { setSortBy(val); setCurrentPage(1); }} />
+      <DashboardSortDropdown currentSortProp={currentSort} onSortChange={(val) => { setCurrentSort(val); setCurrentPage(1); }} />
       <ul className={styles['my-reviews__list']}>
         {paginatedReviews.map((review) => {
           const listing = review.reviewFields?.relatedListing?.nodes?.[0];
