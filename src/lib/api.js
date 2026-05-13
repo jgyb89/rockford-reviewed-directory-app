@@ -69,24 +69,22 @@ export async function getListingBySlug(slug) {
           videoUrl
         }
 
-        reviews {
+        reviews(first: 100) {
           nodes {
-            id
             databaseId
+            date
             title
             content
-            date
-            author {
-              node {
-                databaseId
-                name
-                userData {
-                  isFeaturedUser
-                }
-              }
-            }
             reviewFields {
               starRating
+            }
+            author {
+              node {
+                name
+                avatar {
+                  url
+                }
+              }
             }
           }
         }
@@ -99,7 +97,7 @@ export async function getListingBySlug(slug) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "User-Agent": "CCR-NextJS-Frontend/1.0"
+        "User-Agent": "CCR-NextJS-Frontend/1.0",
       },
       body: JSON.stringify({
         query,
@@ -215,7 +213,7 @@ export async function getListings(categorySlug = null) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "User-Agent": "CCR-NextJS-Frontend/1.0"
+        "User-Agent": "CCR-NextJS-Frontend/1.0",
       },
       body: JSON.stringify({
         query,
@@ -238,7 +236,10 @@ export async function getListings(categorySlug = null) {
   }
 }
 
-export async function getListingsByCategory(categorySlug, directoryType = null) {
+export async function getListingsByCategory(
+  categorySlug,
+  directoryType = null,
+) {
   const query = `
     query GetListingsByCategory($categorySlug: [String], $directoryType: [String]) {
       ccrlistings(first: 100, where: { 
@@ -288,7 +289,7 @@ export async function getListingsByCategory(categorySlug, directoryType = null) 
             nodes {
               name
               slug
-            }
+            }listing
           }
           reviews {
             nodes {
@@ -325,13 +326,13 @@ export async function getListingsByCategory(categorySlug, directoryType = null) 
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "User-Agent": "CCR-NextJS-Frontend/1.0"
+        "User-Agent": "CCR-NextJS-Frontend/1.0",
       },
       body: JSON.stringify({
         query,
-        variables: { 
-          categorySlug: categorySlug ? [categorySlug] : null, 
-          directoryType: directoryType ? [directoryType] : null 
+        variables: {
+          categorySlug: categorySlug ? [categorySlug] : null,
+          directoryType: directoryType ? [directoryType] : null,
         },
       }),
       next: { revalidate: 60 },
@@ -436,11 +437,13 @@ export async function getListingsByDirectoryType(directoryTypeSlug) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "User-Agent": "CCR-NextJS-Frontend/1.0"
+        "User-Agent": "CCR-NextJS-Frontend/1.0",
       },
       body: JSON.stringify({
         query,
-        variables: { directoryType: directoryTypeSlug ? [directoryTypeSlug] : null },
+        variables: {
+          directoryType: directoryTypeSlug ? [directoryTypeSlug] : null,
+        },
       }),
       next: { revalidate: 60 },
     });
@@ -448,7 +451,10 @@ export async function getListingsByDirectoryType(directoryTypeSlug) {
     const json = await res.json();
 
     if (json.errors) {
-      console.error("GraphQL API Errors (getListingsByDirectoryType):", json.errors);
+      console.error(
+        "GraphQL API Errors (getListingsByDirectoryType):",
+        json.errors,
+      );
       return [];
     }
 
@@ -489,8 +495,8 @@ export async function updateUserFavorites(userId, favoriteIdsArray, authToken) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${authToken}`,
-        "User-Agent": "CCR-NextJS-Frontend/1.0"
+        Authorization: `Bearer ${authToken}`,
+        "User-Agent": "CCR-NextJS-Frontend/1.0",
       },
       body: JSON.stringify({ query: mutation, variables }),
     });

@@ -414,13 +414,20 @@ export default async function DirectoryListingPage({ params }) {
         )}
 
         <section id="reviews" className="listing-card">
-          <ReviewActionManager
-            listingId={listing.databaseId}
-            listingTitle={listing.title}
+          <div className="reviews-section-header">
+            <h3 className="review-list__header">User Reviews ({reviewCount})</h3>
+            <ReviewActionManager
+              listingId={listing.databaseId}
+              listingTitle={listing.title}
+              currentUser={currentUser}
+              dict={dict}
+            />
+          </div>
+          <ReviewList 
+            reviews={listing.reviews} 
+            noReviewsYet={t.noReviewsYet}
             currentUser={currentUser}
-            dict={dict}
           />
-          <ReviewList reviews={reviewNodes} dict={dict} />
         </section>
       </main>
 

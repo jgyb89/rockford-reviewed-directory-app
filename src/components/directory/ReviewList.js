@@ -49,8 +49,6 @@ export default function ReviewList({ reviews, noReviewsYet = "No reviews yet. Be
 
   return (
     <section className="review-list">
-      <h3 className="review-list__header">User Reviews ({nodes.length})</h3>
-      
       <div className="review-list__container">
         {nodes.slice(0, visibleCount).map((review, index) => {
           const isOwner = currentUser && currentUser.databaseId === review.author?.node?.databaseId;
