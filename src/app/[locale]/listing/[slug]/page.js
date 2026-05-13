@@ -138,6 +138,13 @@ export default async function DirectoryListingPage({ params }) {
     ALLOWED_ATTR: ["href", "target", "rel"],
   });
 
+  const socialLinks = listingdata.socialUrl
+    ? listingdata.socialUrl
+        .split(",")
+        .map((s) => s.trim())
+        .filter((s) => s !== "")
+    : [];
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -166,6 +173,16 @@ export default async function DirectoryListingPage({ params }) {
           reviewCount: reviewCount,
         }
       : undefined,
+    sameAs: socialLinks.length > 0 ? socialLinks : undefined,
+    openingHours: [
+      listingdata.hoursMonday && `Mo ${listingdata.hoursMonday}`,
+      listingdata.hoursTuesday && `Tu ${listingdata.hoursTuesday}`,
+      listingdata.hoursWednesday && `We ${listingdata.hoursWednesday}`,
+      listingdata.hoursThursday && `Th ${listingdata.hoursThursday}`,
+      listingdata.hoursFriday && `Fr ${listingdata.hoursFriday}`,
+      listingdata.hoursSaturday && `Sa ${listingdata.hoursSaturday}`,
+      listingdata.hoursSunday && `Su ${listingdata.hoursSunday}`,
+    ].filter(Boolean)
   };
 
   const dayLabels = t.days || {};
@@ -184,12 +201,6 @@ export default async function DirectoryListingPage({ params }) {
 
   // Process Video and Social Links
   const videoEmbedUrl = getEmbedUrl(listingdata.videoUrl);
-  const socialLinks = listingdata.socialUrl
-    ? listingdata.socialUrl
-        .split(",")
-        .map((s) => s.trim())
-        .filter((s) => s !== "")
-    : [];
 
   return (
     <div className="listing-layout">

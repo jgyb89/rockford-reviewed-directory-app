@@ -6,6 +6,19 @@ import HeroSlideshow from "@/components/home/HeroSlideshow";
 import TabbedListingFeed from "@/components/home/TabbedListingFeed";
 import HomeSidebar from "@/components/home/HomeSidebar";
 
+export const metadata = {
+  title: "Cape Coral Reviewed - Local Business Directory",
+  description: "Discover the best local businesses, restaurants, and services in Cape Coral, Florida.",
+  openGraph: {
+    title: "Cape Coral Reviewed",
+    description: "Discover the best local businesses, restaurants, and services in Cape Coral, Florida.",
+    url: "https://capecoralreviewed.com",
+    siteName: "Cape Coral Reviewed",
+    locale: "en_US",
+    type: "website",
+  },
+};
+
 export default async function HomePage({ params }) {
   const { locale } = await params;
   const dict = await getDictionary(locale);
@@ -20,8 +33,24 @@ export default async function HomePage({ params }) {
   const popularNearYou = listings.slice(0, 5);
   const feedListings = listings;
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Cape Coral Reviewed",
+    url: "https://capecoralreviewed.com",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://capecoralreviewed.com/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  };
+
   return (
     <main style={{ backgroundColor: "#fdfdfd", minHeight: "100vh" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Hero Section */}
       <HeroSlideshow featuredListings={featuredListings} locale={locale} />
 

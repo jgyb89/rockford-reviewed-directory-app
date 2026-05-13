@@ -29,6 +29,17 @@ const nextConfig = {
       allowedOrigins: ["capecoralreviewed.com", "staging.capecoralreviewed.com", "wp.capecoralreviewed.com"],
     },
   },
+  async redirects() {
+    const legacyBlogSlugs = [
+      "weekend-brunch-at-blossom-brie-a-farm-to-table-review-worth-the-visit",
+    ];
+
+    return legacyBlogSlugs.map((slug) => ({
+      source: `/:locale(en|es)/${slug}`,
+      destination: `/:locale/blog/${slug}`,
+      permanent: true,
+    }));
+  },
   async headers() {
     return [
       {

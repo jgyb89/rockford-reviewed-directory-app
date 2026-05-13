@@ -45,8 +45,23 @@ export default async function BlogPostPage({ params }) {
 
   const sanitizedContent = DOMPurify.sanitize(post.content || "");
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    image: post.featuredImage?.node?.sourceUrl 
+      ? [formatImageUrl(post.featuredImage.node.sourceUrl)] 
+      : [],
+    datePublished: post.date,
+    dateModified: post.modified || post.date,
+  };
+
   return (
     <div className="blog-post-layout">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <article className="blog-post-main">
         <BackButton />
         <header className="blog-post__header">
