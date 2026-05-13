@@ -9,7 +9,7 @@ import BackToTop from "@/components/common/BackToTop";
 import CookieConsent from "@/components/common/CookieConsent";
 import { getViewer } from "@/lib/auth";
 import { getDictionary } from "@/lib/dictionaries";
-import Link from "next/link";
+import { headers } from "next/headers";
 
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -25,11 +25,32 @@ const openSans = Open_Sans({
   variable: "--font-open-sans",
 });
 
-export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://capecoralreviewed.com'),
-  title: "Cape Coral Reviewed",
-  description: "The premier local directory for Cape Coral, Florida.",
-};
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
+  const headersList = await headers();
+  const fullUrl = headersList.get("x-url") || "https://capecoralreviewed.com";
+  
+  // Construct a clean URL for canonical (strip /en)
+  const urlObj = new URL(fullUrl);
+  let cleanPath = urlObj.pathname;
+  
+  // Strip /en prefix if present
+  if (cleanPath.startsWith("/en/") || cleanPath === "/en") {
+    cleanPath = cleanPath.replace(/^\/en/, "") || "/";
+  }
+
+  return {
+    metadataBase: new URL("https://capecoralreviewed.com"),
+    alternates: {
+      canonical: cleanPath,
+    },
+    title: {
+      template: "%s | Cape Coral Reviewed",
+      default: "Cape Coral Reviewed",
+    },
+    description: "The premier local directory for Cape Coral, Florida.",
+  };
+}
 
 export async function generateStaticParams() {
   return [{ locale: "en" }, { locale: "es" }];
