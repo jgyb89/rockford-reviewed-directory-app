@@ -26,7 +26,7 @@ export default async function ReviewsPage({ params }) {
 
   return (
     <div className="reviews-page">
-      <Link href={`/${locale}/dashboard`} className="dashboard-back-btn">
+      <Link href={`/dashboard`} className="dashboard-back-btn">
         <span className="material-symbols-outlined">arrow_back</span> Back to Dashboard
       </Link>
       <header style={{ marginBottom: '2.5rem', paddingBottom: '1rem', borderBottom: '1px solid #f1f5f9' }}>

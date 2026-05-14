@@ -42,7 +42,7 @@ export default function LoginForm() {
     const result = await handleLogin(formData.username, formData.password);
 
     if (result.success) {
-      globalThis.location.href = `/${locale}/dashboard`;
+      globalThis.location.href = `/dashboard`;
     } else {
       setError(formatAuthError(result.error));
       setIsLoading(false);
@@ -54,7 +54,7 @@ export default function LoginForm() {
     setError(null);
     const result = await handleGoogleLogin(credentialResponse.credential);
     if (result.success) {
-      globalThis.location.href = `/${locale}/dashboard`;
+      globalThis.location.href = `/dashboard`;
     } else {
       setError(formatAuthError(result.error));
       setIsLoading(false);

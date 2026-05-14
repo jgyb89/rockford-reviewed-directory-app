@@ -6,24 +6,24 @@ import { ALL_CATEGORIES } from "@/lib/constants";
 import styles from "./SearchModal.module.css";
 
 const TOP_CATEGORIES = [
-  { name: "Restaurants", slug: "restaurants-en", parentSlug: "food-drink" },
-  { name: "Plumbers", slug: "plumbers-en", parentSlug: "home-local-services" },
-  { name: "Pizza", slug: "pizza-en", parentSlug: "food-drink" },
+  { name: "Restaurants", slug: "restaurants", parentSlug: "food-drink" },
+  { name: "Plumbers", slug: "plumbers", parentSlug: "home-local-services" },
+  { name: "Pizza", slug: "pizza", parentSlug: "food-drink" },
   {
     name: "Real Estate",
-    slug: "real-estate-en",
+    slug: "real-estate",
     parentSlug: "home-local-services",
   },
-  { name: "Coffee & Tea", slug: "coffee-tea-en", parentSlug: "food-drink" },
+  { name: "Coffee & Tea", slug: "coffee-tea", parentSlug: "food-drink" },
   {
     name: "Roofing",
-    slug: "roofing-contractors-en",
+    slug: "roofing-contractors",
     parentSlug: "home-local-services",
   },
-  { name: "Seafood", slug: "seafood-en", parentSlug: "food-drink" },
+  { name: "Seafood", slug: "seafood", parentSlug: "food-drink" },
   {
     name: "Auto Repair",
-    slug: "auto-repair-mechanics-en",
+    slug: "auto-repair-mechanics",
     parentSlug: "home-local-services",
   },
 ];
@@ -47,7 +47,6 @@ const getCategoryRoute = (slug) => {
 
   return `/directory`; // Fallback
 };
-
 /**
  * SearchModal Component
  * A predictive search modal for the Cape Coral Directory.
@@ -212,7 +211,7 @@ export default function SearchModal({
             onSubmit={(e) => {
               e.preventDefault();
               if (!searchTerm.trim()) return;
-              window.location.href = `/${locale}/directory?search=${encodeURIComponent(searchTerm.trim())}`;
+              window.location.href = `/directory?search=${encodeURIComponent(searchTerm.trim())}`;
               onClose();
             }}
             className={styles["search-modal__input-wrapper"]}
@@ -237,7 +236,7 @@ export default function SearchModal({
             {TOP_CATEGORIES.map((cat) => (
               <Link
                 key={cat.slug}
-                href={`/${locale}/directory/${cat.parentSlug}/${cat.slug}`}
+                href={`/directory/${cat.parentSlug}/${cat.slug}`}
                 className={styles["search-modal__pill"]}
                 onClick={onClose}
               >
@@ -275,7 +274,7 @@ export default function SearchModal({
                         {/* Categories Results */}
                         {searchResults.categories.map((cat) => {
                           const route = getCategoryRoute(cat.slug);
-                          const categoryHref = `/${locale}${route}`;
+                          const categoryHref = `${route}`;
 
                           return (
                             <div
@@ -313,7 +312,7 @@ export default function SearchModal({
                             className={styles["search-modal__result-item"]}
                           >
                             <Link
-                              href={`/${locale}/listing/${listing.slug}`}
+                              href={`/listing/${listing.slug}`}
                               className={styles["search-modal__result-link"]}
                               onClick={onClose}
                             >

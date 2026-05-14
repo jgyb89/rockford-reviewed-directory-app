@@ -141,7 +141,7 @@ export default function TabbedListingFeed({
         </div>
 
         <Link
-          href={`/${locale}/directory`}
+          href={`/directory`}
           style={{
             backgroundColor: "#d32323",
             color: "white",

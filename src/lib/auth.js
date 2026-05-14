@@ -199,7 +199,7 @@ export async function getViewer() {
     cookieStore.set("authToken", "", { maxAge: 0 });
     
     // Redirect to branded login page
-    redirect("/en/login");
+    redirect("/login");
   }
 
   return null;

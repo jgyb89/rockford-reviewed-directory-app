@@ -182,7 +182,7 @@ export default function LoginModal({ isOpen, onClose, dict = {}, locale = "en" }
             <label className={styles['login-modal__remember']}>
               <input type="checkbox" /> {t.rememberMe || "Remember Me"}
             </label>
-            <Link href={`/${locale}/login?recover=true`} className={styles['login-modal__forgot']}>
+            <Link href={`/login?recover=true`} className={styles['login-modal__forgot']}>
               {t.recoverPassword || "Recover Password"}
             </Link>
           </div>
@@ -199,7 +199,7 @@ export default function LoginModal({ isOpen, onClose, dict = {}, locale = "en" }
         <div className={styles['login-modal__footer']}>
           {t.noAccount || "Don't have an account?"}{" "}
           <Link
-            href={`/${locale}/register`}
+            href={`/register`}
             className={styles['login-modal__signup-link']}
             onClick={onClose}
           >

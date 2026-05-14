@@ -236,10 +236,7 @@ export async function getListings(categorySlug = null) {
   }
 }
 
-export async function getListingsByCategory(
-  categorySlug,
-  directoryType = null,
-) {
+export async function getListingsByCategory(categorySlug, directoryType = null) {
   const query = `
     query GetListingsByCategory($categorySlug: [String], $directoryType: [String]) {
       ccrlistings(first: 100, where: { 
@@ -258,96 +255,30 @@ export async function getListingsByCategory(
           date
           slug
           content
-          
-          featuredImage {
-            node {
-              sourceUrl
-              altText
-            }
-          }
-
+          featuredImage { node { sourceUrl altText } }
           listingdata {
-            addressStreet
-            addressCity
-            phoneNumber
-            priceRange
-            hoursMonday
-            hoursTuesday
-            hoursWednesday
-            hoursThursday
-            hoursFriday
-            hoursSaturday
-            hoursSunday
+            addressStreet addressCity phoneNumber priceRange
+            hoursMonday hoursTuesday hoursWednesday hoursThursday hoursFriday hoursSaturday hoursSunday
           }
-          directoryTypes {
-            nodes {
-              name
-              slug
-            }
-          }
-          ccrlistingcategories {
-            nodes {
-              name
-              slug
-            }listing
-          }
-          reviews {
-            nodes {
-              reviewFields {
-                starRating
-              }
-            }
-          }
-          author {
-            node {
-              name
-              userData {
-                isFeaturedUser
-              }
-              customAvatar {
-                customAvatar {
-                  node {
-                    sourceUrl
-                  }
-                }
-              }
-              avatar {
-                url
-              }
-            }
-          }
+          directoryTypes { nodes { name slug } }
+          ccrlistingcategories { nodes { name slug } }
+          reviews { nodes { reviewFields { starRating } } }
+          author { node { name avatar { url } } }
         }
       }
     }
   `;
-
+  const variables = { categorySlug: [categorySlug], directoryType: directoryType ? [directoryType] : null };
   try {
     const res = await fetch(process.env.NEXT_PUBLIC_WORDPRESS_API_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "User-Agent": "CCR-NextJS-Frontend/1.0",
-      },
-      body: JSON.stringify({
-        query,
-        variables: {
-          categorySlug: categorySlug ? [categorySlug] : null,
-          directoryType: directoryType ? [directoryType] : null,
-        },
-      }),
+      headers: { "Content-Type": "application/json", "User-Agent": "CCR-NextJS-Frontend/1.0" },
+      body: JSON.stringify({ query, variables }),
       next: { revalidate: 60 },
     });
-
     const json = await res.json();
-
-    if (json.errors) {
-      console.error("GraphQL API Errors (getListingsByCategory):", json.errors);
-      return [];
-    }
-
-    return json.data.ccrlistings?.nodes || [];
+    return json.data?.ccrlistings?.nodes || [];
   } catch (error) {
-    console.error("Fetch Error:", error);
     return [];
   }
 }
@@ -357,9 +288,7 @@ export async function getListingsByDirectoryType(directoryTypeSlug) {
     query GetListingsByDirectoryType($directoryType: [String]) {
       ccrlistings(first: 100, where: { 
         taxQuery: {
-          taxArray: [
-            { taxonomy: DIRECTORYTYPE, field: SLUG, terms: $directoryType }
-          ]
+          taxArray: [{ taxonomy: DIRECTORYTYPE, field: SLUG, terms: $directoryType }]
         }
       }) {
         nodes {
@@ -369,98 +298,29 @@ export async function getListingsByDirectoryType(directoryTypeSlug) {
           date
           slug
           content
-          
-          featuredImage {
-            node {
-              sourceUrl
-              altText
-            }
-          }
-
+          featuredImage { node { sourceUrl altText } }
           listingdata {
-            addressStreet
-            addressCity
-            phoneNumber
-            priceRange
-            hoursMonday
-            hoursTuesday
-            hoursWednesday
-            hoursThursday
-            hoursFriday
-            hoursSaturday
-            hoursSunday
+            addressStreet addressCity phoneNumber priceRange
+            hoursMonday hoursTuesday hoursWednesday hoursThursday hoursFriday hoursSaturday hoursSunday
           }
-          directoryTypes {
-            nodes {
-              name
-              slug
-            }
-          }
-          ccrlistingcategories {
-            nodes {
-              name
-              slug
-            }
-          }
-          reviews {
-            nodes {
-              reviewFields {
-                starRating
-              }
-            }
-          }
-          author {
-            node {
-              name
-              userData {
-                isFeaturedUser
-              }
-              customAvatar {
-                customAvatar {
-                  node {
-                    sourceUrl
-                  }
-                }
-              }
-              avatar {
-                url
-              }
-            }
-          }
+          directoryTypes { nodes { name slug } }
+          ccrlistingcategories { nodes { name slug } }
+          reviews { nodes { reviewFields { starRating } } }
+          author { node { name avatar { url } } }
         }
       }
     }
   `;
-
   try {
     const res = await fetch(process.env.NEXT_PUBLIC_WORDPRESS_API_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "User-Agent": "CCR-NextJS-Frontend/1.0",
-      },
-      body: JSON.stringify({
-        query,
-        variables: {
-          directoryType: directoryTypeSlug ? [directoryTypeSlug] : null,
-        },
-      }),
+      headers: { "Content-Type": "application/json", "User-Agent": "CCR-NextJS-Frontend/1.0" },
+      body: JSON.stringify({ query, variables: { directoryType: [directoryTypeSlug] } }),
       next: { revalidate: 60 },
     });
-
     const json = await res.json();
-
-    if (json.errors) {
-      console.error(
-        "GraphQL API Errors (getListingsByDirectoryType):",
-        json.errors,
-      );
-      return [];
-    }
-
-    return json.data.ccrlistings?.nodes || [];
+    return json.data?.ccrlistings?.nodes || [];
   } catch (error) {
-    console.error("Fetch Error:", error);
     return [];
   }
 }

@@ -12,14 +12,14 @@ export default async function SubmitListingPage({ params }) {
   const token = cookieStore.get('authToken')?.value;
 
   if (!token) {
-    redirect(`/${locale}/login`);
+    redirect(`/login`);
   }
 
   // 2. Fetch the viewer data
   const viewer = await getViewer();
 
   if (!viewer) {
-    redirect(`/${locale}/login`);
+    redirect(`/login`);
   }
 
   const userRoles = viewer.roles?.nodes?.map((role) => role.name.toLowerCase()) || [];

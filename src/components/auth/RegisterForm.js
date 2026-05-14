@@ -156,7 +156,7 @@ export default function RegisterForm({ dict = {}, locale = "en" }) {
         return;
       }
 
-      router.push(`/${locale}/check-email`);
+      router.push(`/check-email`);
     } catch (err) {
       setGeneralError(err.message || "An unexpected error occurred.");
     } finally {
@@ -284,7 +284,7 @@ export default function RegisterForm({ dict = {}, locale = "en" }) {
         <label htmlFor="consent" style={{ fontSize: '0.9rem', color: '#475569', lineHeight: '1.5' }}>
           I agree to the{' '}
           <a 
-            href={`/${locale}/terms-of-service`} 
+            href={`/terms-of-service`} 
             target="_blank" 
             rel="noopener noreferrer" 
             style={{ color: '#e04c4c', textDecoration: 'underline', display: 'inline-flex', alignItems: 'center', gap: '2px', fontWeight: '500' }}
@@ -294,7 +294,7 @@ export default function RegisterForm({ dict = {}, locale = "en" }) {
           </a>
           {' '}and{' '}
           <a 
-            href={`/${locale}/privacy-policy`} 
+            href={`/privacy-policy`} 
             target="_blank" 
             rel="noopener noreferrer" 
             style={{ color: '#e04c4c', textDecoration: 'underline', display: 'inline-flex', alignItems: 'center', gap: '2px', fontWeight: '500' }}
