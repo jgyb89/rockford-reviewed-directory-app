@@ -33,7 +33,7 @@ export default function CheckEmailPage() {
           >
             {t.loginButton || "Go to Login"}
           </button>
-          <Link href={`/${locale}`} className="check-email__link">
+          <Link href={``} className="check-email__link">
             {t.returnHome || "Return to Homepage"}
           </Link>
         </div>

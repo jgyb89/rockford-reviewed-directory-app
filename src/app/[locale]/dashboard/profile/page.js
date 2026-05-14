@@ -16,7 +16,7 @@ export default async function ProfilePage({ params }) {
   if (!viewer) {
     return (
       <div className="profile-settings">
-        <Link href={`/${locale}/dashboard`} className="mobile-back-btn">
+        <Link href={`/dashboard`} className="mobile-back-btn">
           <span className="material-symbols-outlined">arrow_back</span> Back to Menu
         </Link>
         <h1 className="profile-settings__title">Profile Settings</h1>
@@ -27,7 +27,7 @@ export default async function ProfilePage({ params }) {
 
   return (
     <div className="profile-settings">
-      <Link href={`/${locale}/dashboard`} className="dashboard-back-btn">
+      <Link href={`/dashboard`} className="dashboard-back-btn">
         <span className="material-symbols-outlined">arrow_back</span> Back to Dashboard
       </Link>
       <header style={{ marginBottom: '2.5rem', paddingBottom: '1rem', borderBottom: '1px solid #f1f5f9' }}>

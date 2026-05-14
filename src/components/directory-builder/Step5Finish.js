@@ -105,7 +105,7 @@ const Step5Finish = ({ formData, prevStep }) => {
 
       if (result.success) {
         setUploadStep('complete');
-        router.push(`/${locale}/submission-success`);
+        router.push(`/submission-success`);
       } else {
         alert(`Error: ${result.message}`);
         setUploadStep('idle');

@@ -29,7 +29,7 @@ export default async function LoginPage({ params, searchParams }) {
         <>
           <RecoverPasswordForm />
           <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
-            <Link href={`/${locale}/login`} style={{ color: '#64748b', textDecoration: 'none', fontWeight: '500' }}>
+            <Link href={`/login`} style={{ color: '#64748b', textDecoration: 'none', fontWeight: '500' }}>
               &larr; Back to Sign In
             </Link>
           </div>
@@ -46,12 +46,12 @@ export default async function LoginPage({ params, searchParams }) {
           <LoginForm />
 
           <div style={{ marginTop: '1.5rem', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <Link href={`/${locale}/login?recover=true`} style={{ color: '#e04c4c', textDecoration: 'none', fontWeight: '500' }}>
+            <Link href={`/login?recover=true`} style={{ color: '#e04c4c', textDecoration: 'none', fontWeight: '500' }}>
               Forgot your password?
             </Link>
             <p style={{ color: '#64748b', margin: 0 }}>
               Don't have an account?{' '}
-              <Link href={`/${locale}/register`} style={{ color: '#e04c4c', fontWeight: '600', textDecoration: 'none' }}>
+              <Link href={`/register`} style={{ color: '#e04c4c', fontWeight: '600', textDecoration: 'none' }}>
                 Sign Up
               </Link>
             </p>

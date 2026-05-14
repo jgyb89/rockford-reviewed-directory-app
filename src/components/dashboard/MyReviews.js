@@ -105,7 +105,7 @@ export default function MyReviews({ reviews: initialReviews, locale = 'en' }) {
       <ul className={styles['my-reviews__list']}>
         {paginatedReviews.map((review) => {
           const listing = review.reviewFields?.relatedListing?.nodes?.[0];
-          const listingUrl = listing ? `/${locale}/listing/${listing.slug}` : '#';
+          const listingUrl = listing ? `/listing/${listing.slug}` : '#';
           const formattedDate = review.date ? new Date(review.date).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',

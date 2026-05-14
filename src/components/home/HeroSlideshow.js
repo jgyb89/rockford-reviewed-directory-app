@@ -80,7 +80,7 @@ export default function HeroSlideshow({ featuredListings = [], locale = "en" }) 
             const category =
               listing.directoryTypes?.nodes?.[0]?.name || "Local Business";
             const slug = listing.slug;
-            const listingUrl = `/${locale}/listing/${slug}`;
+            const listingUrl = `/listing/${slug}`;
 
             return (
               <div

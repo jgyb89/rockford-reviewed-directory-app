@@ -55,7 +55,7 @@ export default function FavoriteListings({ favorites: initialFavorites = [], loc
       <div className={styles['favorite-listings__grid']}>
         {sortedFavorites.map((listing) => {
           const imageUrl = formatImageUrl(listing.featuredImage?.node?.sourceUrl);
-          const listingUrl = `/${locale}/listing/${listing.slug}`;
+          const listingUrl = `/listing/${listing.slug}`;
 
           return (
             <article key={listing.databaseId} className={styles['favorite-item']}>

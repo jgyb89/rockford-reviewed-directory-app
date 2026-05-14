@@ -36,7 +36,7 @@ export default async function DashboardRoot({ params }) {
                 <h3>Recent Reviews</h3>
               </div>
               <p>Monitor and manage feedback from your customers.</p>
-              <Link href={`/${locale}/dashboard/reviews`} className="bento-link">View All &rarr;</Link>
+              <Link href={`/dashboard/reviews`} className="bento-link">View All &rarr;</Link>
             </div>
             <div className="bento-card">
               <div className="bento-card__header">
@@ -44,7 +44,7 @@ export default async function DashboardRoot({ params }) {
                 <h3>Saved Favorites</h3>
               </div>
               <p>Quick access to other local spots you love.</p>
-              <Link href={`/${locale}/dashboard/favorites`} className="bento-link">View All &rarr;</Link>
+              <Link href={`/dashboard/favorites`} className="bento-link">View All &rarr;</Link>
             </div>
           </div>
           <div className="bento-col-large">
@@ -54,7 +54,7 @@ export default async function DashboardRoot({ params }) {
                 <h3 style={{ fontSize: '1.5rem' }}>My Listings</h3>
               </div>
               <p>View, edit, and optimize your business directory listings. Keep your hours, photos, and descriptions up to date to attract more customers.</p>
-              <Link href={`/${locale}/dashboard/listings`} className="bento-link">Manage Listings &rarr;</Link>
+              <Link href={`/dashboard/listings`} className="bento-link">Manage Listings &rarr;</Link>
             </div>
           </div>
         </div>
@@ -68,7 +68,7 @@ export default async function DashboardRoot({ params }) {
                 <h3>Saved Favorites</h3>
               </div>
               <p>Quick access to your saved spots around Cape Coral.</p>
-              <Link href={`/${locale}/dashboard/favorites`} className="bento-link">View All &rarr;</Link>
+              <Link href={`/dashboard/favorites`} className="bento-link">View All &rarr;</Link>
             </div>
             <div className="bento-card bento-card--highlight">
               <div className="bento-card__header">
@@ -76,7 +76,7 @@ export default async function DashboardRoot({ params }) {
                 <h3>Recommend a Business</h3>
               </div>
               <p>Know a great local spot that isn't listed? Let us know so we can add them!</p>
-              <Link href={`/${locale}/submit-listing`} className="bento-link">Submit Idea &rarr;</Link>
+              <Link href={`/submit-listing`} className="bento-link">Submit Idea &rarr;</Link>
             </div>
           </div>
           <div className="bento-col-large">
@@ -86,7 +86,7 @@ export default async function DashboardRoot({ params }) {
                 <h3 style={{ fontSize: '1.5rem' }}>My Reviews</h3>
               </div>
               <p>See all the feedback you've shared with the Cape Coral community. Your reviews help others discover the best places in town!</p>
-              <Link href={`/${locale}/dashboard/reviews`} className="bento-link">View My Reviews &rarr;</Link>
+              <Link href={`/dashboard/reviews`} className="bento-link">View My Reviews &rarr;</Link>
             </div>
           </div>
         </div>

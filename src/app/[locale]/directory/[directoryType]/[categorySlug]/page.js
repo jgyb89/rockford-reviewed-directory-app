@@ -28,7 +28,7 @@ export default async function CategoryPage({ params }) {
   return (
     <main style={{ padding: "clamp(1.5rem, 4vw, 3rem) 1rem 0", maxWidth: "1200px", margin: "0 auto", fontFamily: "sans-serif" }}>
       <header style={{ marginBottom: "1rem" }}>
-        <Link href={`/${locale}/directory/${directoryType}`} style={{ color: "#0070f3", textDecoration: "none", fontSize: "0.9rem" }}>← Back to {directoryType.replace(/-/g, ' ')}</Link>
+        <Link href={`/directory/${directoryType}`} style={{ color: "#0070f3", textDecoration: "none", fontSize: "0.9rem" }}>← Back to {directoryType.replace(/-/g, ' ')}</Link>
         <h1 style={{ 
           fontFamily: 'var(--font-heading)', 
           fontSize: 'clamp(1.75rem, 6vw, 3.5rem)', 

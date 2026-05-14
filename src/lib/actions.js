@@ -35,7 +35,7 @@ async function handleGraphQLError(json) {
     if (isTokenError) {
       const cookieStore = await cookies();
       cookieStore.set("authToken", "", { maxAge: 0 });
-      redirect("/en/login");
+      redirect("/login");
     }
     
     throw new Error(json.errors[0].message);
@@ -50,12 +50,12 @@ export async function updateUserProfile(formData) {
   const authToken = cookieStore.get("authToken")?.value;
 
   if (!authToken) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   const viewer = await getViewer();
   if (!viewer?.id) {
-    redirect("/en/login");
+    redirect("/login");
   }
   
   const userId = viewer.id;

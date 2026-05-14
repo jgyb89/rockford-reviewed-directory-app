@@ -161,7 +161,7 @@ export default async function DirectoryListingPage({ params }) {
     telephone: listingdata.phoneNumber || "",
     url:
       listingdata.websiteUrl ||
-      `https://capecoralreviewed.com/${locale}/listing/${slug}`,
+      `https://capecoralreviewed.com/listing/${slug}`,
     priceRange: listingdata.priceRange
       ? "$".repeat(listingdata.priceRange)
       : undefined,

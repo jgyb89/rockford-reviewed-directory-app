@@ -23,7 +23,7 @@ export default function HomeSidebar({ featuredBusinesses = [], popularNearYou = 
       </h3>
       <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
         {items.map((item) => {
-          const listingUrl = `/${locale}/listing/${item.slug}`;
+          const listingUrl = `/listing/${item.slug}`;
           const imageUrl = formatImageUrl(item.featuredImage?.node?.sourceUrl);
           
           const reviewNodes = item.reviews?.nodes || [];

@@ -7,14 +7,14 @@ import { ALL_CATEGORIES } from '@/lib/constants';
 import styles from './DirectoryFilters.module.css';
 
 const QUICK_PILLS = [
-  { label: 'Restaurants', slug: 'restaurants-en' },
-  { label: 'Bars & Nightlife', slug: 'bars-nightlife-en' },
-  { label: 'Cafes & Bakeries', slug: 'cafes-bakeries-en' },
-  { label: 'Medical & Dental', slug: 'medical-dental-en' },
-  { label: 'Contractors & Repair', slug: 'contractors-repair-en' },
-  { label: 'Beauty & Spas', slug: 'beauty-spas-en' },
-  { label: 'Real Estate', slug: 'real-estate-en' },
-  { label: 'Auto & Transport', slug: 'auto-transport-en' }
+  { label: 'Restaurants', slug: 'restaurants' },
+  { label: 'Bars & Nightlife', slug: 'bars-nightlife' },
+  { label: 'Cafes & Bakeries', slug: 'cafes-bakeries' },
+  { label: 'Medical & Dental', slug: 'medical-dental' },
+  { label: 'Contractors & Repair', slug: 'contractors-repair' },
+  { label: 'Beauty & Spas', slug: 'beauty-spas' },
+  { label: 'Real Estate', slug: 'real-estate' },
+  { label: 'Auto & Transport', slug: 'auto-transport' }
 ];
 
 const getCategoryRoute = (slug) => {
@@ -162,10 +162,10 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
   const handleCategoryClick = (slug) => {
     const locale = pathname.split('/')[1] || 'en';
     if (!slug || pathname.includes(slug)) {
-      router.push(`/${locale}/directory`);
+      router.push(`/directory`);
     } else {
       const route = getCategoryRoute(slug);
-      router.push(`/${locale}${route}`);
+      router.push(`${route}`);
     }
     if (setIsModalOpen) setIsModalOpen(false);
   };
@@ -224,7 +224,7 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
           <ul className={styles['predictive-list']}>
             {hasCategories && searchResults.categories.map(cat => {
               const route = getCategoryRoute(cat.slug);
-              const categoryHref = `/${locale}${route}`;
+              const categoryHref = `${route}`;
               return (
                 <li key={`cat-${cat.slug}`} className={styles['predictive-item']}>
                   <Link href={categoryHref} className={styles['predictive-link']}>
@@ -236,7 +236,7 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
             })}
             {hasListings && searchResults.listings.map(listing => (
               <li key={`list-${listing.slug}`} className={styles['predictive-item']}>
-                <Link href={`/${locale}/listing/${listing.slug}`} className={styles['predictive-link']}>
+                <Link href={`/listing/${listing.slug}`} className={styles['predictive-link']}>
                   <span className={styles['predictive-title']}>{listing.title}</span>
                   <span className={styles['predictive-type']}>Listing</span>
                 </Link>

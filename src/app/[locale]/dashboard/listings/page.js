@@ -17,7 +17,7 @@ export default async function MyListingsPage({ params, searchParams }) {
   const authToken = cookieStore.get('authToken')?.value;
 
   if (!authToken) {
-    redirect(`/${locale}`);
+    redirect(``);
   }
 
   const query = `
@@ -51,12 +51,12 @@ export default async function MyListingsPage({ params, searchParams }) {
   const viewer = json.data?.viewer;
 
   if (!viewer) {
-    redirect(`/${locale}`);
+    redirect(``);
   }
 
   const roles = viewer.roles.nodes.map(r => r.name.toLowerCase());
   if (!roles.includes('business') && !roles.includes('administrator')) {
-    redirect(`/${locale}/dashboard`);
+    redirect(`/dashboard`);
   }
 
   const listings = viewer.ccrlistings?.nodes || [];
@@ -77,7 +77,7 @@ export default async function MyListingsPage({ params, searchParams }) {
 
   return (
     <div className="my-listings-page">
-      <Link href={`/${locale}/dashboard`} className="dashboard-back-btn">
+      <Link href={`/dashboard`} className="dashboard-back-btn">
         <span className="material-symbols-outlined">arrow_back</span>{" "}Back to Dashboard
       </Link>
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', paddingBottom: '1rem', borderBottom: '1px solid #f1f5f9' }}>
@@ -85,7 +85,7 @@ export default async function MyListingsPage({ params, searchParams }) {
           <h1 style={{ margin: '0 0 0.5rem 0' }}>My Listings</h1>
           <p style={{ margin: 0 }}>Manage your business listings and update their details.</p>
         </div>
-        <Link href={`/${locale}/submit-listing`} className="listing-primary-btn" style={{ textDecoration: 'none' }}>
+        <Link href={`/submit-listing`} className="listing-primary-btn" style={{ textDecoration: 'none' }}>
           <span className="material-symbols-outlined">add_business</span>{" "}
           Add New Listing
         </Link>
@@ -94,7 +94,7 @@ export default async function MyListingsPage({ params, searchParams }) {
       {listings.length === 0 ? (
         <div className="blank-state" style={{ textAlign: 'center', padding: '3rem', background: '#f9f9f9', borderRadius: '12px' }}>
           <p style={{ fontSize: '1.2rem', color: '#666', marginBottom: '1.5rem' }}>You haven't posted any listings yet.</p>
-          <Link href={`/${locale}/submit-listing`} style={{ color: '#e04c4c', fontWeight: '600' }}>Create your first listing now</Link>
+          <Link href={`/submit-listing`} style={{ color: '#e04c4c', fontWeight: '600' }}>Create your first listing now</Link>
         </div>
       ) : (
         <>
@@ -109,11 +109,11 @@ export default async function MyListingsPage({ params, searchParams }) {
                   </p>
                 </div>
                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                  <Link href={`/${locale}/listing/${listing.slug}`} style={{ color: '#e04c4c', fontWeight: '600', textDecoration: 'none', fontSize: '0.95rem' }}>
+                  <Link href={`/listing/${listing.slug}`} style={{ color: '#e04c4c', fontWeight: '600', textDecoration: 'none', fontSize: '0.95rem' }}>
                     View
                   </Link>
                   <span style={{ color: '#e2e8f0' }}>|</span>
-                  <Link href={`/${locale}/dashboard/listings/edit/${listing.databaseId}`} style={{ color: '#4a5568', fontWeight: '600', textDecoration: 'none', fontSize: '0.95rem' }}>
+                  <Link href={`/dashboard/listings/edit/${listing.databaseId}`} style={{ color: '#4a5568', fontWeight: '600', textDecoration: 'none', fontSize: '0.95rem' }}>
                     Edit
                   </Link>
                   <span style={{ color: '#e2e8f0' }}>|</span>

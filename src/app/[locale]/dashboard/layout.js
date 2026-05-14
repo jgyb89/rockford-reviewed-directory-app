@@ -15,7 +15,7 @@ export default async function DashboardLayout({ children, params }) {
   const token = cookieStore.get('authToken')?.value;
 
   if (!token) {
-    redirect(`/${locale}/login`);
+    redirect(`/login`);
   }
 
   // 2. Fetch the viewer data
@@ -23,7 +23,7 @@ export default async function DashboardLayout({ children, params }) {
 
   // Redundancy check if middleware is bypassed or token is invalid
   if (!viewer) {
-    redirect(`/${locale}/login`);
+    redirect(`/login`);
   }
 
   const userRoles = viewer.roles.nodes.map((role) => role.name.toLowerCase());

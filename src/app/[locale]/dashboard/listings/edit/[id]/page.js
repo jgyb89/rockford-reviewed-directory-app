@@ -14,12 +14,12 @@ export default async function EditListingPage({ params }) {
 
   return (
     <div className="edit-listing-page">
-      <Link href={`/${locale}/dashboard`} className="dashboard-back-btn">
+      <Link href={`/dashboard`} className="dashboard-back-btn">
         <span className="material-symbols-outlined">arrow_back</span>{" "}Back to Dashboard
       </Link>
       <div style={{ marginBottom: "2rem" }}>
         <Link 
-          href={`/${locale}/dashboard/listings`} 
+          href={`/dashboard/listings`} 
           style={{ 
             display: "inline-flex", 
             alignItems: "center", 
