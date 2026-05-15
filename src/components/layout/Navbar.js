@@ -185,7 +185,16 @@ export default function Navbar({ currentUser, dict, locale }) {
             onFocus={() => setIsListingsOpen(true)}
             onBlur={() => setIsListingsOpen(false)}
           >
-            <Link href={getLocalizedUrl("/directory", locale)} className={`${styles['nav-link']} ${styles['nav-link__trigger']}`}>
+            <Link 
+              href={getLocalizedUrl("/directory", locale)} 
+              className={`${styles['nav-link']} ${styles['nav-link__trigger']}`}
+              onClick={() => {
+                if (typeof setIsListingsOpen === 'function') setIsListingsOpen(false);
+                if (typeof setActiveSubMenu === 'function') setActiveSubMenu(null);
+                if (typeof setMobileLevel === 'function') setMobileLevel(1);
+                if (typeof setIsMobileOpen === 'function') setIsMobileOpen(false);
+              }}
+            >
               {t.allListings || "All Listings"}{" "}
               <span className={`material-symbols-outlined ${styles['nav-link__icon']}`}>
                 expand_more

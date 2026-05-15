@@ -1,10 +1,10 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import PropTypes from "prop-types";
 import CcrCardGrid from "./CcrCardGrid";
-import DirectoryFilters from "./DirectoryFilters";
+import DirectoryFilters, { QUICK_PILLS, getCategoryRoute } from "./DirectoryFilters";
 import Pagination from "../common/Pagination";
 import styles from "./DirectoryFilterManager.module.css";
 import { checkIfOpenNow } from '@/lib/timeUtils';
@@ -26,6 +26,36 @@ const DirectoryFilterManager = ({ listings, currentUser, dict = {}, locale = "en
   const t = dict?.directory || {};
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const scrollContainerRef = useRef(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(true);
+
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setShowLeftArrow(scrollLeft > 0);
+      setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 1); // -1 for rounding errors
+    }
+  };
+
+  useEffect(() => {
+    handleScroll(); // Initial check
+    window.addEventListener('resize', handleScroll);
+    return () => window.removeEventListener('resize', handleScroll);
+  }, []);
+
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+    }
+  };
 
   const updateFilter = (key, value) => {
     const params = new URLSearchParams(searchParams);
@@ -136,6 +166,47 @@ const DirectoryFilterManager = ({ listings, currentUser, dict = {}, locale = "en
           <option value="za">Z-A</option>
           <option value="highest_rated">Highest Rated</option>
         </select>
+      </div>
+
+      {/* Desktop Horizontal Pills (Below Filter Bar, NOT Sticky) */}
+      <div className={styles['desktop-horizontal-pills-container']}>
+        {showLeftArrow && (
+          <button className={`${styles['scroll-arrow']} ${styles['scroll-arrow-left']}`} onClick={scrollLeft}>
+            <span className="material-symbols-outlined">chevron_left</span>
+          </button>
+        )}
+        <div 
+          className={styles['desktop-horizontal-pills']} 
+          ref={scrollContainerRef}
+          onScroll={handleScroll}
+        >
+          <button 
+            className={`${styles['category-pill']} ${pathname.endsWith('/directory') ? styles['category-pill--active'] : ''}`}
+            onClick={() => router.push('/directory')}
+          >
+            All
+          </button>
+          {QUICK_PILLS.map(pill => (
+            <button 
+              key={pill.slug}
+              className={`${styles['category-pill']} ${pathname.includes(pill.slug) ? styles['category-pill--active'] : ''}`}
+              onClick={() => {
+                if (pathname.includes(pill.slug)) {
+                  router.push('/directory'); // Toggle off if already active
+                } else {
+                  router.push(getCategoryRoute(pill.slug)); // Route to specific category
+                }
+              }}
+            >
+              {pill.label}
+            </button>
+          ))}
+        </div>
+        {showRightArrow && (
+          <button className={`${styles['scroll-arrow']} ${styles['scroll-arrow-right']}`} onClick={scrollRight}>
+            <span className="material-symbols-outlined">chevron_right</span>
+          </button>
+        )}
       </div>
 
       {/* Main Feed */}

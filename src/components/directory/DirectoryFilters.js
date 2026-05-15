@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { ALL_CATEGORIES } from '@/lib/constants';
 import styles from './DirectoryFilters.module.css';
 
-const QUICK_PILLS = [
+export const QUICK_PILLS = [
   { label: 'Restaurants', slug: 'restaurants' },
   { label: 'Bars & Nightlife', slug: 'bars-nightlife' },
   { label: 'Cafes & Bakeries', slug: 'cafes-bakeries' },
@@ -17,20 +18,20 @@ const QUICK_PILLS = [
   { label: 'Auto & Transport', slug: 'auto-transport' }
 ];
 
-const getCategoryRoute = (slug) => {
+export const getCategoryRoute = (slug) => {
   const category = ALL_CATEGORIES.find(c => c.slug === slug);
   if (!category) return '/directory';
 
-  // If it has a direct directoryType, use it
+  const sanitizedSlug = category.slug.replace(/-en$/, '');
+
   if (category.directoryType) {
-    return `/directory/${category.directoryType}/${category.slug}`;
+    return `/directory/${category.directoryType}/${sanitizedSlug}`;
   }
 
-  // If it's a child, find the parent's directoryType
   if (category.parentSlug) {
     const parent = ALL_CATEGORIES.find(p => p.slug === category.parentSlug);
     if (parent && parent.directoryType) {
-      return `/directory/${parent.directoryType}/${category.slug}`;
+      return `/directory/${parent.directoryType}/${sanitizedSlug}`;
     }
   }
 
@@ -41,6 +42,11 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Unified Predictive Search State
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
@@ -206,6 +212,102 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
     );
   };
 
+  const modalContent = isModalOpen ? (
+    <div 
+      className={styles['modal-overlay']} 
+      onClick={() => setIsModalOpen(false)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          setIsModalOpen(false);
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      aria-label="Close filters"
+    >
+      <div 
+        className={styles['modal-content']} 
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
+        role="presentation"
+      >
+        <div className={styles['modal-header']}>
+          <h3 style={{ margin: 0, fontSize: '1.25rem', fontFamily: 'var(--font-heading)' }}>Filters</h3>
+          <button onClick={() => setIsModalOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}>
+            <span className="material-symbols-outlined">close</span>
+          </button>
+        </div>
+
+        {/* Minimum Rating (Label Top) */}
+        <div className={styles['filter-group']} style={{ flexDirection: 'column', alignItems: 'flex-start', width: '100%' }}>
+          <label className={styles['filter-label']}>Minimum Rating</label>
+          <div className={styles['custom-select']} ref={ratingDropdownRef} style={{ width: '100%' }}>
+            <button 
+              type="button" 
+              className={styles['custom-select__button']}
+              onClick={() => setOpenDropdown(openDropdown === 'rating' ? null : 'rating')}
+              aria-expanded={openDropdown === 'rating'}
+            >
+              {ratingFilter === 0 ? 'Any Rating' : (
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  {ratingFilter}+ <span className={`material-symbols-outlined ${styles['star-icon']}`}>star</span>
+                </span>
+              )}
+              <span className="material-symbols-outlined">expand_more</span>
+            </button>
+            {openDropdown === 'rating' && (
+              <ul className={styles['custom-select__menu']}>
+                {[0, 1, 2, 3, 4, 5].map((rating) => (
+                  <li 
+                    key={rating}
+                    className={`${styles['custom-select__option']} ${ratingFilter === rating ? styles['custom-select__option--selected'] : ''}`}
+                    onClick={() => {
+                      updateFilter('rating', rating.toString());
+                      setOpenDropdown(null);
+                    }}
+                  >
+                    {rating === 0 ? 'Any Rating' : `${rating}+ Stars`}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+
+        {/* Open Now */}
+        <div className={styles['filter-group']} style={{ justifyContent: 'space-between', width: '100%', flexDirection: 'row', alignItems: 'center' }}>
+          <label className={styles['filter-label']}>Open Now</label>
+          <label className={styles['toggle-switch']}>
+            <input 
+              type="checkbox" 
+              checked={openNowFilter}
+              onChange={(e) => updateFilter('open', e.target.checked ? 'true' : null)}
+            />
+            <span className={styles['slider']}></span>
+          </label>
+        </div>
+
+        {/* Categories */}
+        <div style={{ width: '100%' }}>
+          <label className={styles['filter-label']} style={{ display: 'block', marginBottom: '0.75rem' }}>Quick Categories</label>
+          <div className={styles['category-pills-mobile']}>
+            {renderPills(true)}
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          <button onClick={clearFilters} className={styles['btn-clear']} style={{ background: '#f1f5f9', borderRadius: '8px', width: '100%', padding: '0.75rem', fontWeight: 600 }}>
+            Clear All Filters
+          </button>
+          <button onClick={() => setIsModalOpen(false)} style={{ background: '#e04c4c', color: 'white', border: 'none', padding: '0.75rem', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', width: '100%' }}>
+            Show Results
+          </button>
+        </div>
+      </div>
+    </div>
+  ) : null;
+
   const renderPredictiveDropdown = () => {
     if (!isSearchFocused || debouncedSearch.length < 2) return null;
 
@@ -266,102 +368,8 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
         {renderPredictiveDropdown()}
       </div>
 
-      {/* 2. Universal Left Slide-Out Modal */}
-      {isModalOpen && (
-        <div 
-          className={styles['modal-overlay']} 
-          onClick={() => setIsModalOpen(false)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              setIsModalOpen(false);
-            }
-          }}
-          role="button"
-          tabIndex={0}
-          aria-label="Close filters"
-        >
-          <div 
-            className={styles['modal-content']} 
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => e.stopPropagation()}
-            role="presentation"
-          >
-            <div className={styles['modal-header']}>
-              <h3 style={{ margin: 0, fontSize: '1.25rem', fontFamily: 'var(--font-heading)' }}>Filters</h3>
-              <button onClick={() => setIsModalOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}>
-                <span className="material-symbols-outlined">close</span>
-              </button>
-            </div>
-
-            {/* Minimum Rating (Label Top) */}
-            <div className={styles['filter-group']} style={{ flexDirection: 'column', alignItems: 'flex-start', width: '100%' }}>
-              <label className={styles['filter-label']}>Minimum Rating</label>
-              <div className={styles['custom-select']} ref={ratingDropdownRef} style={{ width: '100%' }}>
-                <button 
-                  type="button" 
-                  className={styles['custom-select__button']}
-                  onClick={() => setOpenDropdown(openDropdown === 'rating' ? null : 'rating')}
-                  aria-expanded={openDropdown === 'rating'}
-                >
-                  {ratingFilter === 0 ? 'Any Rating' : (
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      {ratingFilter}+ <span className={`material-symbols-outlined ${styles['star-icon']}`}>star</span>
-                    </span>
-                  )}
-                  <span className="material-symbols-outlined">expand_more</span>
-                </button>
-                {openDropdown === 'rating' && (
-                  <ul className={styles['custom-select__menu']}>
-                    {[0, 1, 2, 3, 4, 5].map((rating) => (
-                      <li 
-                        key={rating}
-                        className={`${styles['custom-select__option']} ${ratingFilter === rating ? styles['custom-select__option--selected'] : ''}`}
-                        onClick={() => {
-                          updateFilter('rating', rating.toString());
-                          setOpenDropdown(null);
-                        }}
-                      >
-                        {rating === 0 ? 'Any Rating' : `${rating}+ Stars`}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </div>
-
-            {/* Open Now */}
-            <div className={styles['filter-group']} style={{ justifyContent: 'space-between', width: '100%', flexDirection: 'row', alignItems: 'center' }}>
-              <label className={styles['filter-label']}>Open Now</label>
-              <label className={styles['toggle-switch']}>
-                <input 
-                  type="checkbox" 
-                  checked={openNowFilter}
-                  onChange={(e) => updateFilter('open', e.target.checked ? 'true' : null)}
-                />
-                <span className={styles['slider']}></span>
-              </label>
-            </div>
-
-            {/* Categories */}
-            <div style={{ width: '100%' }}>
-              <label className={styles['filter-label']} style={{ display: 'block', marginBottom: '0.75rem' }}>Quick Categories</label>
-              <div className={styles['category-pills-mobile']}>
-                {renderPills(true)}
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              <button onClick={clearFilters} className={styles['btn-clear']} style={{ background: '#f1f5f9', borderRadius: '8px', width: '100%', padding: '0.75rem', fontWeight: 600 }}>
-                Clear All Filters
-              </button>
-              <button onClick={() => setIsModalOpen(false)} style={{ background: '#e04c4c', color: 'white', border: 'none', padding: '0.75rem', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', width: '100%' }}>
-                Show Results
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* 2. Universal Left Slide-Out Modal (Portaled) */}
+      {mounted && typeof document !== 'undefined' ? createPortal(modalContent, document.body) : null}
     </>
   );
 };
