@@ -1,0 +1,53 @@
+[
+  {
+    "title": "Food & Drink",
+    "slug": "food-drink",
+    "iconName": "Utensils",
+    "subs": [
+      { "name": "Restaurants", "slug": "restaurants", "iconName": "ChefHat" },
+      { "name": "Bars & Nightlife", "slug": "bars-nightlife", "iconName": "Beer" },
+      { "name": "Cafes & Bakeries", "slug": "cafes-bakeries", "iconName": "Coffee" },
+      { "name": "Pizza", "slug": "pizza", "iconName": "Pizza" },
+      { "name": "Seafood", "slug": "seafood", "iconName": "Utensils" },
+      { "name": "Breakfast & Brunch", "slug": "breakfast-brunch", "iconName": "Coffee" },
+      { "name": "Mexican & Latin", "slug": "mexican-latin", "iconName": "Utensils" },
+      { "name": "Breweries", "slug": "breweries", "iconName": "Beer" },
+      { "name": "Coffee & Tea", "slug": "coffee-tea", "iconName": "Coffee" },
+      { "name": "Steakhouse", "slug": "steakhouse", "iconName": "Utensils" }
+    ]
+  },
+  {
+    "title": "Health & Wellness",
+    "slug": "health-wellness",
+    "iconName": "HeartPulse",
+    "subs": [
+      { "name": "Medical & Dental", "slug": "medical-dental", "iconName": "Stethoscope" },
+      { "name": "Beauty & Spas", "slug": "beauty-spas", "iconName": "Flower" },
+      { "name": "Fitness & Sports", "slug": "fitness-sports", "iconName": "Dumbbell" },
+      { "name": "Primary Care", "slug": "primary-care-doctors", "iconName": "Stethoscope" },
+      { "name": "Dentists", "slug": "dentists-orthodontics", "iconName": "Smile" },
+      { "name": "Hair Salons", "slug": "hair-salons", "iconName": "Flower" },
+      { "name": "Gyms & Clubs", "slug": "gyms-health-clubs", "iconName": "Dumbbell" },
+      { "name": "Massage Therapy", "slug": "massage-therapy", "iconName": "HeartPulse" },
+      { "name": "Chiropractors", "slug": "chiropractors", "iconName": "HeartPulse" },
+      { "name": "Yoga", "slug": "yoga", "iconName": "HeartPulse" }
+    ]
+  },
+  {
+    "title": "Home & Local Services",
+    "slug": "home-local-services",
+    "iconName": "Home",
+    "subs": [
+      { "name": "Contractors & Repair", "slug": "contractors-repair", "iconName": "Hammer" },
+      { "name": "Real Estate", "slug": "real-estate", "iconName": "Home" },
+      { "name": "Auto & Transport", "slug": "auto-transport", "iconName": "Wrench" },
+      { "name": "Plumbers", "slug": "plumbers", "iconName": "Wrench" },
+      { "name": "Electricians", "slug": "electricians", "iconName": "Zap" },
+      { "name": "Roofing", "slug": "roofing-contractors", "iconName": "Hammer" },
+      { "name": "Cleaning & Wash", "slug": "cleaning-pressure-washing", "iconName": "Brush" },
+      { "name": "Landscaping", "slug": "landscaping-lawn-care", "iconName": "Leaf" },
+      { "name": "Pet Services", "slug": "pet-services", "iconName": "Smile" },
+      { "name": "HVAC & AC", "slug": "hvac-ac-repair", "iconName": "Zap" }
+    ]
+  }
+]

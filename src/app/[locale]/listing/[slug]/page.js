@@ -14,6 +14,7 @@ import ShareButton from "@/components/directory/ShareButton";
 import StarRating from "@/components/ui/StarRating";
 import ClaimListing from "@/components/directory/ClaimListing";
 import { formatImageUrl } from "@/lib/formatImageUrl";
+import { BASE_URL } from "@/lib/constants";
 import "./ListingPage.css";
 
 /**
@@ -161,7 +162,7 @@ export default async function DirectoryListingPage({ params }) {
     telephone: listingdata.phoneNumber || "",
     url:
       listingdata.websiteUrl ||
-      `https://capecoralreviewed.com/listing/${slug}`,
+      `${BASE_URL}/listing/${slug}`,
     priceRange: listingdata.priceRange
       ? "$".repeat(listingdata.priceRange)
       : undefined,

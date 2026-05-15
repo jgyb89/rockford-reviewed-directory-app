@@ -1,23 +1,10 @@
 import PropTypes from 'prop-types';
-import { Poppins, Open_Sans } from 'next/font/google';
+import { poppins, openSans } from '@/app/fonts';
 import { getViewer } from '@/lib/auth';
 import Navbar from '@/components/layout/Navbar';
 import "material-symbols/outlined.css";
 import './globals.css';
 import styles from './NotFound.module.css';
-
-// Initialize identical fonts to bypass layout.js exclusion
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
-  variable: '--font-heading',
-});
-
-const openSans = Open_Sans({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-open-sans',
-});
 
 export default async function NotFound() {
   // Securely check if the user is authenticated on the server

@@ -3,6 +3,20 @@ import Image from "next/image";
 import { getLocalizedUrl } from "@/lib/constants";
 import styles from "./Footer.module.css";
 
+const EXPLORE_LINKS = [
+  { name: "Business Directory", href: "/directory" },
+  { name: "Restaurants & Dining", href: "/directory/food-drink" },
+  { name: "Home Services", href: "/directory/home-local-services" },
+  { name: "Recommend a Business", href: "/submit-listing" },
+];
+
+const QUICK_LINKS = [
+  { name: "About Us", href: "/about" },
+  { name: "Contact", href: "/contact" },
+  { name: "Business Login", href: "/login" },
+  { name: "Create an Account", href: "/register" },
+];
+
 export default function Footer({ locale = "en" }) {
   const currentYear = new Date().getFullYear();
 
@@ -32,38 +46,16 @@ export default function Footer({ locale = "en" }) {
           <div className={styles["footer__col"]}>
             <h3 className={styles["footer__heading"]}>Explore</h3>
             <ul className={styles["footer__list"]}>
-              <li>
-                <Link
-                  href={getLocalizedUrl("/directory", locale)}
-                  className={styles["footer__link"]}
-                >
-                  Business Directory
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={getLocalizedUrl("/directory/food-drink", locale)}
-                  className={styles["footer__link"]}
-                >
-                  Restaurants & Dining
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={getLocalizedUrl("/directory/home-local-services", locale)}
-                  className={styles["footer__link"]}
-                >
-                  Home Services
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={getLocalizedUrl("/submit-listing", locale)}
-                  className={styles["footer__link"]}
-                >
-                  Recommend a Business
-                </Link>
-              </li>
+              {EXPLORE_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={getLocalizedUrl(link.href, locale)}
+                    className={styles["footer__link"]}
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -71,38 +63,16 @@ export default function Footer({ locale = "en" }) {
           <div className={styles["footer__col"]}>
             <h3 className={styles["footer__heading"]}>Quick Links</h3>
             <ul className={styles["footer__list"]}>
-              <li>
-                <Link
-                  href={getLocalizedUrl("/about", locale)}
-                  className={styles["footer__link"]}
-                >
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={getLocalizedUrl("/contact", locale)}
-                  className={styles["footer__link"]}
-                >
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={getLocalizedUrl("/login", locale)}
-                  className={styles["footer__link"]}
-                >
-                  Business Login
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={getLocalizedUrl("/register", locale)}
-                  className={styles["footer__link"]}
-                >
-                  Create an Account
-                </Link>
-              </li>
+              {QUICK_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={getLocalizedUrl(link.href, locale)}
+                    className={styles["footer__link"]}
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -165,11 +135,11 @@ export default function Footer({ locale = "en" }) {
               className={styles["footer__social-link"]}
               aria-label="Facebook"
             >
-              <img
+              <Image
                 src="/icons/facebook.svg"
                 alt="Facebook"
-                width="24"
-                height="24"
+                width={24}
+                height={24}
               />
             </a>
             <a
@@ -179,11 +149,11 @@ export default function Footer({ locale = "en" }) {
               className={styles["footer__social-link"]}
               aria-label="Instagram"
             >
-              <img
+              <Image
                 src="/icons/instagram.svg"
                 alt="Instagram"
-                width="24"
-                height="24"
+                width={24}
+                height={24}
               />
             </a>
           </div>

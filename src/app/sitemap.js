@@ -1,8 +1,6 @@
 import { getListings } from "@/lib/api";
 import { getBlogPosts } from "@/lib/actions";
-import { getLocalizedUrl } from "@/lib/constants";
-
-const BASE_URL = "https://capecoralreviewed.com";
+import { getLocalizedUrl, BASE_URL } from "@/lib/constants";
 
 export default async function sitemap() {
   // 1. Fetch data from WordPress

@@ -75,6 +75,7 @@
 @media (max-width: 600px) {
   .top-controls {
     gap: 1rem;
+    position: static;
   }
   .toggle-filters-btn {
     flex: 1;
