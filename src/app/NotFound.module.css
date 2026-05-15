@@ -29,7 +29,7 @@
   font-weight: 800;
   color: #1e293b;
   margin: 0 0 1rem 0;
-  font-family: var(--font-heading, sans-serif);
+  font-family: var(--font-poppins, sans-serif);
 }
 
 .not-found__text {

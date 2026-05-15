@@ -8,78 +8,7 @@ import styles from "./Navbar.module.css";
 import capeCoralLogo from "../../../public/cape-coral-reviewed-logo.svg";
 import Image from "next/image";
 import { getLocalizedUrl } from "@/lib/constants";
-import {
-  Utensils,
-  HeartPulse,
-  Home,
-  Coffee,
-  Pizza,
-  Beer,
-  ChefHat,
-  Stethoscope,
-  Dumbbell,
-  Flower,
-  Smile,
-  Hammer,
-  Wrench,
-  Brush,
-  Zap,
-  Leaf,
-} from "lucide-react";
-
-const categories = [
-  {
-    title: "Food & Drink",
-    slug: "food-drink",
-    icon: <Utensils size={20} />,
-    subs: [
-      { name: "Restaurants", slug: "restaurants", icon: <ChefHat size={16} /> },
-      { name: "Bars & Nightlife", slug: "bars-nightlife", icon: <Beer size={16} /> },
-      { name: "Cafes & Bakeries", slug: "cafes-bakeries", icon: <Coffee size={16} /> },
-      { name: "Pizza", slug: "pizza", icon: <Pizza size={16} /> },
-      { name: "Seafood", slug: "seafood", icon: <Utensils size={16} /> },
-      { name: "Breakfast & Brunch", slug: "breakfast-brunch", icon: <Coffee size={16} /> },
-      { name: "Mexican & Latin", slug: "mexican-latin", icon: <Utensils size={16} /> },
-      { name: "Breweries", slug: "breweries", icon: <Beer size={16} /> },
-      { name: "Coffee & Tea", slug: "coffee-tea", icon: <Coffee size={16} /> },
-      { name: "Steakhouse", slug: "steakhouse", icon: <Utensils size={16} /> },
-    ],
-  },
-  {
-    title: "Health & Wellness",
-    slug: "health-wellness",
-    icon: <HeartPulse size={20} />,
-    subs: [
-      { name: "Medical & Dental", slug: "medical-dental", icon: <Stethoscope size={16} /> },
-      { name: "Beauty & Spas", slug: "beauty-spas", icon: <Flower size={16} /> },
-      { name: "Fitness & Sports", slug: "fitness-sports", icon: <Dumbbell size={16} /> },
-      { name: "Primary Care", slug: "primary-care-doctors", icon: <Stethoscope size={16} /> },
-      { name: "Dentists", slug: "dentists-orthodontics", icon: <Smile size={16} /> },
-      { name: "Hair Salons", slug: "hair-salons", icon: <Flower size={16} /> },
-      { name: "Gyms & Clubs", slug: "gyms-health-clubs", icon: <Dumbbell size={16} /> },
-      { name: "Massage Therapy", slug: "massage-therapy", icon: <HeartPulse size={16} /> },
-      { name: "Chiropractors", slug: "chiropractors", icon: <HeartPulse size={16} /> },
-      { name: "Yoga", slug: "yoga", icon: <HeartPulse size={16} /> },
-    ],
-  },
-  {
-    title: "Home & Local Services",
-    slug: "home-local-services",
-    icon: <Home size={20} />,
-    subs: [
-      { name: "Contractors & Repair", slug: "contractors-repair", icon: <Hammer size={16} /> },
-      { name: "Real Estate", slug: "real-estate", icon: <Home size={16} /> },
-      { name: "Auto & Transport", slug: "auto-transport", icon: <Wrench size={16} /> },
-      { name: "Plumbers", slug: "plumbers", icon: <Wrench size={16} /> },
-      { name: "Electricians", slug: "electricians", icon: <Zap size={16} /> },
-      { name: "Roofing", slug: "roofing-contractors", icon: <Hammer size={16} /> },
-      { name: "Cleaning & Wash", slug: "cleaning-pressure-washing", icon: <Brush size={16} /> },
-      { name: "Landscaping", slug: "landscaping-lawn-care", icon: <Leaf size={16} /> },
-      { name: "Pet Services", slug: "pet-services", icon: <Smile size={16} /> },
-      { name: "HVAC & AC", slug: "hvac-ac-repair", icon: <Zap size={16} /> },
-    ],
-  },
-];
+import { categories } from "@/lib/navigation";
 
 export default function Navbar({ currentUser, dict, locale }) {
   const router = useRouter();

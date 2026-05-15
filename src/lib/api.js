@@ -1,5 +1,30 @@
 // lib/api.js
 
+const CORE_LISTING_FIELDS = `
+  id
+  databaseId
+  title
+  date
+  slug
+  content
+  featuredImage { node { sourceUrl altText } }
+  listingdata {
+    addressStreet addressCity phoneNumber priceRange
+    hoursMonday hoursTuesday hoursWednesday hoursThursday hoursFriday hoursSaturday hoursSunday
+  }
+  directoryTypes { nodes { name slug } }
+  ccrlistingcategories { nodes { name slug } }
+  reviews { nodes { reviewFields { starRating } } }
+  author { 
+    node { 
+      name 
+      userData { isFeaturedUser } 
+      customAvatar { customAvatar { node { sourceUrl } } } 
+      avatar { url } 
+    } 
+  }
+`;
+
 export async function getListingBySlug(slug) {
   const query = `
     query GetListingBySlug($id: ID!) {
@@ -121,75 +146,6 @@ export async function getListingBySlug(slug) {
 }
 
 export async function getListings(categorySlug = null) {
-  const nodesBlock = `
-    nodes {
-      id
-      databaseId
-      title
-      date
-      slug
-      content
-      
-      featuredImage {
-        node {
-          sourceUrl
-          altText
-        }
-      }
-
-      listingdata {
-        addressStreet
-        addressCity
-        phoneNumber
-        priceRange
-        hoursMonday
-        hoursTuesday
-        hoursWednesday
-        hoursThursday
-        hoursFriday
-        hoursSaturday
-        hoursSunday
-      }
-      directoryTypes {
-        nodes {
-          name
-          slug
-        }
-      }
-      ccrlistingcategories {
-        nodes {
-          name
-          slug
-        }
-      }
-      reviews {
-        nodes {
-          reviewFields {
-            starRating
-          }
-        }
-      }
-      author {
-        node {
-          name
-          userData {
-            isFeaturedUser
-          }
-          customAvatar {
-            customAvatar {
-              node {
-                sourceUrl
-              }
-            }
-          }
-          avatar {
-            url
-          }
-        }
-      }
-    }
-  `;
-
   const query = categorySlug
     ? `query GetListingsWithCategory($categorySlug: [String]) {
         ccrlistings(first: 100, where: { 
@@ -199,12 +155,16 @@ export async function getListings(categorySlug = null) {
             ]
           }
         }) {
-          ${nodesBlock}
+          nodes {
+            ${CORE_LISTING_FIELDS}
+          }
         }
       }`
     : `query GetListingsAll {
         ccrlistings(first: 100) {
-          ${nodesBlock}
+          nodes {
+            ${CORE_LISTING_FIELDS}
+          }
         }
       }`;
 
@@ -249,21 +209,7 @@ export async function getListingsByCategory(categorySlug, directoryType = null) 
         }
       }) {
         nodes {
-          id
-          databaseId
-          title
-          date
-          slug
-          content
-          featuredImage { node { sourceUrl altText } }
-          listingdata {
-            addressStreet addressCity phoneNumber priceRange
-            hoursMonday hoursTuesday hoursWednesday hoursThursday hoursFriday hoursSaturday hoursSunday
-          }
-          directoryTypes { nodes { name slug } }
-          ccrlistingcategories { nodes { name slug } }
-          reviews { nodes { reviewFields { starRating } } }
-          author { node { name avatar { url } } }
+          ${CORE_LISTING_FIELDS}
         }
       }
     }
@@ -292,21 +238,7 @@ export async function getListingsByDirectoryType(directoryTypeSlug) {
         }
       }) {
         nodes {
-          id
-          databaseId
-          title
-          date
-          slug
-          content
-          featuredImage { node { sourceUrl altText } }
-          listingdata {
-            addressStreet addressCity phoneNumber priceRange
-            hoursMonday hoursTuesday hoursWednesday hoursThursday hoursFriday hoursSaturday hoursSunday
-          }
-          directoryTypes { nodes { name slug } }
-          ccrlistingcategories { nodes { name slug } }
-          reviews { nodes { reviewFields { starRating } } }
-          author { node { name avatar { url } } }
+          ${CORE_LISTING_FIELDS}
         }
       }
     }

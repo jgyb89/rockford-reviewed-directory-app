@@ -1,0 +1,29 @@
+.backToTopBtn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 9999;
+  background-color: #1e293b;
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+}
+
+.backToTopBtn:hover,
+.backToTopBtn:focus {
+  background-color: #e04c4c;
+  transform: translateY(-3px);
+  outline: none;
+}
+
+.backToTopIcon {
+  font-size: 1.5rem;
+}

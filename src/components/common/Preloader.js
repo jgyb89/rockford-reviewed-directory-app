@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import styles from './Preloader.module.css';
 
 export default function Preloader() {
   const [showPreloader, setShowPreloader] = useState(false);
@@ -65,44 +66,12 @@ export default function Preloader() {
   if (!showPreloader) return null;
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 99999,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#000000",
-        overflow: "hidden",
-      }}
-    >
+    <div ref={containerRef} className={styles.preloaderOverlay}>
       {/* Unified Composite Background Layer */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          zIndex: 1,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          /* 1: Shadow (Normal), 2: Color (Exclusion), 3: Image (Normal) */
-          backgroundBlendMode: "normal, exclusion, normal",
-          backgroundImage:
-            "linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.75) 100%), linear-gradient(180deg, rgba(43, 135, 218, 0.5) 0%, rgba(41, 196, 169, 0.7) 100%), url(/cape-coral-florida-background.webp)",
-        }}
-      />
+      <div className={styles.preloaderBackground} />
 
       {/* Foreground Elements (Logo & Text) */}
-      <div
-        style={{
-          position: "relative",
-          zIndex: 10,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
+      <div className={styles.preloaderContent}>
         <div ref={logoRef}>
           <Image
             src="/cape-coral-reviewed-round-logo-white.webp"
@@ -110,25 +79,12 @@ export default function Preloader() {
             width={400}
             height={400}
             priority
-            style={{ objectFit: "contain" }}
+            style={{ objectFit: "contain" }} 
           />
         </div>
 
         {/* The Tagline */}
-        <div
-          style={{
-            marginTop: "1.5rem",
-            color: "#ffffff",
-            fontSize: "1.2rem",
-            fontWeight: "500",
-            letterSpacing: "0.05em",
-            display: "flex",
-            gap: "0.5rem",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            textTransform: "uppercase",
-          }}
-        >
+        <div className={styles.preloaderTagline}>
           <span className="preloader-phrase">Read Reviews.</span>
           <span className="preloader-phrase">Leave Reviews.</span>
           <span className="preloader-phrase">Get Reviews.</span>

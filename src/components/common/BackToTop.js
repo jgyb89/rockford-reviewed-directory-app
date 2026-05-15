@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import styles from './BackToTop.module.css';
 
 export default function BackToTop() {
   const [isVisible, setIsVisible] = useState(false);
@@ -31,42 +32,9 @@ export default function BackToTop() {
     <button
       onClick={scrollToTop}
       aria-label="Back to top"
-      style={{
-        position: 'fixed',
-        bottom: '2rem',
-        right: '2rem',
-        zIndex: 9999,
-        backgroundColor: '#1e293b', 
-        color: '#ffffff',
-        border: 'none',
-        borderRadius: '50%',
-        width: '50px',
-        height: '50px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        cursor: 'pointer',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-        transition: 'all 0.3s ease',
-      }}
-      onMouseOver={(e) => {
-        e.currentTarget.style.backgroundColor = '#e04c4c';
-        e.currentTarget.style.transform = 'translateY(-3px)';
-      }}
-      onFocus={(e) => {
-        e.currentTarget.style.backgroundColor = '#e04c4c';
-        e.currentTarget.style.transform = 'translateY(-3px)';
-      }}
-      onMouseOut={(e) => {
-        e.currentTarget.style.backgroundColor = '#1e293b';
-        e.currentTarget.style.transform = 'translateY(0)';
-      }}
-      onBlur={(e) => {
-        e.currentTarget.style.backgroundColor = '#1e293b';
-        e.currentTarget.style.transform = 'translateY(0)';
-      }}
+      className={styles.backToTopBtn}
     >
-      <span className="material-symbols-outlined" style={{ fontSize: '1.5rem' }}>arrow_upward</span>
+      <span className={`material-symbols-outlined ${styles.backToTopIcon}`}>arrow_upward</span>
     </button>
   );
 }

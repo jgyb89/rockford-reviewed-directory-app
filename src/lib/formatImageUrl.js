@@ -8,10 +8,12 @@
  * TODO: Delete this file and remove its imports when pushing to production.
  */
 
+import { BASE_URL } from "@/lib/constants";
+
 export function formatImageUrl(sourceUrl) {
   if (!sourceUrl) return "/placeholder-image.jpg";
 
-  const productionDomain = "https://capecoralreviewed.com";
+  const productionDomain = BASE_URL;
   const stagingDomain = "https://staging.capecoralreviewed.com";
 
   // If the URL already has staging, leave it alone
