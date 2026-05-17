@@ -1,0 +1,39 @@
+﻿Please remove the inline aspect-ratio from the React parser and force an auto aspect-ratio in the CSS to override WordPress.
+
+
+Please perform the following updates:
+
+
+### Task 1: Remove Inline Aspect Ratio from page.js
+1. Open `src/app/[locale]/blog/[slug]/page.js`.
+2. Locate the `parseOptions` object.
+3. Delete the `aspectRatio` property completely from the iframe's `style` object. The `style` block should now look exactly like this:
+
+
+   ```javascript
+               style={{
+                 width: '100%',
+                 maxWidth: isPortrait ? '400px' : '800px',
+                 minHeight: '450px',
+                 borderRadius: '12px',
+                 backgroundColor: '#000',
+                 boxShadow: '0 10px 30px rgba(0,0,0,0.15)'
+               }}
+
+
+Task 2: Override WordPress Inline Styles in BlogPost.css
+1. Open src/app/[locale]/blog/[slug]/BlogPost.css.
+2. Locate the .blog-post-main iframe, .blog-post-main video rule at the bottom of the file.
+3. Add aspect-ratio: auto !important; to force the browser to ignore the inline ratios that WordPress natively injects on <video> tags:
+4. CSS
+.blog-post-main iframe,
+.blog-post-main video {
+  max-width: 100% !important;
+  height: auto !important;
+  aspect-ratio: auto !important; /* Kills the inline WordPress aspect-ratio */
+  border-radius: 12px;
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+5. }
+6.

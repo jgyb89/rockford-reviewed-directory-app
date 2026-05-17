@@ -27,5 +27,9 @@ export const ALL_CATEGORIES = categoriesData.flatMap((cat) => {
 });
 
 export function getLocalizedUrl(path, locale) {
+  if (locale === 'es') {
+    if (path.startsWith('/es/') || path === '/es') return path;
+    return `/es${path.startsWith('/') ? '' : '/'}${path}`;
+  }
   return path;
 }

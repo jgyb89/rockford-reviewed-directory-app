@@ -3,8 +3,9 @@
 import { useMemo, useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import PropTypes from "prop-types";
+import Breadcrumbs from "../common/Breadcrumbs";
 import CcrCardGrid from "./CcrCardGrid";
-import DirectoryFilters, { QUICK_PILLS, getCategoryRoute } from "./DirectoryFilters";
+import DirectoryFilters, { QUICK_PILLS, getCategoryRoute, getDynamicPills } from "./DirectoryFilters";
 import Pagination from "../common/Pagination";
 import styles from "./DirectoryFilterManager.module.css";
 import { checkIfOpenNow } from '@/lib/timeUtils';
@@ -24,6 +25,8 @@ const DirectoryFilterManager = ({ listings, currentUser, dict = {}, locale = "en
   const router = useRouter();
   const pathname = usePathname();
   const t = dict?.directory || {};
+
+  const activePills = getDynamicPills(pathname);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -137,6 +140,7 @@ const DirectoryFilterManager = ({ listings, currentUser, dict = {}, locale = "en
 
   return (
     <div className={styles['directory-filter-manager']}>
+      <Breadcrumbs locale={locale} />
       {/* New Universal Top Bar */}
       <div className={styles['top-controls']}>
         <button 
@@ -186,15 +190,27 @@ const DirectoryFilterManager = ({ listings, currentUser, dict = {}, locale = "en
           >
             All
           </button>
-          {QUICK_PILLS.map(pill => (
+          {activePills.map(pill => (
             <button 
               key={pill.slug}
               className={`${styles['category-pill']} ${pathname.includes(pill.slug) ? styles['category-pill--active'] : ''}`}
               onClick={() => {
+                const segments = pathname.split('/').filter(Boolean);
+                const isSpanish = segments[0] === 'es';
+                const localePrefix = isSpanish ? '/es' : '';
+
                 if (pathname.includes(pill.slug)) {
-                  router.push('/directory'); // Toggle off if already active
+                  // Deselect: Go back to the parent directory type if available
+                  const dirIndex = segments.indexOf('directory');
+                  if (dirIndex !== -1 && segments.length > dirIndex + 1) {
+                    const dirType = segments[dirIndex + 1];
+                    router.push(`${localePrefix}/directory/${dirType}`);
+                  } else {
+                    router.push(`${localePrefix}/directory`);
+                  }
                 } else {
-                  router.push(getCategoryRoute(pill.slug)); // Route to specific category
+                  const route = getCategoryRoute(pill.slug);
+                  router.push(`${localePrefix}${route}`);
                 }
               }}
             >

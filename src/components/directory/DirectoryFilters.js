@@ -38,6 +38,29 @@ export const getCategoryRoute = (slug) => {
   return `/directory`; // Fallback
 };
 
+export const getDynamicPills = (pathname) => {
+  const pathSegments = pathname.split('/').filter(Boolean);
+  const directoryIndex = pathSegments.indexOf('directory');
+  
+  // If we are inside a specific directory type (e.g., /directory/food-drink)
+  if (directoryIndex !== -1 && pathSegments.length > directoryIndex + 1) {
+    const dirTypeSlug = pathSegments[directoryIndex + 1];
+    
+    // Find all sub-categories belonging to this parent directory type
+    const subCategories = ALL_CATEGORIES.filter(cat => cat.parentSlug === dirTypeSlug);
+    
+    if (subCategories.length > 0) {
+      return subCategories.map(cat => ({
+        label: cat.name,
+        slug: cat.slug
+      }));
+    }
+  }
+
+  // Fallback to default QUICK_PILLS if on the main /directory page or no subs found
+  return QUICK_PILLS;
+};
+
 const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -166,17 +189,31 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
   };
 
   const handleCategoryClick = (slug) => {
-    const locale = pathname.split('/')[1] || 'en';
+    const segments = pathname.split('/').filter(Boolean);
+    const isSpanish = segments[0] === 'es';
+    const localePrefix = isSpanish ? '/es' : '';
+
     if (!slug || pathname.includes(slug)) {
-      router.push(`/directory`);
+      // Deselecting: Step back to the parent directory type if available, else root directory
+      const directoryIndex = segments.indexOf('directory');
+      if (directoryIndex !== -1 && segments.length > directoryIndex + 1) {
+        const dirTypeSlug = segments[directoryIndex + 1];
+        router.push(`${localePrefix}/directory/${dirTypeSlug}`);
+      } else {
+        router.push(`${localePrefix}/directory`);
+      }
     } else {
       const route = getCategoryRoute(slug);
-      router.push(`${route}`);
+      // getCategoryRoute returns /directory/..., so we prepend the locale prefix
+      router.push(`${localePrefix}${route}`);
     }
+    setIsSearchFocused(false);
+    setSearchTerm('');
     if (setIsModalOpen) setIsModalOpen(false);
   };
 
   const renderPills = (isMobile = false) => {
+    const activePills = getDynamicPills(pathname);
     const pillsContent = (
       <>
         <button 
@@ -185,9 +222,9 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
         >
           All
         </button>
-        {QUICK_PILLS.map(pill => (
+        {activePills.map(pill => (
           <button 
-            key={pill.slug}
+            key={`pill-${pill.slug}`}
             className={`${styles['category-pill']} ${pathname.includes(pill.slug) ? styles['category-pill--active'] : ''}`}
             onClick={() => handleCategoryClick(pill.slug)}
           >
@@ -311,7 +348,9 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
   const renderPredictiveDropdown = () => {
     if (!isSearchFocused || debouncedSearch.length < 2) return null;
 
-    const locale = pathname.split('/')[1] || 'en';
+    const segments = pathname.split('/').filter(Boolean);
+    const isSpanish = segments[0] === 'es';
+    const localePrefix = isSpanish ? '/es' : '';
     const hasCategories = searchResults.categories && searchResults.categories.length > 0;
     const hasListings = searchResults.listings && searchResults.listings.length > 0;
     const hasResults = hasCategories || hasListings;
@@ -326,7 +365,8 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
           <ul className={styles['predictive-list']}>
             {hasCategories && searchResults.categories.map(cat => {
               const route = getCategoryRoute(cat.slug);
-              const categoryHref = `${route}`;
+              // getCategoryRoute returns /directory/..., so we prepend the locale prefix
+              const categoryHref = `${localePrefix}${route}`;
               return (
                 <li key={`cat-${cat.slug}`} className={styles['predictive-item']}>
                   <Link href={categoryHref} className={styles['predictive-link']}>
@@ -338,7 +378,7 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
             })}
             {hasListings && searchResults.listings.map(listing => (
               <li key={`list-${listing.slug}`} className={styles['predictive-item']}>
-                <Link href={`/listing/${listing.slug}`} className={styles['predictive-link']}>
+                <Link href={`${localePrefix}/listing/${listing.slug}`} className={styles['predictive-link']}>
                   <span className={styles['predictive-title']}>{listing.title}</span>
                   <span className={styles['predictive-type']}>Listing</span>
                 </Link>
