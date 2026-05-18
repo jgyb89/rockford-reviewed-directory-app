@@ -12,7 +12,8 @@ import { getDictionary } from "@/lib/dictionaries";
 import { headers } from "next/headers";
 import { BASE_URL } from "@/lib/constants";
 
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import { SpeedInsights } from "@vercel-speed-insights/next";
+import Script from "next/script";
 
 export async function generateMetadata({ params }) {
   const { locale } = await params;
@@ -52,6 +53,20 @@ export default async function RootLayout({ children, params }) {
 
   return (
     <html lang={locale}>
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-TBEXLYNPDT"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-TBEXLYNPDT');
+          `}
+        </Script>
+      </head>
       <body className={`${poppins.variable} ${openSans.variable}`}>
         <Preloader />
         <Navbar currentUser={viewer} dict={dict} locale={locale} />
