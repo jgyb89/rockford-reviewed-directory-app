@@ -39,6 +39,10 @@ export async function generateMetadata({ params }) {
       default: "Cape Coral Reviewed",
     },
     description: "The premier local directory for Cape Coral, Florida.",
+    icons: {
+      icon: "/cape-coral-reviewed-icon.svg",
+      apple: "/cape-coral-reviewed-icon.svg",
+    },
   };
 }
 
