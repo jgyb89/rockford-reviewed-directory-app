@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
+import { Suspense } from "react";
 import Link from "next/link";
 import { getListingsByCategory } from "@/lib/api";
-import { getViewer } from "@/lib/auth";
 import { getDictionary } from "@/lib/dictionaries";
 import DirectoryFilterManager from "@/components/directory/DirectoryFilterManager";
 
@@ -20,7 +20,7 @@ export default async function CategoryPage({ params }) {
   const { locale, directoryType, categorySlug } = await params;
   const dict = await getDictionary(locale);
   const listings = await getListingsByCategory(categorySlug, directoryType);
-  const currentUser = await getViewer();
+  const currentUser = null;
 
   // Derive category name from the first listing if available, or use the slug
   const categoryName = listings[0]?.ccrlistingcategories?.nodes?.find(n => n.slug === categorySlug)?.name || categorySlug.replace(/-/g, ' ');
@@ -43,7 +43,9 @@ export default async function CategoryPage({ params }) {
         </h1>
       </header>
 
-      <DirectoryFilterManager listings={listings} currentUser={currentUser} dict={dict} locale={locale} />
+      <Suspense fallback={<div style={{ textAlign: 'center', padding: '3rem', color: '#64748b' }}>Loading listings...</div>}>
+        <DirectoryFilterManager listings={listings} currentUser={currentUser} dict={dict} locale={locale} />
+      </Suspense>
     </main>
   );
 }

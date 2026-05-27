@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
+import { Suspense } from "react";
 import Link from "next/link";
 import { getListingsByDirectoryType } from "@/lib/api";
-import { getViewer } from "@/lib/auth";
 import { getDictionary } from "@/lib/dictionaries";
 import DirectoryFilterManager from "@/components/directory/DirectoryFilterManager";
 
@@ -19,7 +19,7 @@ export default async function DirectoryTypePage({ params }) {
   const { locale, directoryType } = await params;
   const dict = await getDictionary(locale);
   const listings = await getListingsByDirectoryType(directoryType);
-  const currentUser = await getViewer();
+  const currentUser = null;
 
   // Derive directory type name from the first listing if available, or use the slug
   const typeName = listings[0]?.directoryTypes?.nodes.find(n => n.slug === directoryType)?.name || directoryType.replace(/-/g, ' ');
@@ -42,7 +42,9 @@ export default async function DirectoryTypePage({ params }) {
         </h1>
       </header>
 
-      <DirectoryFilterManager listings={listings} currentUser={currentUser} dict={dict} locale={locale} />
+      <Suspense fallback={<div style={{ textAlign: 'center', padding: '3rem', color: '#64748b' }}>Loading listings...</div>}>
+        <DirectoryFilterManager listings={listings} currentUser={currentUser} dict={dict} locale={locale} />
+      </Suspense>
     </main>
   );
 }

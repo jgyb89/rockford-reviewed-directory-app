@@ -1,12 +1,37 @@
 "use client";
 
-import { useState } from 'react';
-import { toggleFavoriteListing } from '@/lib/actions';
+import { useState, useEffect } from 'react';
+import { toggleFavoriteListing, getCurrentViewer } from '@/lib/actions';
 import heartStyles from '@/components/common/HeartButton.module.css';
 
-export default function FavoriteButton({ listingId, initialIsFavorite = false, currentUser, label = "Favorite" }) {
+export default function FavoriteButton({ listingId, initialIsFavorite = false, currentUser: propCurrentUser, label = "Favorite" }) {
+  const [currentUser, setCurrentUser] = useState(propCurrentUser);
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite);
   const [toastMessage, setToastMessage] = useState(null);
+
+  useEffect(() => {
+    setCurrentUser(propCurrentUser);
+  }, [propCurrentUser]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && document.cookie.includes("hasSession=true")) {
+      async function checkAuth() {
+        try {
+          const viewer = await getCurrentViewer();
+          setCurrentUser(viewer);
+          if (viewer) {
+            const favorited = viewer.userData?.favoriteListings?.nodes?.some(
+              (n) => n.databaseId === listingId
+            ) || false;
+            setIsFavorite(favorited);
+          }
+        } catch (err) {
+          console.error("Failed to check auth in FavoriteButton:", err);
+        }
+      }
+      checkAuth();
+    }
+  }, [listingId]);
 
   const handleToggle = async () => {
     if (!currentUser) {

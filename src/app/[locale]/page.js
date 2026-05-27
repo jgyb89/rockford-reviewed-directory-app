@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import { getListings } from "@/lib/api";
-import { getViewer } from "@/lib/auth";
 import { getDictionary } from "@/lib/dictionaries";
 import HeroSlideshow from "@/components/home/HeroSlideshow";
 import HorizontalListingFeed from "@/components/home/HorizontalListingFeed";
@@ -28,7 +27,7 @@ export default async function HomePage({ params }) {
   const { locale } = await params;
   const dict = await getDictionary(locale);
   const listings = await getListings();
-  const currentUser = await getViewer();
+  const currentUser = null;
 
   // Strict filter: only listings where the author is featured
   const featuredListings = listings.filter(

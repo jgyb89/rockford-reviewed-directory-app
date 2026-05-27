@@ -1,5 +1,5 @@
+import { Suspense } from "react";
 import { getListings } from "@/lib/api";
-import { getViewer } from "@/lib/auth";
 import { getDictionary } from "@/lib/dictionaries";
 import DirectoryFilterManager from "@/components/directory/DirectoryFilterManager";
 
@@ -12,7 +12,7 @@ export default async function DirectoryIndexPage({ params }) {
   const { locale } = await params;
   const dict = await getDictionary(locale);
   const listings = await getListings();
-  const currentUser = await getViewer();
+  const currentUser = null;
 
   const t = dict?.directory || {};
 
@@ -47,7 +47,9 @@ export default async function DirectoryIndexPage({ params }) {
         </p>
       </header>
 
-      <DirectoryFilterManager listings={listings} currentUser={currentUser} dict={dict} locale={locale} />
+      <Suspense fallback={<div style={{ textAlign: 'center', padding: '3rem', color: '#64748b' }}>Loading listings...</div>}>
+        <DirectoryFilterManager listings={listings} currentUser={currentUser} dict={dict} locale={locale} />
+      </Suspense>
     </main>
   );
 }

@@ -83,6 +83,7 @@ async function handleGraphQLError(json) {
     if (isTokenError) {
       const cookieStore = await cookies();
       cookieStore.set("authToken", "", { maxAge: 0 });
+      cookieStore.set("hasSession", "", { maxAge: 0 });
       redirect("/login");
     }
     
@@ -736,6 +737,13 @@ export async function handleGoogleLogin(credential) {
         maxAge: 7 * 24 * 60 * 60, // 7 days
         path: '/',
       });
+      cookieStore.set('hasSession', 'true', {
+        httpOnly: false,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60, // 7 days
+        path: '/',
+      });
       return { success: true };
     } else {
       return { success: false, error: data.message || 'Google login failed on the server.' };
@@ -745,3 +753,12 @@ export async function handleGoogleLogin(credential) {
     return { success: false, error: 'Network error during Google login.' };
   }
 }
+
+/**
+ * Server Action to fetch the current logged-in user's data.
+ * This is safe to run client-side as it is a POST Server Action.
+ */
+export async function getCurrentViewer() {
+  return await getViewer();
+}
+
