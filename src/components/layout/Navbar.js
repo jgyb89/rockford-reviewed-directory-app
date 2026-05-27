@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import LoginModal from "@/components/auth/LoginModal";
@@ -9,8 +10,30 @@ import capeCoralLogo from "../../../public/cape-coral-reviewed-logo.svg";
 import Image from "next/image";
 import { getLocalizedUrl } from "@/lib/constants";
 import { categories } from "@/lib/navigation";
+import { getCurrentViewer } from "@/lib/actions";
 
-export default function Navbar({ currentUser, dict, locale }) {
+export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
+  const [user, setUser] = useState(propCurrentUser);
+
+  useEffect(() => {
+    setUser(propCurrentUser);
+  }, [propCurrentUser]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && document.cookie.includes("hasSession=true")) {
+      async function fetchUser() {
+        try {
+          const viewer = await getCurrentViewer();
+          if (viewer) {
+            setUser(viewer);
+          }
+        } catch (err) {
+          console.error("Failed to fetch current user in Navbar:", err);
+        }
+      }
+      fetchUser();
+    }
+  }, []);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -43,9 +66,9 @@ export default function Navbar({ currentUser, dict, locale }) {
   };
 
   const getSubmitHref = () => {
-    if (!currentUser) return getLocalizedUrl("/register-business", locale);
+    if (!user) return getLocalizedUrl("/register-business", locale);
     const userRoles =
-      currentUser.roles?.nodes?.map((node) => node.name.toLowerCase()) || [];
+      user.roles?.nodes?.map((node) => node.name.toLowerCase()) || [];
     if (userRoles.includes("business") || userRoles.includes("administrator")) {
       return getLocalizedUrl("/submit-listing", locale);
     }
@@ -54,7 +77,7 @@ export default function Navbar({ currentUser, dict, locale }) {
 
   const submitHref = getSubmitHref();
 
-  const userRoles = currentUser?.roles?.nodes?.map((node) => node.name.toLowerCase()) || [];
+  const userRoles = user?.roles?.nodes?.map((node) => node.name.toLowerCase()) || [];
   const isBusinessOrAdmin = userRoles.includes("business") || userRoles.includes("administrator");
 
   const t = dict?.nav || {};
@@ -183,7 +206,7 @@ export default function Navbar({ currentUser, dict, locale }) {
             </button>
           </div>
 
-          {currentUser ? (
+          {user ? (
             // LOGGED IN STATE
             <>
               <div
@@ -319,7 +342,7 @@ export default function Navbar({ currentUser, dict, locale }) {
                   </Link>
                 </li>
 
-                {currentUser ? (
+                {user ? (
                   <li className={styles['flyout-item']}>
                     <button
                       className={styles['flyout-action']}
@@ -360,7 +383,7 @@ export default function Navbar({ currentUser, dict, locale }) {
 
               {/* Bottom CTAs */}
               <div className={styles['flyout-cta-wrap']}>
-                {!currentUser && (
+                {!user && (
                   <div className={styles['sign-up-button']}>
                     <Link href={getLocalizedUrl("/register", locale)} onClick={closeMobileMenu}>
                       {t.joinCommunity || "Join Community"}
@@ -533,12 +556,14 @@ export default function Navbar({ currentUser, dict, locale }) {
       />
 
       {/* Existing Login Modal */}
-      <LoginModal
-        isOpen={isLoginModalOpen}
-        onClose={() => setIsLoginModalOpen(false)}
-        dict={dict}
-        locale={locale}
-      />
+      <Suspense fallback={null}>
+        <LoginModal
+          isOpen={isLoginModalOpen}
+          onClose={() => setIsLoginModalOpen(false)}
+          dict={dict}
+          locale={locale}
+        />
+      </Suspense>
 
       {/* Logout Confirmation Modal */}
       {isLogoutModalOpen && (

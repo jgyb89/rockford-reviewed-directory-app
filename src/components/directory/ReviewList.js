@@ -1,12 +1,34 @@
 "use client";
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import PropTypes from 'prop-types';
 import DOMPurify from 'isomorphic-dompurify';
 import ReviewModal from './ReviewModal';
+import { getCurrentViewer } from '@/lib/actions';
 
-export default function ReviewList({ reviews, noReviewsYet = "No reviews yet. Be the first to leave one!", currentUser }) {
+export default function ReviewList({ reviews, noReviewsYet = "No reviews yet. Be the first to leave one!", currentUser: propCurrentUser }) {
+  const [currentUser, setCurrentUser] = useState(propCurrentUser);
+
+  useEffect(() => {
+    setCurrentUser(propCurrentUser);
+  }, [propCurrentUser]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && document.cookie.includes("hasSession=true")) {
+      async function fetchUser() {
+        try {
+          const viewer = await getCurrentViewer();
+          if (viewer) {
+            setCurrentUser(viewer);
+          }
+        } catch (err) {
+          console.error("Failed to fetch current user in ReviewList:", err);
+        }
+      }
+      fetchUser();
+    }
+  }, []);
   const [visibleCount, setVisibleCount] = useState(5);
   const [expandedReviews, setExpandedReviews] = useState({});
   const [editingReview, setEditingReview] = useState(null);

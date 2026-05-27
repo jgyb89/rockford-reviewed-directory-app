@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import LoginModal from "@/components/auth/LoginModal";
@@ -39,12 +39,14 @@ export default function CheckEmailPage() {
         </div>
       </div>
 
-      <LoginModal
-        isOpen={isLoginModalOpen}
-        onClose={() => setIsLoginModalOpen(false)}
-        dict={dict}
-        locale={locale}
-      />
+      <Suspense fallback={null}>
+        <LoginModal
+          isOpen={isLoginModalOpen}
+          onClose={() => setIsLoginModalOpen(false)}
+          dict={dict}
+          locale={locale}
+        />
+      </Suspense>
     </div>
   );
 }

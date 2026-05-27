@@ -53,6 +53,13 @@ export async function loginUser(username, password) {
       path: "/",
       maxAge: 60 * 60 * 4, // 4 hours
     });
+    cookieStore.set("hasSession", "true", {
+      httpOnly: false,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      maxAge: 60 * 60 * 4, // 4 hours
+    });
 
     return json.data.login.user;
   } catch (error) {
@@ -197,6 +204,7 @@ export async function getViewer() {
     // Clear the dead cookie
     const cookieStore = await cookies();
     cookieStore.set("authToken", "", { maxAge: 0 });
+    cookieStore.set("hasSession", "", { maxAge: 0 });
     
     // Redirect to branded login page
     redirect("/login");
@@ -211,4 +219,5 @@ export async function getViewer() {
 export async function logoutUser() {
   const cookieStore = await cookies();
   cookieStore.delete("authToken");
+  cookieStore.delete("hasSession");
 }

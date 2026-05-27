@@ -1,23 +1,50 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import PropTypes from "prop-types";
 import Image from "next/image";
 import Link from "next/link";
 import { getLocalizedUrl } from "@/lib/constants";
 import styles from "./CcrCard.module.css";
 import heartStyles from '@/components/common/HeartButton.module.css';
-import { toggleFavoriteListing } from '@/lib/actions';
+import { toggleFavoriteListing, getCurrentViewer } from '@/lib/actions';
 import LoginModal from '@/components/auth/LoginModal';
 import { formatImageUrl } from "@/lib/formatImageUrl";
 
-export default function CcrCard({ listing, currentUser, locale = 'en' }) {
-  // Initialize state based on whether the listing ID exists in currentUser's favorites
-  const initialFavoriteState = currentUser?.userData?.favoriteListings?.nodes?.some(
-    node => node.databaseId === listing.databaseId
-  ) || false;
+export default function CcrCard({ listing, currentUser: propCurrentUser, locale = 'en' }) {
+  const [currentUser, setCurrentUser] = useState(propCurrentUser);
+  const [isFavorite, setIsFavorite] = useState(false);
 
-  const [isFavorite, setIsFavorite] = useState(initialFavoriteState);
+  useEffect(() => {
+    setCurrentUser(propCurrentUser);
+    if (propCurrentUser) {
+      const favorited = propCurrentUser?.userData?.favoriteListings?.nodes?.some(
+        node => node.databaseId === listing.databaseId
+      ) || false;
+      setIsFavorite(favorited);
+    }
+  }, [propCurrentUser, listing.databaseId]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && document.cookie.includes("hasSession=true")) {
+      async function fetchUser() {
+        try {
+          const viewer = await getCurrentViewer();
+          if (viewer) {
+            setCurrentUser(viewer);
+            const favorited = viewer.userData?.favoriteListings?.nodes?.some(
+              node => node.databaseId === listing.databaseId
+            ) || false;
+            setIsFavorite(favorited);
+          }
+        } catch (err) {
+          console.error("Failed to check auth in CcrCard:", err);
+        }
+      }
+      fetchUser();
+    }
+  }, [listing.databaseId]);
+
   const [isUpdating, setIsUpdating] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -172,7 +199,9 @@ export default function CcrCard({ listing, currentUser, locale = 'en' }) {
           </div>
         </div>
       </div>
-      <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
+      <Suspense fallback={null}>
+        <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
+      </Suspense>
     </>
   );
 }

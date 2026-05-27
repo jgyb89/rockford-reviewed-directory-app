@@ -1,8 +1,7 @@
 import PropTypes from "prop-types";
 import DOMPurify from "isomorphic-dompurify";
 import Script from "next/script";
-import { getListingBySlug } from "@/lib/api";
-import { getViewer } from "@/lib/auth";
+import { getListingBySlug, getListings } from "@/lib/api";
 import { getDictionary } from "@/lib/dictionaries";
 import ListingGallery from "@/components/directory/ListingGallery";
 import BlogSidebar from "@/components/blog/BlogSidebar";
@@ -81,11 +80,29 @@ export async function generateMetadata({ params }) {
   };
 }
 
+export async function generateStaticParams() {
+  const listings = await getListings();
+  const locales = ["en", "es"];
+  
+  const params = [];
+  for (const listing of listings) {
+    if (listing.slug) {
+      for (const locale of locales) {
+        params.push({
+          locale,
+          slug: listing.slug,
+        });
+      }
+    }
+  }
+  return params;
+}
+
 export default async function DirectoryListingPage({ params }) {
   const { slug, locale } = await params;
   const dict = await getDictionary(locale);
   const listing = await getListingBySlug(slug);
-  const currentUser = await getViewer();
+  const currentUser = null;
 
   if (!listing) {
     return (
