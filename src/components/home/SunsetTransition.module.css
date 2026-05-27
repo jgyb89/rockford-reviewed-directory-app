@@ -1,0 +1,370 @@
+.transitionSection {
+  position: relative;
+  width: 100%;
+  /* Background is inherited naturally without forced values */
+}
+
+.animationViewport {
+  position: relative;
+  width: 100%;
+  height: 150vh; /* INCREASED: Expanded from 80vh to 100vh to fit full height graphics */
+  overflow: hidden;
+}
+
+/* Image Utilities */
+.imageFit {
+  object-fit: cover;
+}
+
+.imageFitTopCenter {
+  object-fit: cover;
+  object-position: top center;
+}
+
+.imageFitContain {
+  object-fit: contain;
+}
+
+.imageFitContainTop {
+  object-fit: contain;
+  object-position: top center;
+}
+.imageFitContainBottom {
+  object-fit: contain;
+  object-position: bottom center;
+}
+.imageFitCoverBottom {
+  object-fit: cover;
+  object-position: bottom center;
+}
+
+/* 1. Static Sky */
+.sky {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  transform: scaleX(
+    1.6
+  ); /* ADDED: Stretches only the horizontal axis into an oval */
+  transform-origin: top center; /* ADDED: Keeps the stretch perfectly anchored in the middle */
+}
+
+/* 2. Clouds - Starting halfway outside */
+.cloudLeft {
+  position: absolute;
+  top: 50vh;
+  left: -45vw; /* Starts significantly off-screen to the left */
+  width: 80vw;
+  height: 70vh;
+  z-index: 2;
+}
+
+.cloudRight {
+  position: absolute;
+  top: 50vh;
+  right: -35vw; /* Starts significantly off-screen to the right */
+  width: 60vw;
+  height: 70vh;
+  z-index: 2;
+}
+
+/* 7. Cloud Reflections - Start squashed and align with clouds */
+.cloudReflectLeft {
+  position: absolute;
+  top: 0;
+  left: -40vw;
+  width: 60vw;
+  height: 30vh;
+  z-index: 4;
+  transform: scaleY(0.1); /* Start very squashed */
+  transform-origin: top center;
+}
+
+.cloudReflectRight {
+  position: absolute;
+  top: 0;
+  right: -40vw;
+  width: 60vw;
+  height: 30vh;
+  z-index: 4;
+  transform: scaleY(0.1); /* Start very squashed */
+  transform-origin: top center;
+}
+
+/* 3. Sun - Starts smaller and higher */
+.sun {
+  position: absolute;
+  top: 0vh;
+  left: 0; /* CHANGED */
+  right: 0; /* ADDED */
+  margin: auto; /* ADDED: Locks the element dead-center natively */
+  width: 40vw;
+  height: 40vw;
+  transform: scale(0.6); /* REMOVED translateX(-50%) */
+  transform-origin: center center;
+  z-index: 3;
+}
+
+/* 4. Ocean Wrapper - Starts Stretched */
+.oceanWrapper {
+  position: absolute;
+  top: 100vh;
+  left: 0;
+  width: 100vw;
+  height: 150vh; /* Scaled seamlessly to match viewport height bounds */
+  z-index: 4;
+}
+
+.oceanBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%; /* Follows the height of oceanWrapper */
+}
+
+/* 5. Palm Landing - Proportional, Edge-to-Edge framing */
+.palmLanding {
+  position: absolute;
+  bottom: -15vh; /* Extends below the viewport to prevent a bottom gap when translated upwards by GSAP */
+  left: 0;
+  width: 100%;
+  height: 150vh; /* INCREASED: Expanded from 35vw to 45vw to show full asset detail */
+  min-height: 50vh; /* Raised safety fallback minimum height for crisp portrait aspect ratios */
+  z-index: 10;
+}
+
+/* 5. Reflection - Starts squashed, anchors to top */
+.reflection {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 50vw;
+  height: 40vh;
+  transform: scaleY(0.1); /* Start very squashed */
+  transform-origin: top center; /* Stretching will happen downwards */
+  z-index: 5;
+}
+
+/* 7. Dark Section */
+.darkArea {
+  position: relative;
+  background-color: #231f20;
+  color: #ffffff;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 2rem;
+  z-index: 10;
+  margin-top: -2px;
+}
+
+.darkContent h2 {
+  color: #ffffff;
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.darkContent p {
+  font-size: 2rem;
+}
+
+.introModal {
+  position: absolute;
+  top: 0;
+  bottom: 10vh; /* Adjusts vertical center slightly upward to align with the sun */
+  left: 0;
+  right: 0;
+  margin: auto; /* Natively centers the modal horizontally and vertically */
+  width: 90%;
+  max-width: 800px;
+  min-height: 600px;
+  height: fit-content;
+  background-color: rgba(0, 0, 0, 0.85); /* Black with 85% opacity */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  z-index: 20; /* Ensures it sits above all sunset elements */
+  backdrop-filter: blur(
+    8px
+  ); /* Optional: Adds a premium glass blur behind the modal */
+}
+
+.modalLogo {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  margin-bottom: 1.25rem;
+}
+
+.introModal h3 {
+  font-size: 2.5rem;
+  line-height: 1.25;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+}
+
+.introModal p {
+  font-size: 24px;
+  color: #cccccc;
+  line-height: 1.75;
+  margin-bottom: 1.5rem;
+}
+
+.starsRow {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.starsRow span {
+  color: #e94f37;
+  font-variation-settings: "FILL" 1;
+  font-size: 2.5rem;
+}
+
+@media (max-width: 1024px) {
+  .darkArea {
+    min-height: 20vh;
+    padding: 3rem 1.5rem;
+  }
+
+  .darkContent h2 {
+    font-size: 3rem;
+  }
+
+  .darkContent p {
+    font-size: 1.25rem;
+  }
+
+  .starsRow span {
+    font-size: 2rem;
+  }
+
+  .modalLogo {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    margin-bottom: 1.25rem;
+  }
+
+  .introModal {
+    min-height: 300px;
+  }
+
+  .introModal h3 {
+    font-size: 2rem;
+    line-height: 1.25;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+  }
+
+  .introModal p {
+    font-size: 1rem;
+    color: #cccccc;
+    line-height: 1.75;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* ====================================================
+   MOBILE CONDENSED STATE (Prevents Excessive Stretching)
+==================================================== */
+@media (max-width: 900px) {
+  .animationViewport {
+    height: 75vh; /* CONDENSED: Compressed from 150vh so it matches handheld viewport ratios gracefully */
+  }
+
+  .sky {
+    transform: scaleX(
+      2
+    ); /* Scales horizonal stretch to eliminate side gap bleeding */
+  }
+
+  .sun {
+    width: 60vw; /* Scales sun element down proportionally */
+    height: 60vw;
+    top: 8vh;
+  }
+
+  .cloudLeft {
+    left: -40vw;
+    width: 75vw;
+    height: 35vh;
+  }
+
+  .cloudRight {
+    right: -40vw;
+    width: 75vw;
+    height: 35vh;
+  }
+
+  .oceanWrapper {
+    top: 42vh; /* Shifts ocean ceiling up slightly to make up for layout real estate loss */
+  }
+
+  .palmLanding {
+    height: 50vh; /* Keeps trees properly anchored without blocking center frame overlays */
+    min-height: 30vh;
+    bottom: -10vh; /* Extends below the viewport to prevent a bottom gap when translated upwards by GSAP */
+  }
+
+  /* Overlay Modal Adjustments */
+  .introModal {
+    width: 88%;
+    max-width: 340px;
+    padding: 1.5rem;
+    bottom: 4vh; /* Closer floor proximity alignment */
+  }
+
+  .modalLogo {
+    height: 110px; /* Shrinks container to give textual copy priority room */
+    margin-bottom: 0.5rem;
+  }
+
+  .introModal h3 {
+    font-size: 1.3rem;
+    line-height: 1.25;
+    margin-bottom: 0.4rem;
+  }
+
+  .introModal p {
+    font-size: 0.9rem;
+    line-height: 1.45;
+    margin-bottom: 0;
+  }
+
+  /* Lower Context Box Adjustments */
+  .darkArea {
+    padding: 4rem 1.5rem;
+  }
+
+  .darkContent h2 {
+    font-size: 1.8rem;
+    line-height: 1.25;
+  }
+
+  .darkContent p {
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+
+  .starsRow span {
+    font-size: 1.6rem;
+  }
+}

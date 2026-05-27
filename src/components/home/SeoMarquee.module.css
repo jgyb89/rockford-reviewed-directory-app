@@ -1,0 +1,71 @@
+.marqueeContainer {
+  width: 100%;
+  padding: 10vh 0;
+  overflow: hidden;
+}
+
+.marqueeTitle {
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.marqueeDesc {
+  text-align: center;
+  margin: 3rem auto 0 auto;
+  max-width: 800px;
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  line-height: 1.6;
+}
+
+.marqueeTrack {
+  display: flex;
+  gap: 2rem;
+  width: 250vw;
+  padding: 2rem 0;
+  will-change: transform;
+}
+
+.pill {
+  font-size: clamp(1.2rem, 2.5vw, 2rem);
+  font-weight: 600;
+  padding: 1rem 3rem;
+  border-radius: 100px;
+  border: 3px solid currentColor;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ====================================================
+   MOBILE RESPONSIVENESS
+==================================================== */
+@media (max-width: 900px) {
+  .marqueeContainer {
+    padding: 6vh 0; /* Cut down from 10vh */
+  }
+
+  .marqueeTitle {
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    padding: 0 1.5rem;
+  }
+
+  .marqueeDesc {
+    font-size: 1rem;
+    margin-top: 2rem;
+    padding: 0 1.5rem;
+  }
+
+  .marqueeTrack {
+    gap: 1rem;
+    padding: 1rem 0;
+  }
+
+  .pill {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+    border-width: 2px; /* Thinner border for smaller text */
+  }
+}

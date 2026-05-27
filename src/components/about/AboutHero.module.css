@@ -1,0 +1,50 @@
+.heroSection {
+  position: relative;
+  overflow: hidden;
+  background-color: #e94f37; /* Brand Coral */
+  color: #ffffff;
+  padding: 25vh 2rem 15vh 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.container {
+  max-width: 1000px;
+  position: relative;
+  z-index: 2; /* Sits above the background graphics */
+}
+
+/* Background Blended Image */
+.backgroundImageWrapper {
+  position: absolute;
+  inset: 0;
+  opacity: 0.18; /* Lower opacity to blend nicely */
+  mix-blend-mode: multiply; /* Multiplies details with the Coral Red color */
+  pointer-events: none; /* Make sure it doesn't block text highlights or hover clicks */
+  z-index: 1;
+}
+
+.backgroundImage {
+  object-fit: cover;
+  object-position: center center;
+}
+
+.heroTitle {
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 2rem;
+  perspective: 1000px; /* Gives the text swell a 3D feel */
+}
+
+.heroSubtitle {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 400;
+  line-height: 1.5;
+  opacity: 0.9;
+  max-width: 800px;
+  margin: 0 auto;
+}

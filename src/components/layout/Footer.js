@@ -129,7 +129,7 @@ export default function Footer({ locale = "en" }) {
           {/* Social Icons */}
           <div className={styles["footer__socials"]}>
             <a
-              href="https://facebook.com"
+              href="https://www.facebook.com/CapeCoralReviewed/"
               target="_blank"
               rel="noopener noreferrer"
               className={styles["footer__social-link"]}
@@ -143,7 +143,7 @@ export default function Footer({ locale = "en" }) {
               />
             </a>
             <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/capecoralreviewed/"
               target="_blank"
               rel="noopener noreferrer"
               className={styles["footer__social-link"]}
@@ -152,6 +152,34 @@ export default function Footer({ locale = "en" }) {
               <Image
                 src="/icons/instagram.svg"
                 alt="Instagram"
+                width={24}
+                height={24}
+              />
+            </a>
+            <a
+              href="https://www.youtube.com/@CapeCoralReviewed"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles["footer__social-link"]}
+              aria-label="YouTube"
+            >
+              <Image
+                src="/icons/youtube.svg"
+                alt="YouTube"
+                width={24}
+                height={24}
+              />
+            </a>
+            <a
+              href="https://www.tiktok.com/@capecoralreviewed"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles["footer__social-link"]}
+              aria-label="TikTok"
+            >
+              <Image
+                src="/icons/tiktok.svg"
+                alt="TikTok"
                 width={24}
                 height={24}
               />
