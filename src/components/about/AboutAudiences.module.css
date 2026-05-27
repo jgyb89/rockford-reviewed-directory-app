@@ -35,3 +35,22 @@
   color: #333333;
   margin: 0;
 }
+
+/* ====================================================
+   MOBILE RESPONSIVENESS (Fixes Rightward Drift / Overflow)
+==================================================== */
+@media (max-width: 900px) {
+  .section {
+    padding: 6vh 1.5rem;
+  }
+
+  .container {
+    grid-template-columns: 1fr; /* Removes 400px minimum viewport overflow boundaries */
+    gap: 2rem;
+  }
+
+  .card {
+    padding: 2.5rem 1.5rem;
+    border-radius: 24px;
+  }
+}
