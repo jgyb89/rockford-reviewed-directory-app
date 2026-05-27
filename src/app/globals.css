@@ -1,7 +1,19 @@
-html { line-height: 1.15; -webkit-text-size-adjust: 100%; }
-main { display: block; }
-h1 { font-size: 2em; margin: 0.67em 0; }
-hr { box-sizing: content-box; height: 0; overflow: visible; }
+html {
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+}
+main {
+  display: block;
+}
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+}
 
 :root {
   --color-primary: #e94f37;
@@ -27,7 +39,12 @@ body {
   line-height: 1.5;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-poppins), sans-serif;
   color: var(--color-text);
   padding-bottom: 10px;
@@ -50,7 +67,9 @@ h1, h2, h3, h4, h5, h6 {
   background: white;
   padding: 3rem;
   border-radius: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
   text-align: center;
 }
 
@@ -70,7 +89,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .check-email__actions {
   display: flex;
-  flex-direction: column; gap: 1rem;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .check-email__button {
@@ -146,7 +166,9 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
   text-decoration: none;
   font-family: inherit;
 }
@@ -176,16 +198,22 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Mobile Overhaul: Global Typography & Buttons */
 @media (max-width: 768px) {
-  h1 { font-size: 1.75em !important; }
-  h2 { font-size: 1.5em !important; }
-  h3 { font-size: 1.25em !important; }
-  
-  .listing-action-btn, 
+  h1 {
+    font-size: 1.75em;
+  }
+  h2 {
+    font-size: 1.5em;
+  }
+  h3 {
+    font-size: 1.25em;
+  }
+
+  .listing-action-btn,
   .listing-primary-btn {
     padding: 0.5rem 0.75rem !important;
     font-size: 0.85rem !important;
   }
-  
+
   .listing-action-btn .material-symbols-outlined,
   .listing-primary-btn .material-symbols-outlined {
     font-size: 1.1rem !important;

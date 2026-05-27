@@ -1,0 +1,128 @@
+.stickyWrapper {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.flashCard {
+  position: relative;
+  width: 96%;
+  height: 94vh;
+  border-radius: 40px;
+  background-color: #e94f37; /* Coral Red */
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  box-shadow: 0 -25px 50px rgba(0, 0, 0, 0.3); /* Beautiful heavy drop shadow */
+  will-change: transform;
+}
+
+.contentMaxWidth {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 3rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Background Decorative watermark logo */
+.backgroundIcon {
+  position: absolute;
+  bottom: -20vh; /* Halfway shown from bottom */
+  left: -15vh; /* Halfway shown from left */
+  width: 60vh;
+  height: 60vh;
+  opacity: 0.15;
+  mix-blend-mode: multiply; /* Blends nicely with the red background */
+  pointer-events: none; /* Make sure it doesn't block text highlights or hover clicks */
+  z-index: 1;
+}
+
+.bgIconImage {
+  object-fit: contain;
+}
+
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2rem;
+  text-align: right;
+}
+
+.headlineMaskContainer {
+  position: relative;
+  width: 100%;
+  overflow: hidden; /* Clips anything outside the container boundaries */
+  padding-bottom: 0.2em; /* Prevents low-hanging character descenders (g, j, y) from clipping */
+}
+
+.textBlock h2 {
+  display: block;
+  will-change: transform;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.textBlock p {
+  will-change: transform, opacity;
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  line-height: 1.6;
+  font-weight: 400;
+  max-width: 900px;
+  margin: 0;
+  opacity: 0; /* Let GSAP context handle the opacity rise seamlessly */
+  color: #ffffff;
+}
+
+/* ====================================================
+   MOBILE RESPONSIVENESS
+==================================================== */
+@media (max-width: 900px) {
+  .stickyWrapper {
+    height: auto;
+    min-height: 100svh;
+    padding: 1rem 0;
+  }
+
+  .flashCard {
+    height: auto;
+    min-height: 96svh;
+    padding: 3rem 0;
+    border-radius: 24px;
+  }
+
+  .contentMaxWidth {
+    padding: 0 1.5rem;
+  }
+
+  .textBlock {
+    gap: 1.25rem;
+  }
+
+  .textBlock h2 {
+    font-size: 2.5rem;
+  }
+
+  .textBlock p {
+    font-size: 1rem;
+    color: #ffffff;
+  }
+
+  .backgroundIcon {
+    width: 30vh;
+    height: 30vh;
+    bottom: -10vh;
+    left: -8vh;
+  }
+}

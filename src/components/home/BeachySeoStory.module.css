@@ -1,0 +1,20 @@
+.wrapper {
+  position: relative;
+  width: 100%;
+  background-color: #f6eee3; /* Base Beach Sand color for marquee and cards */
+  color: #231f20;
+  padding-bottom: 10vh;
+  overflow: hidden;
+}
+
+.stackContainer {
+  position: relative;
+  width: 100%;
+  /* No height needed! The 3 100vh cards + spacer dictate the scroll length natively */
+}
+
+.contentMaxWidth {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}

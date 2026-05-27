@@ -1,0 +1,86 @@
+.section {
+  background-color: #231f20; /* Dark Footer Blend */
+  color: #ffffff;
+  padding: 15vh 2rem 20vh 2rem;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 0;
+  color: #ffc845;
+}
+
+.section p {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  opacity: 0.8;
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+.divider {
+  width: 100px;
+  height: 4px;
+  background-color: #e94f37; /* Coral */
+  margin: 4rem auto;
+  border-radius: 2px;
+}
+
+.headline {
+  font-size: clamp(3rem, 5vw, 4.5rem) !important;
+  color: #ffc845; /* Yellow punch */
+  line-height: 1.1;
+}
+
+.subHeadline {
+  font-size: 1.5rem !important;
+  opacity: 1 !important;
+  margin-bottom: 3rem !important;
+}
+
+.buttonGroup {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  padding: 1.2rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 100px;
+  text-decoration: none;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.primaryBtn {
+  background-color: #e94f37;
+  color: #ffffff;
+}
+
+.secondaryBtn {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.primaryBtn:hover,
+.secondaryBtn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}

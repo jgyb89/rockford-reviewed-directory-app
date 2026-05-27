@@ -1,0 +1,44 @@
+.section {
+  background-color: #ffc845; /* Sunny Yellow */
+  color: #231f20;
+  padding: 15vh 2rem;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.section h2 {
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.section p {
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.pillContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+/* Passed via global string to GSAP, styled here natively */
+:global(.category-pill) {
+  background-color: #231f20;
+  color: #ffffff;
+  padding: 1rem 2rem;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}

@@ -3,19 +3,20 @@ import { getListings } from "@/lib/api";
 import { getViewer } from "@/lib/auth";
 import { getDictionary } from "@/lib/dictionaries";
 import HeroSlideshow from "@/components/home/HeroSlideshow";
-import TabbedListingFeed from "@/components/home/TabbedListingFeed";
-import HomeSidebar from "@/components/home/HomeSidebar";
+import HorizontalListingFeed from "@/components/home/HorizontalListingFeed";
+import SunsetTransition from "@/components/home/SunsetTransition";
+import BeachySeoStory from "@/components/home/BeachySeoStory";
 import { BASE_URL } from "@/lib/constants";
 import styles from "./page.module.css";
 
 export const metadata = {
   title: "Cape Coral Reviewed - Local Business Directory",
   description:
-    "Discover the best local businesses, restaurants, and services in Cape Coral, Florida.",
+    "Looking for the best and most popular Cape Coral businesses, restaurants, services, and local spots? Cape Coral Reviewed helps residents, visitors, and business owners like you connect through real reviews, local recommendations, honest business spotlights, and true community-driven guides.",
   openGraph: {
     title: "Cape Coral Reviewed",
     description:
-      "Discover the best local businesses, restaurants, and services in Cape Coral, Florida.",
+      "Looking for the best and most popular Cape Coral businesses, restaurants, services, and local spots? Cape Coral Reviewed helps residents, visitors, and business owners like you connect through real reviews, local recommendations, honest business spotlights, and true community-driven guides.",
     url: BASE_URL,
     siteName: "Cape Coral Reviewed",
     locale: "en_US",
@@ -58,30 +59,21 @@ export default async function HomePage({ params }) {
       {/* Hero Section */}
       <HeroSlideshow featuredListings={featuredListings} locale={locale} />
 
-      {/* Main Content Layout */}
+      {/* Main Content Layout - REPLACED WITH HORIZONTAL ROW */}
       <div className={styles.container}>
-        <div className="home-layout-grid">
-          {/* Sidebar (Left on Desktop, Bottom on Mobile) */}
-          <div className="home-sidebar-wrapper">
-            <HomeSidebar
-              featuredBusinesses={featuredListings}
-              popularNearYou={popularNearYou}
-              dict={dict.home}
-              locale={locale}
-            />
-          </div>
-
-          {/* Main Feed (Right on Desktop, Top on Mobile) */}
-          <div className="home-feed-wrapper">
-            <TabbedListingFeed
-              initialListings={feedListings}
-              currentUser={currentUser}
-              dict={dict.home}
-              locale={locale}
-            />
-          </div>
-        </div>
+        <HorizontalListingFeed
+          listings={feedListings}
+          currentUser={currentUser}
+          dict={dict.home}
+          locale={locale}
+        />
       </div>
+
+      {/* Sunset Animation Transition */}
+      <SunsetTransition />
+
+      {/* Coastal Sunrise GSAP Journey & SEO Story */}
+      <BeachySeoStory />
     </main>
   );
 }
