@@ -46,8 +46,12 @@ async function submitGravityForm(formId, fieldValues, requireAuth = false) {
       }
     }
   `;
-  
-  const json = await fetchGraphQL(mutation, { input: { id: formId, fieldValues } }, requireAuth);
+
+  const json = await fetchGraphQL(
+    mutation,
+    { input: { id: formId, fieldValues } },
+    requireAuth,
+  );
 
   if (json.data?.submitGfForm?.errors?.length > 0) {
     throw new Error(json.data.submitGfForm.errors[0].message);
@@ -77,7 +81,7 @@ async function handleGraphQLError(json) {
         e.extensions?.debugMessage === "Expired token" ||
         e.message?.includes("Expired token") ||
         e.message?.includes("jwt_auth_invalid_token") ||
-        e.message?.includes("invalid_token")
+        e.message?.includes("invalid_token"),
     );
 
     if (isTokenError) {
@@ -86,7 +90,7 @@ async function handleGraphQLError(json) {
       cookieStore.set("hasSession", "", { maxAge: 0 });
       redirect("/login");
     }
-    
+
     throw new Error(json.errors[0].message);
   }
 }
@@ -111,17 +115,23 @@ export async function updateUserProfile(formData) {
       }
     `;
 
-    const json = await fetchGraphQL(mutation, {
-      input: {
-        id: viewer.id,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        phoneNumber: formData.phoneNumber,
-        websiteUrl: formData.websiteUrl,
-        emailVisibility: formData.emailVisibility,
-        ...(formData.avatarId && { customAvatar: Number.parseInt(formData.avatarId) }),
+    const json = await fetchGraphQL(
+      mutation,
+      {
+        input: {
+          id: viewer.id,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          phoneNumber: formData.phoneNumber,
+          websiteUrl: formData.websiteUrl,
+          emailVisibility: formData.emailVisibility,
+          ...(formData.avatarId && {
+            customAvatar: Number.parseInt(formData.avatarId),
+          }),
+        },
       },
-    }, true);
+      true,
+    );
 
     revalidatePath("/dashboard", "layout");
     return { success: true, user: json.data.updateUser.user };
@@ -158,8 +168,11 @@ export async function removeFavoriteListing(listingId) {
     const viewer = await getViewer();
     if (!viewer) throw new Error("Could not fetch viewer data");
 
-    const currentFavorites = viewer.userData?.favoriteListings?.nodes.map((n) => n.databaseId) || [];
-    const updatedFavorites = currentFavorites.filter((id) => id.toString() !== listingId.toString());
+    const currentFavorites =
+      viewer.userData?.favoriteListings?.nodes.map((n) => n.databaseId) || [];
+    const updatedFavorites = currentFavorites.filter(
+      (id) => id.toString() !== listingId.toString(),
+    );
 
     const mutation = `
       mutation UpdateUserFavorites($userId: ID!, $favorites: [Int]) {
@@ -169,7 +182,11 @@ export async function removeFavoriteListing(listingId) {
       }
     `;
 
-    await fetchGraphQL(mutation, { userId: viewer.id, favorites: updatedFavorites }, true);
+    await fetchGraphQL(
+      mutation,
+      { userId: viewer.id, favorites: updatedFavorites },
+      true,
+    );
     return { success: true };
   } catch (error) {
     console.error("Remove Favorite Error:", error);
@@ -182,9 +199,10 @@ export async function toggleFavoriteListing(listingId) {
     const viewer = await getViewer();
     if (!viewer) throw new Error("Could not fetch viewer data");
 
-    const currentFavorites = viewer.userData?.favoriteListings?.nodes?.map((n) => n.databaseId) || [];
+    const currentFavorites =
+      viewer.userData?.favoriteListings?.nodes?.map((n) => n.databaseId) || [];
     const listingDbId = parseInt(listingId);
-    
+
     let updatedFavorites;
     if (currentFavorites.includes(listingDbId)) {
       updatedFavorites = currentFavorites.filter((id) => id !== listingDbId);
@@ -200,13 +218,20 @@ export async function toggleFavoriteListing(listingId) {
       }
     `;
 
-    await fetchGraphQL(mutation, { userId: viewer.id, favorites: updatedFavorites }, true);
+    await fetchGraphQL(
+      mutation,
+      { userId: viewer.id, favorites: updatedFavorites },
+      true,
+    );
     revalidatePath("/directory");
     revalidatePath("/dashboard/favorites");
     return { success: true };
   } catch (error) {
     console.error("Toggle Favorite Error:", error);
-    return { success: false, error: error.message || "Network error occurred." };
+    return {
+      success: false,
+      error: error.message || "Network error occurred.",
+    };
   }
 }
 
@@ -226,21 +251,29 @@ export async function submitUserReview(formData) {
   `;
 
   try {
-    await fetchGraphQL(mutation, {
-      input: {
-        title: formData.title || `Review for Listing #${formData.listingId}`,
-        content: formData.content,
-        starRating: String(formData.rating),
-        relatedListing: [Number.parseInt(formData.listingId, 10)],
-        status: "PUBLISH",
+    await fetchGraphQL(
+      mutation,
+      {
+        input: {
+          title: formData.title || `Review for Listing #${formData.listingId}`,
+          content: formData.content,
+          starRating: String(formData.rating),
+          relatedListing: [Number.parseInt(formData.listingId, 10)],
+          status: "PUBLISH",
+        },
       },
-    }, true);
+      true,
+    );
 
     revalidatePath("/", "layout");
     return { success: true };
   } catch (error) {
     console.error("Submit Review Action Error:", error);
-    return { success: false, message: error.message || "Network error occurred while submitting review." };
+    return {
+      success: false,
+      message:
+        error.message || "Network error occurred while submitting review.",
+    };
   }
 }
 
@@ -329,21 +362,32 @@ export async function updateUserListing(databaseId, payload) {
 
     const acfData = mapPayloadToAcf(payload);
 
-    await fetchGraphQL(mutation, {
-      input: {
-        id: databaseId,
-        title: payload.title,
-        content: payload.content,
-        featuredImageId: payload.featuredImageId,
-        listingDataJson: JSON.stringify(acfData),
-        directoryTypes: payload.selectedDirectoryType
-          ? { append: false, nodes: [{ slug: payload.selectedDirectoryType }] }
-          : { append: false, nodes: [] },
-        ccrlistingcategories: payload.selectedCategories?.length > 0
-          ? { append: false, nodes: payload.selectedCategories.map(slug => ({ slug })) }
-          : { append: false, nodes: [] }
+    await fetchGraphQL(
+      mutation,
+      {
+        input: {
+          id: databaseId,
+          title: payload.title,
+          content: payload.content,
+          featuredImageId: payload.featuredImageId,
+          listingDataJson: JSON.stringify(acfData),
+          directoryTypes: payload.selectedDirectoryType
+            ? {
+                append: false,
+                nodes: [{ slug: payload.selectedDirectoryType }],
+              }
+            : { append: false, nodes: [] },
+          ccrlistingcategories:
+            payload.selectedCategories?.length > 0
+              ? {
+                  append: false,
+                  nodes: payload.selectedCategories.map((slug) => ({ slug })),
+                }
+              : { append: false, nodes: [] },
+        },
       },
-    }, true);
+      true,
+    );
 
     revalidatePath("/dashboard/listings");
     revalidatePath("/directory", "layout");
@@ -396,13 +440,17 @@ export async function updateUserReview(reviewId, formData) {
   `;
 
   try {
-    await fetchGraphQL(mutation, {
-      input: {
-        id: reviewId,
-        starRating: String(formData.rating),
-        content: formData.content,
+    await fetchGraphQL(
+      mutation,
+      {
+        input: {
+          id: reviewId,
+          starRating: String(formData.rating),
+          content: formData.content,
+        },
       },
-    }, true);
+      true,
+    );
 
     revalidatePath("/", "layout");
     return { success: true };
@@ -434,34 +482,44 @@ export async function submitBugReport(formData) {
  */
 export async function submitListing(formData) {
   try {
-    await submitGravityForm(11, [
-      { id: 1, value: formData.businessName },
-      { id: 3, value: formData.city },
-      { id: 4, value: formData.state },
-      { id: 5, value: formData.zipCode },
-      { id: 7, value: formData.priceRange || "" },
-      { id: 8, value: formData.phoneNumber },
-      { id: 9, value: formData.businessEmail },
-      { id: 10, value: formData.websiteUrl },
-      { id: 11, value: formData.videoUrl },
-      { id: 12, value: formData.socialUrl },
-      { id: 13, value: formData.hoursMonday },
-      { id: 14, value: formData.hoursWednesday },
-      { id: 15, value: formData.hoursTuesday },
-      { id: 16, value: formData.hoursThursday },
-      { id: 17, value: formData.hoursSaturday },
-      { id: 18, value: formData.hoursFriday },
-      { id: 19, value: formData.hoursSunday },
-      { id: 20, value: formData.businessDescription },
-      { id: 21, value: formData.streetAddress },
-      { id: 22, value: formData.directoryType },
-      { 
-        id: 29, 
-        value: Array.isArray(formData.categories) ? formData.categories.join(', ') : formData.categories 
-      },
-      ...(formData.featuredImage ? [{ id: 27, value: formData.featuredImage }] : []),
-      ...(formData.galleryImages ? [{ id: 28, value: formData.galleryImages }] : []),
-    ], false); // Usually listing submission doesn't strictly *require* auth but uses it if available
+    await submitGravityForm(
+      11,
+      [
+        { id: 1, value: formData.businessName },
+        { id: 3, value: formData.city },
+        { id: 4, value: formData.state },
+        { id: 5, value: formData.zipCode },
+        { id: 7, value: formData.priceRange || "" },
+        { id: 8, value: formData.phoneNumber },
+        { id: 9, value: formData.businessEmail },
+        { id: 10, value: formData.websiteUrl },
+        { id: 11, value: formData.videoUrl },
+        { id: 12, value: formData.socialUrl },
+        { id: 13, value: formData.hoursMonday },
+        { id: 14, value: formData.hoursWednesday },
+        { id: 15, value: formData.hoursTuesday },
+        { id: 16, value: formData.hoursThursday },
+        { id: 17, value: formData.hoursSaturday },
+        { id: 18, value: formData.hoursFriday },
+        { id: 19, value: formData.hoursSunday },
+        { id: 20, value: formData.businessDescription },
+        { id: 21, value: formData.streetAddress },
+        { id: 22, value: formData.directoryType },
+        {
+          id: 29,
+          value: Array.isArray(formData.categories)
+            ? formData.categories.join(", ")
+            : formData.categories,
+        },
+        ...(formData.featuredImage
+          ? [{ id: 27, value: formData.featuredImage }]
+          : []),
+        ...(formData.galleryImages
+          ? [{ id: 28, value: formData.galleryImages }]
+          : []),
+      ],
+      false,
+    ); // Usually listing submission doesn't strictly *require* auth but uses it if available
 
     revalidatePath("/directory", "layout");
     return { success: true };
@@ -503,7 +561,7 @@ async function moderateImage(file) {
     const modRes = await fetch("https://api.sightengine.com/1.0/check.json", {
       method: "POST",
       headers: {
-        "User-Agent": "CCR-NextJS-Frontend/1.0"
+        "User-Agent": "CCR-NextJS-Frontend/1.0",
       },
       body: moderationFormData,
     });
@@ -513,7 +571,9 @@ async function moderateImage(file) {
       const nudity = modJson.nudity?.explicit ?? 0;
       const gore = modJson.gore?.prob ?? 0;
       if (nudity > 0.5 || gore > 0.5) {
-        throw new Error("Upload rejected: Image violates our safety guidelines.");
+        throw new Error(
+          "Upload rejected: Image violates our safety guidelines.",
+        );
       }
     }
   } catch (error) {
@@ -527,7 +587,7 @@ async function moderateImage(file) {
  */
 function validateImage(file) {
   const maxSize = 2 * 1024 * 1024; // 2MB
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+  const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
 
   if (file.size > maxSize) {
     throw new Error("File too large. Maximum size is 2MB.");
@@ -542,7 +602,8 @@ function validateImage(file) {
  */
 export async function uploadWPImage(formData, postId = null) {
   const authToken = (await cookies()).get("authToken")?.value;
-  if (!authToken) throw new Error("Unauthorized: Must be logged in to upload files.");
+  if (!authToken)
+    throw new Error("Unauthorized: Must be logged in to upload files.");
 
   const file = formData.get("file");
   if (!file) throw new Error("No file provided");
@@ -557,9 +618,9 @@ export async function uploadWPImage(formData, postId = null) {
   const baseUrl = GRAPHQL_URL.replace("/graphql", "");
   const res = await fetch(`${baseUrl}/wp-json/wp/v2/media`, {
     method: "POST",
-    headers: { 
+    headers: {
       Authorization: `Bearer ${authToken}`,
-      "User-Agent": "CCR-NextJS-Frontend/1.0"
+      "User-Agent": "CCR-NextJS-Frontend/1.0",
     },
     body: wpFormData,
   });
@@ -574,16 +635,20 @@ export async function uploadWPImage(formData, postId = null) {
  */
 export async function deleteWPMedia(attachmentId) {
   const authToken = (await cookies()).get("authToken")?.value;
-  if (!authToken) throw new Error("Unauthorized: Must be logged in to delete files.");
+  if (!authToken)
+    throw new Error("Unauthorized: Must be logged in to delete files.");
 
   const baseUrl = GRAPHQL_URL.replace("/graphql", "");
-  const res = await fetch(`${baseUrl}/wp-json/wp/v2/media/${attachmentId}?force=true`, {
-    method: "DELETE",
-    headers: { 
-      Authorization: `Bearer ${authToken}`,
-      "User-Agent": "CCR-NextJS-Frontend/1.0"
+  const res = await fetch(
+    `${baseUrl}/wp-json/wp/v2/media/${attachmentId}?force=true`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        "User-Agent": "CCR-NextJS-Frontend/1.0",
+      },
     },
-  });
+  );
 
   const data = await res.json();
   if (!res.ok) throw new Error(data.message || "Image deletion failed");
@@ -671,16 +736,35 @@ export async function getSidebarListings() {
 export async function submitClaimForm(formData) {
   try {
     await submitGravityForm(12, [
-      { id: 1, value: formData.fullName || '' },
-      { id: 6, value: formData.phone || '' },
-      { id: 7, emailValues: { value: formData.email || '' } },
-      { id: 3, value: formData.details || '' },
-      { id: 8, value: formData.listingTitle || 'Unknown Title' },
-      { id: 9, value: formData.listingSlug || 'unknown-slug' },
+      { id: 1, value: formData.fullName || "" },
+      { id: 6, value: formData.phone || "" },
+      { id: 7, emailValues: { value: formData.email || "" } },
+      { id: 3, value: formData.details || "" },
+      { id: 8, value: formData.listingTitle || "Unknown Title" },
+      { id: 9, value: formData.listingSlug || "unknown-slug" },
     ]);
     return { success: true };
   } catch (error) {
     console.error("Claim Form Error:", error);
+    return { success: false, message: error.message };
+  }
+}
+
+/**
+ * Submits the "Claim Listing" form to Gravity Forms via GraphQL.
+ */
+export async function submitContactForm(formData) {
+  try {
+    await submitGravityForm(14, [
+      { id: 1, value: formData.firstName || "" },
+      { id: 3, value: formData.lastName || "" },
+      { id: 4, value: formData.email || "" },
+      { id: 5, value: formData.phone || "" },
+      { id: 6, value: formData.message || "" },
+    ]);
+    return { success: true };
+  } catch (error) {
+    console.error("Contact Form Error:", error);
     return { success: false, message: error.message };
   }
 }
@@ -715,13 +799,16 @@ export async function requestPasswordReset(usernameOrEmail) {
 export async function handleGoogleLogin(credential) {
   try {
     // Convert your GraphQL URL to the new custom REST route
-    const backendUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL.replace('/graphql', '/wp-json/ccr/v1/google-login');
+    const backendUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL.replace(
+      "/graphql",
+      "/wp-json/ccr/v1/google-login",
+    );
 
     const res = await fetch(backendUrl, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        "User-Agent": "CCR-NextJS-Frontend/1.0"
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "User-Agent": "CCR-NextJS-Frontend/1.0",
       },
       body: JSON.stringify({ token: credential }),
     });
@@ -730,27 +817,30 @@ export async function handleGoogleLogin(credential) {
 
     if (data.success && data.authToken) {
       const cookieStore = await cookies();
-      cookieStore.set('authToken', data.authToken, {
+      cookieStore.set("authToken", data.authToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
         maxAge: 7 * 24 * 60 * 60, // 7 days
-        path: '/',
+        path: "/",
       });
-      cookieStore.set('hasSession', 'true', {
+      cookieStore.set("hasSession", "true", {
         httpOnly: false,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
         maxAge: 7 * 24 * 60 * 60, // 7 days
-        path: '/',
+        path: "/",
       });
       return { success: true };
     } else {
-      return { success: false, error: data.message || 'Google login failed on the server.' };
+      return {
+        success: false,
+        error: data.message || "Google login failed on the server.",
+      };
     }
   } catch (error) {
     console.error("Google Auth Error:", error);
-    return { success: false, error: 'Network error during Google login.' };
+    return { success: false, error: "Network error during Google login." };
   }
 }
 
@@ -762,3 +852,19 @@ export async function getCurrentViewer() {
   return await getViewer();
 }
 
+/**
+ * Submit the Recommend a Business Form (Gravity Form ID 8)
+ */
+export async function submitRecommendationForm(formData) {
+  const fieldValues = [
+    { id: 8, value: formData.get("submitterName") || "" },
+    { id: 1, value: formData.get("businessName") || "" },
+    { id: 5, value: formData.get("businessAddress") || "" },
+    { id: 4, emailValues: { value: formData.get("businessEmail") || "" } },
+    { id: 6, value: formData.get("businessPhone") || "" },
+    { id: 7, value: formData.get("additionalInfo") || "" },
+  ];
+
+  // Use the centralized Gravity Forms helper
+  return submitGravityForm(8, fieldValues, false);
+}

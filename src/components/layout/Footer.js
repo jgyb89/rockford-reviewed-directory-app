@@ -7,7 +7,7 @@ const EXPLORE_LINKS = [
   { name: "Business Directory", href: "/directory" },
   { name: "Restaurants & Dining", href: "/directory/food-drink" },
   { name: "Home Services", href: "/directory/home-local-services" },
-  { name: "Recommend a Business", href: "/submit-listing" },
+  { name: "Recommend a Business", href: "/recommend" },
 ];
 
 const QUICK_LINKS = [
