@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useCallback } from "react";
 import Image from "next/image";
+import PropTypes from "prop-types";
 import { updateUserListing, uploadWPImage, deleteWPMedia } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import imageCompression from "browser-image-compression";
@@ -19,7 +20,7 @@ const daysList = [
   "Sunday",
 ];
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
+const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/jpg"]);
 
 /**
  * Utility to generate cropped image
@@ -28,7 +29,7 @@ async function getCroppedImg(imageSrc, pixelCrop) {
   const image = await new Promise((resolve, reject) => {
     const img = new globalThis.Image();
     img.addEventListener("load", () => resolve(img));
-    img.addEventListener("error", (error) => reject(error));
+    img.addEventListener("error", (error) => reject(new Error(error)));
     img.src = imageSrc;
   });
 
@@ -371,7 +372,7 @@ function useEditListingForm(initialData) {
 
   const handleFileChange = (files, field) => {
     const validFiles = Array.from(files).filter((file) => {
-      if (!ALLOWED_TYPES.includes(file.type)) return false;
+      if (!ALLOWED_TYPES.has(file.type)) return false;
       if (file.size > MAX_FILE_SIZE) return false;
       return true;
     });
@@ -1715,3 +1716,74 @@ export default function EditListingForm({ initialData }) {
     </div>
   );
 }
+
+EditListingForm.propTypes = {
+  initialData: PropTypes.object.isRequired,
+};
+
+ImageCropModal.propTypes = {
+  file: PropTypes.instanceOf(File),
+  onCancel: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
+};
+
+ProgressOverlay.propTypes = {
+  step: PropTypes.string.isRequired,
+};
+
+SectionWrapper.propTypes = {
+  title: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+};
+
+BasicInfoSection.propTypes = {
+  formData: PropTypes.object.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  titleError: PropTypes.string,
+  descriptionError: PropTypes.string,
+  disabled: PropTypes.bool,
+};
+
+CategorySection.propTypes = {
+  formData: PropTypes.object.isRequired,
+  selectedParentCategory: PropTypes.object,
+  availableParentCategories: PropTypes.array.isRequired,
+  availableChildCategories: PropTypes.array.isRequired,
+  handleDirectoryTypeChange: PropTypes.func.isRequired,
+  handleParentCategoryChange: PropTypes.func.isRequired,
+  handleCategoryToggle: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+};
+
+MediaGallerySection.propTypes = {
+  existingFeatured: PropTypes.object,
+  newFeatured: PropTypes.instanceOf(File),
+  existingGallery: PropTypes.array.isRequired,
+  newGallery: PropTypes.array.isRequired,
+  handleFileChange: PropTypes.func.isRequired,
+  handleRemoveFeatured: PropTypes.func.isRequired,
+  handleRemoveExistingGallery: PropTypes.func.isRequired,
+  handleRemoveNewGallery: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+};
+
+LocationSection.propTypes = {
+  formData: PropTypes.object.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  handleSocialUrlChange: PropTypes.func.isRequired,
+  handleAddSocialUrl: PropTypes.func.isRequired,
+  handleRemoveSocialUrl: PropTypes.func.isRequired,
+  socialErrors: PropTypes.array.isRequired,
+  disabled: PropTypes.bool,
+};
+
+HoursSection.propTypes = {
+  hoursParams: PropTypes.object.isRequired,
+  handleTimeChange: PropTypes.func.isRequired,
+  handleTimeBlur: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+};
+
+SuccessModal.propTypes = {
+  onConfirm: PropTypes.func.isRequired,
+};

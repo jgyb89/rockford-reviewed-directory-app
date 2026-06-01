@@ -8,8 +8,7 @@ export const metadata = {
   title: 'Sign In | Cape Coral Reviewed',
 };
 
-export default async function LoginPage({ params, searchParams }) {
-  const { locale } = await params;
+export default async function LoginPage({ searchParams }) {
   
   // Safely await searchParams in Next.js 15+
   const resolvedSearchParams = await searchParams;
@@ -50,7 +49,7 @@ export default async function LoginPage({ params, searchParams }) {
               Forgot your password?
             </Link>
             <p style={{ color: '#64748b', margin: 0 }}>
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link href={`/register`} style={{ color: '#e04c4c', fontWeight: '600', textDecoration: 'none' }}>
                 Sign Up
               </Link>
@@ -63,6 +62,5 @@ export default async function LoginPage({ params, searchParams }) {
 }
 
 LoginPage.propTypes = {
-  params: PropTypes.object.isRequired,
   searchParams: PropTypes.object.isRequired,
 };

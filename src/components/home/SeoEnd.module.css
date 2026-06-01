@@ -3,6 +3,7 @@
   top: 0;
   width: 100%;
   height: 100vh;
+  padding: 3rem 0 6rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,7 +19,7 @@
   display: flex;
   align-items: center;
   overflow: hidden;
-  box-shadow: 0 -25px 50px rgba(0,0,0,0.2);
+  box-shadow: 0 -25px 50px rgba(0, 0, 0, 0.2);
   will-change: transform;
 }
 
@@ -132,7 +133,7 @@
   .stickyWrapper {
     height: auto;
     min-height: 100svh;
-    padding: 1rem 0; 
+    padding: 1rem 0;
   }
 
   .flashCard {

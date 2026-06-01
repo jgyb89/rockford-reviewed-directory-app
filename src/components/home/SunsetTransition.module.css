@@ -38,6 +38,11 @@
   object-position: bottom center;
 }
 
+.modalTitle {
+  color: #fff;
+  font-size: 2rem;
+}
+
 /* 1. Static Sky */
 .sky {
   position: absolute;
@@ -50,6 +55,40 @@
     1.6
   ); /* ADDED: Stretches only the horizontal axis into an oval */
   transform-origin: top center; /* ADDED: Keeps the stretch perfectly anchored in the middle */
+}
+
+/* 1.5 Stars */
+.star {
+  position: absolute;
+  z-index: 2; /* Between sky and clouds */
+}
+
+.starLeftSmall {
+  top: 15vh;
+  left: 20vw;
+  width: 25px;
+  height: 25px;
+}
+
+.starLeftLarge {
+  top: 25vh;
+  left: 12vw;
+  width: 45px;
+  height: 45px;
+}
+
+.starRightSmall {
+  top: 15vh;
+  right: 20vw;
+  width: 25px;
+  height: 25px;
+}
+
+.starRightLarge {
+  top: 25vh;
+  right: 12vw;
+  width: 45px;
+  height: 45px;
 }
 
 /* 2. Clouds - Starting halfway outside */
@@ -151,41 +190,16 @@
   z-index: 5;
 }
 
-/* 7. Dark Section */
-.darkArea {
-  position: relative;
-  background-color: #231f20;
-  color: #ffffff;
-  min-height: 60vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 4rem 2rem;
-  z-index: 10;
-  margin-top: -2px;
-}
-
-.darkContent h2 {
-  color: #ffffff;
-  font-size: 4rem;
-  margin-bottom: 1rem;
-}
-
-.darkContent p {
-  font-size: 2rem;
-}
-
 .introModal {
   position: absolute;
   top: 0;
-  bottom: 10vh; /* Adjusts vertical center slightly upward to align with the sun */
+  bottom: 0;
   left: 0;
   right: 0;
   margin: auto; /* Natively centers the modal horizontally and vertically */
   width: 90%;
-  max-width: 800px;
-  min-height: 600px;
+  max-width: 900px;
+  min-height: 500px;
   height: fit-content;
   background-color: rgba(0, 0, 0, 0.85); /* Black with 85% opacity */
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -194,110 +208,120 @@
   color: #ffffff;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
   z-index: 20; /* Ensures it sits above all sunset elements */
   backdrop-filter: blur(
     8px
   ); /* Optional: Adds a premium glass blur behind the modal */
 }
 
-.modalLogo {
-  position: relative;
-  width: 100%;
-  height: 250px;
-  margin-bottom: 1.25rem;
-}
-
-.introModal h3 {
-  font-size: 2.5rem;
-  line-height: 1.25;
+.primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  padding: 1.2rem 2rem;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  width: fit-content;
+  text-decoration: none;
+  background-color: #e94f37;
   color: #ffffff;
 }
 
-.introModal p {
-  font-size: 24px;
-  color: #cccccc;
-  line-height: 1.75;
-  margin-bottom: 1.5rem;
+.primaryBtn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-.starsRow {
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  width: 100%;
+}
+
+.categoryCard {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #ffffff;
+  transition: all 0.2s ease;
+  text-align: center;
+  gap: 0.75rem;
+}
+
+.categoryCard:hover {
+  background-color: rgba(233, 79, 55, 0.1);
+  border-color: #e94f37;
+  transform: translateY(-4px);
+}
+
+.categoryIcon {
+  color: #e94f37;
+}
+
+.categoryName {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.modalFooter {
   display: flex;
   justify-content: center;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.starsRow span {
-  color: #e94f37;
-  font-variation-settings: "FILL" 1;
-  font-size: 2.5rem;
+  width: 100%;
 }
 
 @media (max-width: 1024px) {
-  .darkArea {
-    min-height: 20vh;
-    padding: 3rem 1.5rem;
+  .categoryGrid {
+    gap: 1rem;
   }
 
-  .darkContent h2 {
-    font-size: 3rem;
-  }
-
-  .darkContent p {
-    font-size: 1.25rem;
-  }
-
-  .starsRow span {
-    font-size: 2rem;
-  }
-
-  .modalLogo {
-    position: relative;
+  .primaryBtn {
     width: 100%;
-    height: 150px;
-    margin-bottom: 1.25rem;
-  }
-
-  .introModal {
-    min-height: 300px;
-  }
-
-  .introModal h3 {
-    font-size: 2rem;
-    line-height: 1.25;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #ffffff;
-  }
-
-  .introModal p {
     font-size: 1rem;
-    color: #cccccc;
-    line-height: 1.75;
-    margin-bottom: 1.5rem;
+    padding: 1rem 1.5rem;
   }
 }
 
 /* ====================================================
-   MOBILE CONDENSED STATE (Prevents Excessive Stretching)
+   MOBILE CONDENSED STATE (Prevents Clipping)
 ==================================================== */
 @media (max-width: 900px) {
+  /* We switch from a fixed vh limit to a minimum height. 
+   This allows the container to dynamically grow taller 
+   if the 6-button grid needs more physical space! 
+  */
   .animationViewport {
-    height: 75vh; /* CONDENSED: Compressed from 150vh so it matches handheld viewport ratios gracefully */
+    min-height: 85vh; 
+    height: auto; 
+    padding-bottom: 5vh; /* Adds safe breathing room below the modal */
   }
 
   .sky {
-    transform: scaleX(
-      2
-    ); /* Scales horizonal stretch to eliminate side gap bleeding */
+    transform: scaleX(2.0); 
   }
 
   .sun {
-    width: 60vw; /* Scales sun element down proportionally */
+    width: 60vw; 
     height: 60vw;
     top: 8vh;
   }
@@ -315,38 +339,52 @@
   }
 
   .oceanWrapper {
-    top: 42vh; /* Shifts ocean ceiling up slightly to make up for layout real estate loss */
+    top: 42vh; 
   }
 
   .palmLanding {
-    height: 50vh; /* Keeps trees properly anchored without blocking center frame overlays */
-    min-height: 30vh;
-    bottom: -10vh; /* Extends below the viewport to prevent a bottom gap when translated upwards by GSAP */
+    height: 70vh;
+    min-height: 40vh;
+    bottom: -15vh; /* Pushed further down to compensate for the taller viewport */
   }
 
-  /* Overlay Modal Adjustments */
+  /* Modal Adjustments: 
+    Changes positioning to flow naturally with the content 
+    rather than being strictly absolute to the bottom edge.
+  */
   .introModal {
-    width: 88%;
-    max-width: 340px;
+    position: relative; /* Takes it out of absolute bottom locking */
+    margin: 55vh auto 0 auto; /* Pushes it down below the sun/clouds */
+    width: 92%;
+    max-width: 100%; 
     padding: 1.5rem;
-    bottom: 4vh; /* Closer floor proximity alignment */
+    height: auto;
+    bottom: auto; 
   }
 
-  .modalLogo {
-    height: 110px; /* Shrinks container to give textual copy priority room */
-    margin-bottom: 0.5rem;
+  .modalTitle {
+    font-size: 1.5rem;
   }
 
-  .introModal h3 {
-    font-size: 1.3rem;
-    line-height: 1.25;
-    margin-bottom: 0.4rem;
+  /* Grid Compression to save space */
+  .categoryGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
   }
 
-  .introModal p {
-    font-size: 0.9rem;
-    line-height: 1.45;
-    margin-bottom: 0;
+  .categoryCard {
+    padding: 1rem 0.5rem; /* Tighter padding for buttons */
+    gap: 0.5rem;
+  }
+
+  .categoryIcon {
+    width: 24px; /* Slightly smaller icons */
+    height: 24px;
+  }
+
+  .categoryName {
+    font-size: 0.85rem; /* Reduces text wrap risk */
   }
 
   /* Lower Context Box Adjustments */

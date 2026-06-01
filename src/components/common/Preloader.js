@@ -20,7 +20,7 @@ export default function Preloader() {
     const now = Date.now();
 
     // If they've never visited, OR if the expiration time has passed since their last visit
-    if (!lastVisited || now - parseInt(lastVisited, 10) > EXPIRATION_TIME) {
+    if (!lastVisited || now - Number.parseInt(lastVisited, 10) > EXPIRATION_TIME) {
       setShowPreloader(true);
       // Save the current timestamp to local storage
       localStorage.setItem("ccr_last_visited", now.toString());

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getSidebarListings } from "@/lib/actions";
 import { formatImageUrl } from "@/lib/formatImageUrl";
 import { getLocalizedUrl } from "@/lib/constants";
+import PropTypes from 'prop-types';
 
 export default async function BlogSidebar({ locale = "en" }) {
   const listings = await getSidebarListings();
@@ -70,3 +71,7 @@ export default async function BlogSidebar({ locale = "en" }) {
     </aside>
   );
 }
+
+BlogSidebar.propTypes = {
+  locale: PropTypes.string,
+};

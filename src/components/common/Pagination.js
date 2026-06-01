@@ -1,5 +1,6 @@
 'use client';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import PropTypes from 'prop-types';
 import styles from './Pagination.module.css';
 
 export default function Pagination({ totalItems, itemsPerPage, currentPageProp, onPageChange }) {
@@ -11,7 +12,7 @@ export default function Pagination({ totalItems, itemsPerPage, currentPageProp, 
   if (totalPages <= 1) return null;
 
   // Use local state prop if provided (Client), otherwise read from URL (Server)
-  const currentPage = currentPageProp || parseInt(searchParams.get('page') || '1', 10);
+  const currentPage = currentPageProp || Number.parseInt(searchParams.get('page') || '1', 10);
 
   const handlePageChange = (page) => {
     if (onPageChange) {
@@ -49,3 +50,10 @@ export default function Pagination({ totalItems, itemsPerPage, currentPageProp, 
     </div>
   );
 }
+
+Pagination.propTypes = {
+  totalItems: PropTypes.number.isRequired,
+  itemsPerPage: PropTypes.number.isRequired,
+  currentPageProp: PropTypes.number,
+  onPageChange: PropTypes.func,
+};

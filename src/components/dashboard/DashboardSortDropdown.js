@@ -1,5 +1,6 @@
 'use client';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import PropTypes from 'prop-types';
 
 export default function DashboardSortDropdown({ currentSortProp, onSortChange }) {
   const router = useRouter();
@@ -53,3 +54,8 @@ export default function DashboardSortDropdown({ currentSortProp, onSortChange })
     </div>
   );
 }
+
+DashboardSortDropdown.propTypes = {
+  currentSortProp: PropTypes.string,
+  onSortChange: PropTypes.func,
+};

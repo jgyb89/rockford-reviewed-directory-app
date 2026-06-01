@@ -10,8 +10,7 @@ export async function generateStaticParams() {
   return [{ locale: "en" }, { locale: "es" }];
 }
 
-export default async function RecommendPage({ params }) {
-  const { locale } = await params;
+export default async function RecommendPage() {
 
   return (
     <main style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>

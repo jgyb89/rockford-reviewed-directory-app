@@ -1,5 +1,6 @@
 'use client';
 import { useState } from "react";
+import PropTypes from 'prop-types';
 import { deleteUserListing } from "@/lib/actions";
 
 export default function DeleteListingButton({ listingId, className = "btn-delete" }) {
@@ -60,3 +61,8 @@ export default function DeleteListingButton({ listingId, className = "btn-delete
     </>
   );
 }
+
+DeleteListingButton.propTypes = {
+  listingId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  className: PropTypes.string,
+};

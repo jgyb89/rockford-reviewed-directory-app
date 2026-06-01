@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Image from "next/image";
 import gsap from "gsap";
 import { SplitText } from "gsap/dist/SplitText";
 import styles from "./AboutHero.module.css";
@@ -35,15 +34,10 @@ export default function AboutHero() {
 
   return (
     <section ref={containerRef} className={styles.heroSection}>
-      {/* Background Blended Image */}
-      <div className={styles.backgroundImageWrapper}>
-        <Image
-          src="/beach-background.jpg"
-          alt="Beach Background"
-          fill
-          priority
-          className={styles.backgroundImage}
-        />
+      {/* Wave Background */}
+      <div className={styles.ocean}>
+        <div className={styles.wave}></div>
+        <div className={styles.wave}></div>
       </div>
 
       <div className={styles.container}>

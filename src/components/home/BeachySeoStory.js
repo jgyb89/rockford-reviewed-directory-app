@@ -6,8 +6,7 @@ import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import SeoIntro from "./SeoIntro";
 import SeoMiddle from "./SeoMiddle";
 import SeoEnd from "./SeoEnd";
-import SeoMarquee from "./SeoMarquee";
-import SeoCards from "./SeoCards";
+import Newsletter from "./Newsletter";
 import styles from "./BeachySeoStory.module.css";
 
 export default function BeachySeoStory() {
@@ -68,10 +67,7 @@ export default function BeachySeoStory() {
         <SeoEnd />
         <div className={styles.stackSpacer}></div> 
       </div>
-      <SeoMarquee />
-      <div className={styles.contentMaxWidth}>
-        <SeoCards />
-      </div>
+      <Newsletter />
     </section>
   );
 }

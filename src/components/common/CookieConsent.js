@@ -29,7 +29,7 @@ export default function CookieConsent() {
     setIsVisible(false);
 
     // Optional: Reload to let the server instantly inject newly approved scripts
-    window.location.reload();
+    globalThis.location.reload();
   };
 
   const handleAcceptAll = () => {
@@ -122,21 +122,24 @@ export default function CookieConsent() {
               <details className={styles.accordion}>
                 <summary className={styles.accordionSummary}>
                   Preferences
-                  <label
-                    className={styles.toggle}
+                  <div 
                     onClick={(e) => e.stopPropagation()}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ")
-                        e.stopPropagation();
+                      if (e.key === "Enter" || e.key === " ") e.stopPropagation();
                     }}
+                    role="presentation"
+                    style={{ display: 'inline-block' }}
                   >
-                    <input
-                      type="checkbox"
-                      checked={preferences.preferences}
-                      onChange={() => togglePref("preferences")}
-                    />
-                    <span className={styles.slider}></span>
-                  </label>
+                    <label className={styles.toggle}>
+                      <input
+                        type="checkbox"
+                        checked={preferences.preferences}
+                        onChange={() => togglePref("preferences")}
+                        aria-label="Toggle Preferences"
+                      />
+                      <span className={styles.slider}></span>
+                    </label>
+                  </div>
                 </summary>
                 <div className={styles.accordionContent}>
                   Preference cookies enable a website to remember information
@@ -148,21 +151,24 @@ export default function CookieConsent() {
               <details className={styles.accordion}>
                 <summary className={styles.accordionSummary}>
                   Statistics
-                  <label
-                    className={styles.toggle}
+                  <div 
                     onClick={(e) => e.stopPropagation()}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ")
-                        e.stopPropagation();
+                      if (e.key === "Enter" || e.key === " ") e.stopPropagation();
                     }}
+                    role="presentation"
+                    style={{ display: 'inline-block' }}
                   >
-                    <input
-                      type="checkbox"
-                      checked={preferences.statistics}
-                      onChange={() => togglePref("statistics")}
-                    />
-                    <span className={styles.slider}></span>
-                  </label>
+                    <label className={styles.toggle}>
+                      <input
+                        type="checkbox"
+                        checked={preferences.statistics}
+                        onChange={() => togglePref("statistics")}
+                        aria-label="Toggle Statistics"
+                      />
+                      <span className={styles.slider}></span>
+                    </label>
+                  </div>
                 </summary>
                 <div className={styles.accordionContent}>
                   Statistic cookies help website owners to understand how
@@ -174,21 +180,24 @@ export default function CookieConsent() {
               <details className={styles.accordion}>
                 <summary className={styles.accordionSummary}>
                   Marketing
-                  <label
-                    className={styles.toggle}
+                  <div 
                     onClick={(e) => e.stopPropagation()}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ")
-                        e.stopPropagation();
+                      if (e.key === "Enter" || e.key === " ") e.stopPropagation();
                     }}
+                    role="presentation"
+                    style={{ display: 'inline-block' }}
                   >
-                    <input
-                      type="checkbox"
-                      checked={preferences.marketing}
-                      onChange={() => togglePref("marketing")}
-                    />
-                    <span className={styles.slider}></span>
-                  </label>
+                    <label className={styles.toggle}>
+                      <input
+                        type="checkbox"
+                        checked={preferences.marketing}
+                        onChange={() => togglePref("marketing")}
+                        aria-label="Toggle Marketing"
+                      />
+                      <span className={styles.slider}></span>
+                    </label>
+                  </div>
                 </summary>
                 <div className={styles.accordionContent}>
                   Marketing cookies are used to track visitors across websites.

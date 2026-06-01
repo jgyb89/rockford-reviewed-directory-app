@@ -3,8 +3,10 @@ import { getListings } from "@/lib/api";
 import { getDictionary } from "@/lib/dictionaries";
 import HeroSlideshow from "@/components/home/HeroSlideshow";
 import HorizontalListingFeed from "@/components/home/HorizontalListingFeed";
+import HomepageInfo from "@/components/home/HomepageInfo";
 import SunsetTransition from "@/components/home/SunsetTransition";
 import BeachySeoStory from "@/components/home/BeachySeoStory";
+import SeoCards from "@/components/home/SeoCards";
 import { BASE_URL } from "@/lib/constants";
 import styles from "./page.module.css";
 
@@ -68,11 +70,20 @@ export default async function HomePage({ params }) {
         />
       </div>
 
-      {/* Sunset Animation Transition */}
-      <SunsetTransition />
+      {/* Homepage Info Section */}
+      <HomepageInfo />
 
       {/* Coastal Sunrise GSAP Journey & SEO Story */}
       <BeachySeoStory />
+
+      <section style={{ backgroundColor: "#ffffff", padding: "4rem 0" }}>
+        <div className={styles.container}>
+          <SeoCards />
+        </div>
+      </section>
+
+      {/* Sunset Animation Transition */}
+      <SunsetTransition />
     </main>
   );
 }

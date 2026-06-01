@@ -25,10 +25,10 @@ export default function ContactLandingClient() {
       <section className={styles.contactSection} ref={contactRef}>
         <div className={styles.contactContent}>
           <h1 className={`${styles.contactTitle} contact-anim`}>
-            Let's Start a <span className={styles.contactHighlight}>Conversation</span>
+            Let&apos;s Start a <span className={styles.contactHighlight}>Conversation</span>
           </h1>
           <p className={`${styles.contactSubtitle} contact-anim`}>
-            Whether you have a question about our directory, want to explore partnership opportunities, or just want to say hello, we're ready to answer all your questions.
+            Whether you have a question about our directory, want to explore partnership opportunities, or just want to say hello, we&apos;re ready to answer all your questions.
           </p>
           
           <div className={`${styles.contactInfoGrid} contact-anim`}>
@@ -38,7 +38,7 @@ export default function ContactLandingClient() {
               </div>
               <div className={styles.infoText}>
                 <h3>General Inquiries</h3>
-                <p>Reach out and we'll get back to you as soon as we can.</p>
+                <p>Reach out and we&apos;ll get back to you as soon as we can.</p>
               </div>
             </div>
             
@@ -48,7 +48,7 @@ export default function ContactLandingClient() {
               </div>
               <div className={styles.infoText}>
                 <h3>Partnerships</h3>
-                <p>Interested in collaborating? Let's discuss how we can work together.</p>
+                <p>Interested in collaborating? Let&apos;s discuss how we can work together.</p>
               </div>
             </div>
 
@@ -58,7 +58,7 @@ export default function ContactLandingClient() {
               </div>
               <div className={styles.infoText}>
                 <h3>Support</h3>
-                <p>Need help with your business listing? We're here to assist.</p>
+                <p>Need help with your business listing? We&apos;re here to assist.</p>
               </div>
             </div>
           </div>

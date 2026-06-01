@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import PropTypes from "prop-types";
 import styles from '../RegisterBusinessForm.module.css';
 
 export default function RegisterForm({ dict = {}, locale = "en" }) {
@@ -318,3 +318,8 @@ export default function RegisterForm({ dict = {}, locale = "en" }) {
     </form>
   );
 }
+
+RegisterForm.propTypes = {
+  dict: PropTypes.object,
+  locale: PropTypes.string,
+};
