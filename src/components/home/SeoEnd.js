@@ -9,9 +9,11 @@ import styles from "./SeoEnd.module.css";
 const SeoEnd = forwardRef((props, ref) => {
   const localWrapperRef = useRef(null);
   const cardRef = useRef(null);
+  const bgImageRef = useRef(null);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
+    let mm = gsap.matchMedia();
 
     const ctx = gsap.context(() => {
       // 1. Entrance tilt animation for the card
@@ -19,7 +21,7 @@ const SeoEnd = forwardRef((props, ref) => {
         cardRef.current,
         {
           scale: 0.85,
-          rotationZ: -4,  // Tilted to the left
+          rotationZ: -4,
           y: "25vh",
         },
         {
@@ -36,40 +38,35 @@ const SeoEnd = forwardRef((props, ref) => {
         }
       );
 
-      // 2. Slide up entrance animation for the icons
-      gsap.fromTo(
-        `.${styles.iconWrapper}`,
-        { y: 120, opacity: 0 },
+      // 2. Background image slide in and fade
+      mm.add(
         {
-          y: 0,
-          opacity: 1,
-          duration: 1.2,
-          stagger: 0.15,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: localWrapperRef.current,
-            start: "top 80%",
-            toggleActions: "play none none reverse",
-          }
+          isDesktop: "(min-width: 901px)",
+          isMobile: "(max-width: 900px)",
+        },
+        (context) => {
+          let { isDesktop } = context.conditions;
+
+          gsap.fromTo(
+            bgImageRef.current,
+            {
+              xPercent: -50,
+              opacity: 0,
+            },
+            {
+              xPercent: isDesktop ? -20 : 0, // Offset heavily to the left on desktop for padding!
+              opacity: 0.15, // Blend with yellow
+              duration: 1.5,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: localWrapperRef.current,
+                start: "top 75%",
+                toggleActions: "play none none reverse",
+              }
+            }
+          );
         }
       );
-
-      // 3. Floating loops for the inner icon wrappers
-      const inners = gsap.utils.toArray(`.${styles.floatInner}`);
-      inners.forEach((el, i) => {
-        const dy = i === 0 ? -15 : i === 1 ? 12 : -18;
-        const dur = i === 0 ? 2.5 : i === 1 ? 2.0 : 2.8;
-        const delay = i * 0.3;
-
-        gsap.to(el, {
-          y: dy,
-          duration: dur,
-          delay: delay,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut"
-        });
-      });
 
     }, localWrapperRef);
 
@@ -85,11 +82,22 @@ const SeoEnd = forwardRef((props, ref) => {
   return (
     <div ref={setRefs} className={styles.stickyWrapper}>
       <div ref={cardRef} className={styles.flashCard}>
+        
+        {/* Background Image sliding in from left */}
+        <div ref={bgImageRef} className={styles.bgImageWrapper}>
+          <Image 
+            src="/cape-coral-facebook-reel-grid.jpg" 
+            alt="Cape Coral Community" 
+            fill 
+            className={styles.bgImage} 
+            priority
+          />
+        </div>
+
         <div className={styles.contentMaxWidth}>
-          <div className={styles.splitGrid}>
-            
-            {/* LEFT COLUMN: 2/3 Width Text narrative */}
-            <div className={styles.leftTextColumn}>
+          <div className={styles.contentWrapper}>
+            {/* TEXT COLUMN (flex-end aligns to right) */}
+            <div className={styles.textColumn}>
               <div className={styles.headlineMaskContainer}>
                 <h2 className="breeze-text">Real Reviews. Local Spots. Better Recommendations.</h2>
               </div>
@@ -97,34 +105,6 @@ const SeoEnd = forwardRef((props, ref) => {
                 We’re not here to create another noisy online group full of random posts and arguments. Cape Coral Reviewed is focused on useful information, helpful recommendations, and local businesses that are worth knowing about. Less noise. Better information. Stronger local connections. That’s Cape Coral Reviewed.
               </p>
             </div>
-
-            {/* RIGHT COLUMN: 1/3 Width Graphics Icons Layout */}
-            <div className={styles.rightGraphicsColumn}>
-              <div className={styles.gridContainer}>
-                {/* Top 1-Column Row (Beer) */}
-                <div className={styles.topRow}>
-                  <div className={styles.iconWrapper}>
-                    <div className={styles.floatInner}>
-                      <Image src="/beer-mugs.svg" alt="Beer Mugs" fill className={styles.iconImage} />
-                    </div>
-                  </div>
-                </div>
-                {/* Bottom 2-Column Row (Pizza & Taco) */}
-                <div className={styles.bottomRow}>
-                  <div className={styles.iconWrapper}>
-                    <div className={styles.floatInner}>
-                      <Image src="/pizza.svg" alt="Pizza" fill className={styles.iconImage} />
-                    </div>
-                  </div>
-                  <div className={styles.iconWrapper}>
-                    <div className={styles.floatInner}>
-                      <Image src="/taco.svg" alt="Taco" fill className={styles.iconImage} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
           </div>
         </div>
       </div>
