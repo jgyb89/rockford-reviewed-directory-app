@@ -119,6 +119,7 @@
 .listing-card__text {
   line-height: 1.5;
   color: #2d3748;
+  white-space: pre-wrap;
 }
 
 .listing-card__link {

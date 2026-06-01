@@ -211,7 +211,7 @@
 
   /* Right Graphics Horizontal Strip */
   .rightGraphicsColumn {
-    width: 100vw;
+    width: calc(100% + 3rem);
     margin-left: -1.5rem;
     height: auto; /* Remove 40vh so it hugs the row */
     padding: 1rem 0;
