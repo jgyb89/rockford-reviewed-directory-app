@@ -25,21 +25,83 @@ export default function RecommendBusinessForm() {
     additionalInfo: ''
   });
 
+  const [fieldErrors, setFieldErrors] = useState({
+    submitterName: '',
+    businessName: '',
+    businessAddress: '',
+    businessEmail: '',
+    businessPhone: ''
+  });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
 
+  const validateField = (name, value) => {
+    let error = "";
+    if (name === 'submitterName') {
+      if (!value.trim()) error = "Your name is required";
+      else if (value.trim().length < 2) error = "Your name must be at least 2 characters";
+    } else if (name === 'businessName') {
+      if (!value.trim()) error = "Business name is required";
+      else if (value.trim().length < 2) error = "Business name must be at least 2 characters";
+    } else if (name === 'businessAddress') {
+      if (!value.trim()) error = "Business address is required";
+      else if (value.trim().length < 5) error = "Business address must be at least 5 characters";
+    } else if (name === 'businessEmail') {
+      if (value) {
+        const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+        if (!emailRegex.test(value)) error = "Please enter a valid email address";
+      }
+    } else if (name === 'businessPhone') {
+      if (value) {
+        const digits = value.replace(/\D/g, "");
+        if (digits.length !== 10) error = "Phone number must be exactly 10 digits";
+      }
+    }
+    return error;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+    let finalValue = value;
+
     if (name === 'businessPhone') {
-      setFormData(prev => ({ ...prev, businessPhone: formatPhoneNumber(value) }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      finalValue = formatPhoneNumber(value);
     }
+
+    setFormData(prev => ({ ...prev, [name]: finalValue }));
+
+    // Real-time validation
+    const error = validateField(name, finalValue);
+    setFieldErrors(prev => ({ ...prev, [name]: error }));
+  };
+
+  const isFormValid = () => {
+    const requiredFields = ['submitterName', 'businessName', 'businessAddress'];
+    const hasRequired = requiredFields.every(field => formData[field].trim());
+    const hasNoErrors = Object.values(fieldErrors).every(err => !err);
+    return hasRequired && hasNoErrors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Final validation check
+    const errors = {};
+    Object.keys(formData).forEach(key => {
+      const error = validateField(key, formData[key]);
+      if (error) {
+        errors[key] = error;
+      }
+    });
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setError("Please fix the validation errors before submitting.");
+      return;
+    }
+
     setIsSubmitting(true);
     setError(null);
 
@@ -79,6 +141,13 @@ export default function RecommendBusinessForm() {
               businessPhone: '',
               additionalInfo: ''
             });
+            setFieldErrors({
+              submitterName: '',
+              businessName: '',
+              businessAddress: '',
+              businessEmail: '',
+              businessPhone: ''
+            });
             setSuccess(false);
           }} className={styles.submitBtn} style={{ marginTop: '1.5rem' }}>Submit Another</button>
         </div>
@@ -92,37 +161,92 @@ export default function RecommendBusinessForm() {
 
       <form onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
-          <label className={styles.label} htmlFor="submitterName">Your Name</label>
-          <input type="text" id="submitterName" name="submitterName" required className={styles.input} value={formData.submitterName} onChange={handleChange} placeholder="John Doe" />
+          <label className={styles.label} htmlFor="submitterName">Your Name *</label>
+          <input 
+            type="text" 
+            id="submitterName" 
+            name="submitterName" 
+            required 
+            className={`${styles.input} ${fieldErrors.submitterName ? styles.inputInvalid : ''}`} 
+            value={formData.submitterName} 
+            onChange={handleChange} 
+            placeholder="John Doe" 
+          />
+          {fieldErrors.submitterName && <span className={styles.errorText}>{fieldErrors.submitterName}</span>}
         </div>
 
         <div className={styles.formGroup}>
-          <label className={styles.label} htmlFor="businessName">Business Name</label>
-          <input type="text" id="businessName" name="businessName" required className={styles.input} value={formData.businessName} onChange={handleChange} placeholder="Cape Coral Bakery" />
+          <label className={styles.label} htmlFor="businessName">Business Name *</label>
+          <input 
+            type="text" 
+            id="businessName" 
+            name="businessName" 
+            required 
+            className={`${styles.input} ${fieldErrors.businessName ? styles.inputInvalid : ''}`} 
+            value={formData.businessName} 
+            onChange={handleChange} 
+            placeholder="Cape Coral Bakery" 
+          />
+          {fieldErrors.businessName && <span className={styles.errorText}>{fieldErrors.businessName}</span>}
         </div>
 
         <div className={styles.formGroup}>
-          <label className={styles.label} htmlFor="businessAddress">Business Address</label>
-          <input type="text" id="businessAddress" name="businessAddress" required className={styles.input} value={formData.businessAddress} onChange={handleChange} placeholder="123 Cape Coral Pkwy" />
+          <label className={styles.label} htmlFor="businessAddress">Business Address *</label>
+          <input 
+            type="text" 
+            id="businessAddress" 
+            name="businessAddress" 
+            required 
+            className={`${styles.input} ${fieldErrors.businessAddress ? styles.inputInvalid : ''}`} 
+            value={formData.businessAddress} 
+            onChange={handleChange} 
+            placeholder="123 Cape Coral Pkwy" 
+          />
+          {fieldErrors.businessAddress && <span className={styles.errorText}>{fieldErrors.businessAddress}</span>}
         </div>
 
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <div className={styles.formGroup} style={{ flex: '1 1 calc(50% - 0.5rem)', minWidth: '240px' }}>
             <label className={styles.label} htmlFor="businessEmail">Business Email</label>
-            <input type="email" id="businessEmail" name="businessEmail" className={styles.input} value={formData.businessEmail} onChange={handleChange} placeholder="info@business.com" />
+            <input 
+              type="email" 
+              id="businessEmail" 
+              name="businessEmail" 
+              className={`${styles.input} ${fieldErrors.businessEmail ? styles.inputInvalid : ''}`} 
+              value={formData.businessEmail} 
+              onChange={handleChange} 
+              placeholder="info@business.com" 
+            />
+            {fieldErrors.businessEmail && <span className={styles.errorText}>{fieldErrors.businessEmail}</span>}
           </div>
           <div className={styles.formGroup} style={{ flex: '1 1 calc(50% - 0.5rem)', minWidth: '240px' }}>
             <label className={styles.label} htmlFor="businessPhone">Business Phone</label>
-            <input type="tel" id="businessPhone" name="businessPhone" className={styles.input} value={formData.businessPhone} onChange={handleChange} placeholder="(239) 555-0123" />
+            <input 
+              type="tel" 
+              id="businessPhone" 
+              name="businessPhone" 
+              className={`${styles.input} ${fieldErrors.businessPhone ? styles.inputInvalid : ''}`} 
+              value={formData.businessPhone} 
+              onChange={handleChange} 
+              placeholder="(239) 555-0123" 
+            />
+            {fieldErrors.businessPhone && <span className={styles.errorText}>{fieldErrors.businessPhone}</span>}
           </div>
         </div>
 
         <div className={styles.formGroup}>
           <label className={styles.label} htmlFor="additionalInfo">Why are you recommending them?</label>
-          <textarea id="additionalInfo" name="additionalInfo" className={styles.textarea} value={formData.additionalInfo} onChange={handleChange} placeholder="They have the best service in town..." />
+          <textarea 
+            id="additionalInfo" 
+            name="additionalInfo" 
+            className={styles.textarea} 
+            value={formData.additionalInfo} 
+            onChange={handleChange} 
+            placeholder="They have the best service in town..." 
+          />
         </div>
 
-        <button type="submit" disabled={isSubmitting} className={styles.submitBtn}>
+        <button type="submit" disabled={isSubmitting || !isFormValid()} className={styles.submitBtn}>
           {isSubmitting ? 'Submitting...' : 'Recommend Business'}
         </button>
       </form>

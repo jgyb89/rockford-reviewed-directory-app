@@ -82,3 +82,15 @@
   margin-bottom: 1.5rem;
   font-size: 0.9rem;
 }
+
+.inputInvalid {
+  border-color: #e04c4c;
+  background-color: #fff5f5;
+}
+
+.errorText {
+  color: #e04c4c;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  display: block;
+}

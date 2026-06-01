@@ -120,7 +120,7 @@ export default function RecommendLandingClient() {
           <div className={styles.headlineMaskContainer}>
             <h1 className={`${styles.heroTitle} hero-title-anim`}>
               Recommend Your Favorite{" "}
-              <span className={styles.heroHighlight}>Great Business</span>
+              <span className={styles.heroHighlight}>Local Businesses</span>
             </h1>
           </div>
           <p className={`${styles.heroSubtitle} hero-subtitle-anim`}>
