@@ -184,8 +184,8 @@ export default function RecommendLandingClient() {
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>Why Recommend A Business?</h2>
           <p className={styles.sectionSubtitle}>
-            When you recommend a business, you aren't just giving them a
-            shoutout. You're entering them into our comprehensive spotlight
+            When you recommend a business, you aren&apos;t just giving them a
+            shoutout. You&apos;re entering them into our comprehensive spotlight
             program designed to supercharge their local presence.
           </p>
         </div>
@@ -308,7 +308,7 @@ export default function RecommendLandingClient() {
             Cape Coral Reviewed is the premier destination for discovering the
             absolute best that our city has to offer. We are passionate locals
             dedicated to uncovering hidden gems, highlighting outstanding
-            services, and building a stronger community. Whether it's a
+            services, and building a stronger community. Whether it&apos;s a
             family-owned restaurant, a reliable contractor, or a unique local
             boutique, our mission is to connect great people with great
             businesses.

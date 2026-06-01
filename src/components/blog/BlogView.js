@@ -3,6 +3,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import BlogCard from "./BlogCard";
+import PropTypes from 'prop-types';
 import styles from "./Blog.module.css";
 
 export default function BlogView({ posts, dict = {}, locale = "en" }) {
@@ -103,3 +104,9 @@ export default function BlogView({ posts, dict = {}, locale = "en" }) {
     </div>
   );
 }
+
+BlogView.propTypes = {
+  posts: PropTypes.array.isRequired,
+  dict: PropTypes.object,
+  locale: PropTypes.string,
+};

@@ -22,20 +22,82 @@
 .marqueeTrack {
   display: flex;
   gap: 2rem;
-  width: 250vw;
+  width: max-content;
   padding: 2rem 0;
   will-change: transform;
 }
 
-.pill {
-  font-size: clamp(1.2rem, 2.5vw, 2rem);
-  font-weight: 600;
-  padding: 1rem 3rem;
-  border-radius: 100px;
-  border: 3px solid currentColor;
-  white-space: nowrap;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+.mockListingCard {
+  width: 320px;
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  flex-shrink: 0;
+}
+
+.cardImageStub {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  background-color: rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.cardImage {
+  object-fit: cover;
+}
+
+.cardContentContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+.cardTitleLineStub {
+  width: 60%;
+  height: 14px;
+  background-color: rgb(228, 228, 228);
+  border-radius: 4px;
+  margin-bottom: 0.6rem;
+}
+
+.starsRowStub {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 0.75rem;
+  justify-content: center;
+}
+
+.miniStar {
+  color: #e94f37;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.cardBodyLineStub,
+.cardBodyLineStubShort {
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  margin-bottom: 0.4rem;
+}
+
+.cardBodyLineStub {
+  width: 95%;
+}
+
+.cardBodyLineStubShort {
+  width: 55%;
+  margin-bottom: 0;
 }
 
 /* ====================================================
@@ -63,9 +125,14 @@
     padding: 1rem 0;
   }
 
-  .pill {
-    font-size: 1rem;
-    padding: 0.75rem 1.5rem;
-    border-width: 2px; /* Thinner border for smaller text */
+  .mockListingCard {
+    width: 260px;
+    padding: 1rem;
+    gap: 1rem;
+    border-radius: 16px;
+  }
+
+  .cardImageStub {
+    border-radius: 8px;
   }
 }

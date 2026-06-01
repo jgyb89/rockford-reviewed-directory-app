@@ -22,7 +22,7 @@ export default function BugReporter() {
 
     const payload = {
       ...formData,
-      pageUrl: window.location.origin + pathname,
+      pageUrl: globalThis.location.origin + pathname,
     };
 
     try {
@@ -32,7 +32,7 @@ export default function BugReporter() {
         setFormData({ name: '', description: '' });
         
         // Close modal after showing success message briefly
-        setTimeout(() => {
+        globalThis.setTimeout(() => {
           setIsOpen(false);
           setSuccess(false);
         }, 3000);

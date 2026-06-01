@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
 import { toggleFavoriteListing, getCurrentViewer } from '@/lib/actions';
 import heartStyles from '@/components/common/HeartButton.module.css';
 
@@ -8,6 +9,31 @@ export default function FavoriteButton({ listingId, initialIsFavorite = false, c
   const [currentUser, setCurrentUser] = useState(propCurrentUser);
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite);
   const [toastMessage, setToastMessage] = useState(null);
+  const heartRef = useRef(null);
+
+  const handleMouseEnter = () => {
+    if (!heartRef.current) return;
+    gsap.to(heartRef.current, {
+      rotation: 30,
+      scale: 1.3,
+      duration: 1,
+      overwrite: "auto",
+      transformOrigin: "center 60%",
+      ease: "back.out(3)"
+    });
+  };
+
+  const handleMouseLeave = () => {
+    if (!heartRef.current) return;
+    gsap.to(heartRef.current, {
+      rotation: 0,
+      scale: 1,
+      duration: 1,
+      overwrite: "auto",
+      transformOrigin: "center 60%",
+      ease: "back.out(3)"
+    });
+  };
 
   useEffect(() => {
     setCurrentUser(propCurrentUser);
@@ -64,6 +90,8 @@ export default function FavoriteButton({ listingId, initialIsFavorite = false, c
     <div style={{ position: 'relative' }}>
       <button 
         className={`listing-action-btn ${isFavorite ? heartStyles.active : ''}`} 
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -71,7 +99,7 @@ export default function FavoriteButton({ listingId, initialIsFavorite = false, c
         }}
         style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
       >
-        <span className={`material-symbols-outlined ${heartStyles['heart-icon']}`}>
+        <span ref={heartRef} className={`material-symbols-outlined ${heartStyles['heart-icon']}`}>
           favorite
         </span>
         <span className="listing-action-btn__text">{label}</span>

@@ -7,7 +7,6 @@ export default async function sitemap() {
   const listings = await getListings();
   const posts = await getBlogPosts();
 
-
   const staticPages = [
     "",
     "/directory",
@@ -20,14 +19,12 @@ export default async function sitemap() {
     "/terms-of-service",
   ];
 
-
   const staticEntries = staticPages.map((path) => ({
     url: `${BASE_URL}${getLocalizedUrl(path, "en")}`,
     lastModified: new Date(),
     changeFrequency: "daily",
     priority: path === "" ? 1.0 : 0.8,
   }));
-
 
   // Map Main Directory Types (e.g. /directory/food-drink)
   const directoryTypeEntries = DIRECTORY_TYPES.map((type) => ({
@@ -36,7 +33,6 @@ export default async function sitemap() {
     changeFrequency: "weekly",
     priority: 0.9,
   }));
-
 
   // Map All Sub-Categories (e.g. /directory/food-drink/restaurants)
   const categoryEntries = ALL_CATEGORIES.map((cat) => {
@@ -62,7 +58,6 @@ export default async function sitemap() {
     };
   }).filter(Boolean);
 
-
   const listingEntries = listings.map((listing) => ({
     url: `${BASE_URL}${getLocalizedUrl(`/listing/${listing.slug}`, "en")}`,
     lastModified: new Date(listing.date || new Date()),
@@ -70,14 +65,12 @@ export default async function sitemap() {
     priority: 0.7,
   }));
 
-
   const postEntries = posts.map((post) => ({
     url: `${BASE_URL}${getLocalizedUrl(`/blog/${post.slug}`, "en")}`,
     lastModified: new Date(post.date || new Date()),
     changeFrequency: "monthly",
     priority: 0.6,
   }));
-
 
   return [...staticEntries, ...directoryTypeEntries, ...categoryEntries, ...listingEntries, ...postEntries];
 }

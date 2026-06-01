@@ -5,7 +5,7 @@ import "material-symbols/outlined.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Preloader from "@/components/common/Preloader";
-import BackToTop from "@/components/common/BackToTop";
+import FabMenu from "@/components/common/FabMenu";
 import CookieConsent from "@/components/common/CookieConsent";
 import { getDictionary } from "@/lib/dictionaries";
 import { BASE_URL } from "@/lib/constants";
@@ -57,7 +57,7 @@ export default async function RootLayout({ children, params }) {
         <Navbar currentUser={null} dict={dict} locale={locale} />
         <main>{children}</main>
         <Footer locale={locale} />
-        <BackToTop />
+        <FabMenu />
         <CookieConsent />
         <SpeedInsights />
       </body>

@@ -10,8 +10,7 @@ export async function generateStaticParams() {
   return [{ locale: "en" }, { locale: "es" }];
 }
 
-export default async function ContactPage({ params }) {
-  const { locale } = await params;
+export default async function ContactPage() {
 
   return (
     <main style={{ backgroundColor: '#f8fafc', minHeight: '100vh' }}>

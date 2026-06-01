@@ -22,7 +22,7 @@
 }
 
 .heroContent {
-  flex: 1;
+  flex: 2;
 }
 
 .headlineMaskContainer {
@@ -280,6 +280,7 @@
 .benefitCard:hover .benefitIcon {
   background-image: linear-gradient(135deg, #e04c4c 0%, #a82d1c 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 

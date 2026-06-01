@@ -1,12 +1,45 @@
 .section {
   background-color: #f6eee3; /* Beach Sand */
   color: #231f20;
-  padding: 10vh 2rem;
+  padding: 8rem 2rem;
+  position: relative;
+  overflow: hidden;
 }
 
 .container {
   max-width: 1000px;
   margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  padding-left: 200px; /* 140px for lines + 60px gap */
+}
+
+.svgLines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 180px;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: visible;
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 4rem 1.5rem;
+  }
+  .container {
+    padding-left: 50px; /* 32px for lines + 18px gap */
+  }
+  .svgLines {
+    top: -4rem;
+    bottom: -4rem;
+    width: 32px;
+  }
+  .textBlock {
+    padding-left: 0;
+  }
 }
 
 .spacer {
@@ -17,6 +50,10 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+
+  padding-right: clamp(15px, 4vw, 40px);
+  position: relative;
+  z-index: 2;
 }
 
 .textBlock h2 {

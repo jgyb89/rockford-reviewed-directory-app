@@ -201,7 +201,7 @@ export async function toggleFavoriteListing(listingId) {
 
     const currentFavorites =
       viewer.userData?.favoriteListings?.nodes?.map((n) => n.databaseId) || [];
-    const listingDbId = parseInt(listingId);
+    const listingDbId = Number.parseInt(listingId, 10);
 
     let updatedFavorites;
     if (currentFavorites.includes(listingDbId)) {
@@ -766,6 +766,35 @@ export async function submitContactForm(formData) {
   } catch (error) {
     console.error("Contact Form Error:", error);
     return { success: false, message: error.message };
+  }
+}
+
+/**
+ * Server Action to handle the Newsletter subscription via Gravity Form ID: 15.
+ */
+export async function submitNewsletterForm(formData) {
+  const email = formData.get("email");
+
+  if (!email) {
+    return { success: false, error: "Email is required." };
+  }
+
+  const formId = 15;
+  
+  // CRITICAL: GraphQL Gravity Forms requires 'emailValues' for email fields, not just 'value'
+  const fieldValues = [
+    { 
+      id: 1, 
+      emailValues: { value: email } 
+    }
+  ];
+
+  try {
+    await submitGravityForm(formId, fieldValues);
+    return { success: true };
+  } catch (error) {
+    console.error("Newsletter submission error:", error);
+    return { success: false, error: error.message || "Failed to join the newsletter. Please try again." };
   }
 }
 

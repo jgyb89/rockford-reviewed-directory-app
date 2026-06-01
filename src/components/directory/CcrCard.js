@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useRef } from "react";
 import PropTypes from "prop-types";
 import Image from "next/image";
 import Link from "next/link";
+import gsap from "gsap";
 import { getLocalizedUrl } from "@/lib/constants";
 import styles from "./CcrCard.module.css";
 import heartStyles from '@/components/common/HeartButton.module.css';
@@ -14,6 +15,31 @@ import { formatImageUrl } from "@/lib/formatImageUrl";
 export default function CcrCard({ listing, currentUser: propCurrentUser, locale = 'en' }) {
   const [currentUser, setCurrentUser] = useState(propCurrentUser);
   const [isFavorite, setIsFavorite] = useState(false);
+  const heartRef = useRef(null);
+
+  const handleMouseEnter = () => {
+    if (!heartRef.current) return;
+    gsap.to(heartRef.current, {
+      rotation: 30,
+      scale: 1.3,
+      duration: 1,
+      overwrite: "auto",
+      transformOrigin: "center 60%",
+      ease: "back.out(3)"
+    });
+  };
+
+  const handleMouseLeave = () => {
+    if (!heartRef.current) return;
+    gsap.to(heartRef.current, {
+      rotation: 0,
+      scale: 1,
+      duration: 1,
+      overwrite: "auto",
+      transformOrigin: "center 60%",
+      ease: "back.out(3)"
+    });
+  };
 
   useEffect(() => {
     setCurrentUser(propCurrentUser);
@@ -122,16 +148,29 @@ export default function CcrCard({ listing, currentUser: propCurrentUser, locale 
           </Link>
 
           <div className={styles['ccr-card__rating']}>
-            <span
-              className="material-symbols-outlined"
-              style={{ fontSize: "18px", color: "var(--color-secondary)" }}
-            >
-              star
-            </span>
-            <span style={{ fontWeight: "600" }}>{averageRating}</span>
-            <span style={{ color: "#666", fontSize: "0.8rem" }}>
-              ({reviewCount} reviews)
-            </span>
+            {Array.from({ length: 5 }).map((_, i) => {
+              const val = i + 1;
+              const numRating = Number.parseFloat(averageRating);
+              if (numRating >= val) {
+                return (
+                  <span key={i} className="material-symbols-outlined" style={{ fontSize: "18px", color: "#e94f37", fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                );
+              } else if (numRating >= val - 0.5) {
+                return (
+                  <span key={i} className="material-symbols-outlined" style={{ fontSize: "18px", color: "#e94f37", fontVariationSettings: "'FILL' 1" }}>
+                    star_half
+                  </span>
+                );
+              } else {
+                return (
+                  <span key={i} className="material-symbols-outlined" style={{ fontSize: "18px", color: "#e94f37", fontVariationSettings: "'FILL' 0" }}>
+                    star
+                  </span>
+                );
+              }
+            })}
           </div>
 
           <div className={styles['ccr-card__footer']}>
@@ -140,9 +179,13 @@ export default function CcrCard({ listing, currentUser: propCurrentUser, locale 
                 className="material-symbols-outlined"
                 style={{ fontSize: "16px" }}
               >
-                location_on
+                rate_review
               </span>
-              {listingdata.addressCity || "Cape Coral"}, FL
+              {reviewCount > 0 ? (
+                <>{reviewCount} {reviewCount === 1 ? 'Review' : 'Reviews'}</>
+              ) : (
+                <>Be the first to <Link href={listingUrl} style={{ textDecoration: 'underline', color: '#e94f37' }}>review</Link></>
+              )}
             </div>
 
             <div style={{ position: 'relative', display: 'inline-block' }}>
@@ -151,6 +194,8 @@ export default function CcrCard({ listing, currentUser: propCurrentUser, locale 
                 aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
                 disabled={isUpdating}
                 style={{ position: 'relative', zIndex: 10, opacity: isUpdating ? 0.6 : 1 }}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
                 onClick={async (e) => {
                   e.preventDefault();
                   e.stopPropagation();
@@ -185,7 +230,7 @@ export default function CcrCard({ listing, currentUser: propCurrentUser, locale 
                   setIsUpdating(false);
                 }}
               >
-                <span className={`material-symbols-outlined ${heartStyles['heart-icon']}`}>
+                <span ref={heartRef} className={`material-symbols-outlined ${heartStyles['heart-icon']}`}>
                   favorite
                 </span>
               </button>

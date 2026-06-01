@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
+import PropTypes from 'prop-types';
 
 export default function BackButton({ label = "Go Back" }) {
   const router = useRouter();
@@ -14,3 +15,7 @@ export default function BackButton({ label = "Go Back" }) {
     </div>
   );
 }
+
+BackButton.propTypes = {
+  label: PropTypes.string,
+};

@@ -7,8 +7,7 @@ export const metadata = {
   title: 'Dashboard | Cape Coral Reviewed',
 };
 
-export default async function DashboardRoot({ params }) {
-  const { locale } = await params;
+export default async function DashboardRoot() {
   const viewer = await getViewer();
 
   // Extract roles safely
@@ -75,7 +74,7 @@ export default async function DashboardRoot({ params }) {
                 <span className="material-symbols-outlined">add_business</span>
                 <h3>Recommend a Business</h3>
               </div>
-              <p>Know a great local spot that isn't listed? Let us know so we can add them!</p>
+              <p>Know a great local spot that isn&apos;t listed? Let us know so we can add them!</p>
               <Link href={`/submit-listing`} className="bento-link">Submit Idea &rarr;</Link>
             </div>
           </div>
@@ -85,7 +84,7 @@ export default async function DashboardRoot({ params }) {
                 <span className="material-symbols-outlined" style={{ fontSize: '2rem' }}>reviews</span>
                 <h3 style={{ fontSize: '1.5rem' }}>My Reviews</h3>
               </div>
-              <p>See all the feedback you've shared with the Cape Coral community. Your reviews help others discover the best places in town!</p>
+              <p>See all the feedback you&apos;ve shared with the Cape Coral community. Your reviews help others discover the best places in town!</p>
               <Link href={`/dashboard/reviews`} className="bento-link">View My Reviews &rarr;</Link>
             </div>
           </div>
@@ -95,6 +94,4 @@ export default async function DashboardRoot({ params }) {
   );
 }
 
-DashboardRoot.propTypes = {
-  params: PropTypes.object.isRequired,
-};
+DashboardRoot.propTypes = {};

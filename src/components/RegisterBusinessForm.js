@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import PropTypes from "prop-types";
 import { registerBusiness } from "@/lib/actions";
 import styles from "./RegisterBusinessForm.module.css";
 
@@ -509,3 +509,7 @@ export default function RegisterBusinessForm({ locale = "en" }) {
     </form>
   );
 }
+
+RegisterBusinessForm.propTypes = {
+  locale: PropTypes.string,
+};

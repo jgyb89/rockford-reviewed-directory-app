@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import PropTypes from 'prop-types';
 import { ALL_CATEGORIES, DIRECTORY_TYPES } from '@/lib/constants';
 
 export default function Breadcrumbs({ locale = 'en' }) {
@@ -81,3 +82,7 @@ export default function Breadcrumbs({ locale = 'en' }) {
     </nav>
   );
 }
+
+Breadcrumbs.propTypes = {
+  locale: PropTypes.string,
+};

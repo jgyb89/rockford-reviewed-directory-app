@@ -9,7 +9,7 @@ import DashboardSortDropdown from '@/components/dashboard/DashboardSortDropdown'
 export default async function MyListingsPage({ params, searchParams }) {
   const { locale } = await params;
   const resolvedSearchParams = await searchParams;
-  const page = parseInt(resolvedSearchParams?.page || '1', 10);
+  const page = Number.parseInt(resolvedSearchParams?.page || '1', 10);
   const sort = resolvedSearchParams?.sort || 'newest';
   const ITEMS_PER_PAGE = 10;
   
@@ -93,7 +93,7 @@ export default async function MyListingsPage({ params, searchParams }) {
 
       {listings.length === 0 ? (
         <div className="blank-state" style={{ textAlign: 'center', padding: '3rem', background: '#f9f9f9', borderRadius: '12px' }}>
-          <p style={{ fontSize: '1.2rem', color: '#666', marginBottom: '1.5rem' }}>You haven't posted any listings yet.</p>
+          <p style={{ fontSize: '1.2rem', color: '#666', marginBottom: '1.5rem' }}>You haven&apos;t posted any listings yet.</p>
           <Link href={`/submit-listing`} style={{ color: '#e04c4c', fontWeight: '600' }}>Create your first listing now</Link>
         </div>
       ) : (
