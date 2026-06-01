@@ -76,7 +76,7 @@ export default async function HomePage({ params }) {
       {/* Coastal Sunrise GSAP Journey & SEO Story */}
       <BeachySeoStory />
 
-      <section style={{ backgroundColor: "#ffffff", padding: "4rem 0" }}>
+      <section style={{ backgroundColor: "#ffffff", padding: "4rem 0", overflowX: "hidden" }}>
         <div className={styles.container}>
           <SeoCards />
         </div>

@@ -152,7 +152,7 @@
   position: absolute;
   top: 100vh;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 150vh; /* Scaled seamlessly to match viewport height bounds */
   z-index: 4;
 }
@@ -161,7 +161,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 100%; /* Follows the height of oceanWrapper */
 }
 
