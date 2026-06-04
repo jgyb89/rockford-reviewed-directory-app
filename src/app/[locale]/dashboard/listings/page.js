@@ -47,11 +47,26 @@ export default async function MyListingsPage({ params, searchParams }) {
     cache: 'no-store',
   });
 
-  const json = await res.json();
-  const viewer = json.data?.viewer;
+  let json = null;
+  try {
+    if (res.ok) {
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        json = await res.json();
+      } else {
+        console.error(`Unexpected content-type in listings page: ${contentType}`);
+      }
+    } else {
+      console.error(`HTTP Error in listings page: status ${res.status}`);
+    }
+  } catch (error) {
+    console.error("Failed to parse JSON on listings page:", error);
+  }
+
+  const viewer = json?.data?.viewer;
 
   if (!viewer) {
-    redirect(``);
+    redirect(`/dashboard`);
   }
 
   const roles = viewer.roles.nodes.map(r => r.name.toLowerCase());

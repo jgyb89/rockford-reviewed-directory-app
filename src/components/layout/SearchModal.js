@@ -124,6 +124,7 @@ export default function SearchModal({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Accept": "application/json",
           "User-Agent": "CCR-NextJS-Frontend/1.0"
         },
         body: JSON.stringify({

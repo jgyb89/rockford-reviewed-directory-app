@@ -11,7 +11,7 @@ const GRAPHQL_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 /**
  * Global helper to cleanly execute authenticated GraphQL mutations.
  */
-async function fetchGraphQL(query, variables = {}, requireAuth = true) {
+export async function fetchGraphQL(query, variables = {}, requireAuth = true) {
   const headers = {
     "Content-Type": "application/json",
     "User-Agent": "CCR-NextJS-Frontend/1.0",
@@ -23,15 +23,29 @@ async function fetchGraphQL(query, variables = {}, requireAuth = true) {
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  const res = await fetch(GRAPHQL_URL, {
-    method: "POST",
-    headers,
-    body: JSON.stringify({ query, variables }),
-  });
+  try {
+    const res = await fetch(GRAPHQL_URL, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ query, variables }),
+    });
 
-  const json = await res.json();
-  await handleGraphQLError(json);
-  return json;
+    if (!res.ok) {
+      console.error(`HTTP Error inside fetchGraphQL: status ${res.status}`);
+      return { errors: [{ message: `HTTP Error: ${res.status}` }] };
+    }
+    const contentType = res.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      console.error(`Unexpected content-type inside fetchGraphQL: ${contentType}`);
+      return { errors: [{ message: "Invalid JSON response" }] };
+    }
+    const json = await res.json();
+    await handleGraphQLError(json);
+    return json;
+  } catch (error) {
+    console.error("GraphQL fetch failed inside fetchGraphQL:", error);
+    return { errors: [{ message: error.message }] };
+  }
 }
 
 /**

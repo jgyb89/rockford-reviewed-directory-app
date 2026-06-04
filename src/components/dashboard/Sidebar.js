@@ -25,6 +25,11 @@ export default function Sidebar({ user, userRoles, locale }) {
       href: getLocalizedUrl("/dashboard/reviews", locale),
       label: 'My Reviews',
       icon: 'rate_review'
+    },
+    {
+      href: getLocalizedUrl("/dashboard/events", locale),
+      label: 'My Events',
+      icon: 'event'
     }
   ];
 

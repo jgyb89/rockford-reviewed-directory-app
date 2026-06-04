@@ -36,7 +36,13 @@ export async function loginUser(username, password) {
 
     const rawText = await res.text();
     console.log("RAW LOGIN RESPONSE:", rawText);
-    const json = JSON.parse(rawText);
+    let json;
+    try {
+      json = JSON.parse(rawText);
+    } catch (e) {
+      console.error("Failed to parse login response:", e, rawText);
+      throw new Error("Invalid response received from authentication server.");
+    }
 
     if (json.errors) {
       throw new Error(json.errors[0].message);
@@ -175,7 +181,13 @@ export async function getViewer() {
 
     const rawText = await res.text();
     console.log("RAW VIEWER RESPONSE:", rawText);
-    const json = JSON.parse(rawText);
+    let json;
+    try {
+      json = JSON.parse(rawText);
+    } catch (e) {
+      console.error("Failed to parse viewer response:", e, rawText);
+      return null;
+    }
 
     if (json.errors) {
       // Detect if the WPGraphQL token has expired

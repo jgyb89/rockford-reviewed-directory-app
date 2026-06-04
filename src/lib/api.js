@@ -25,6 +25,24 @@ const CORE_LISTING_FIELDS = `
   }
 `;
 
+async function safeJsonParse(res) {
+  if (!res.ok) {
+    console.error(`HTTP Error: status ${res.status}`);
+    return null;
+  }
+  const contentType = res.headers.get("content-type");
+  if (!contentType || !contentType.includes("application/json")) {
+    console.error(`Unexpected content-type: ${contentType}`);
+    return null;
+  }
+  try {
+    return await res.json();
+  } catch (error) {
+    console.error("JSON parsing failed:", error);
+    return null;
+  }
+}
+
 export async function getListingBySlug(slug) {
   const query = `
     query GetListingBySlug($id: ID!) {
@@ -131,14 +149,15 @@ export async function getListingBySlug(slug) {
       next: { revalidate: 60 },
     });
 
-    const json = await res.json();
+    const json = await safeJsonParse(res);
+    if (!json) return null;
 
     if (json.errors) {
       console.error("GraphQL API Errors (getListingBySlug):", json.errors);
       throw new Error("Failed to fetch listing data from GraphQL");
     }
 
-    return json.data.ccrlisting;
+    return json.data?.ccrlisting;
   } catch (error) {
     console.error("Network or Fetch Error:", error);
     return null;
@@ -182,14 +201,15 @@ export async function getListings(categorySlug = null) {
       next: { revalidate: 60 },
     });
 
-    const json = await res.json();
+    const json = await safeJsonParse(res);
+    if (!json) return [];
 
     if (json.errors) {
       console.error("GraphQL API Errors (getListings):", json.errors);
       return [];
     }
 
-    return json.data.ccrlistings?.nodes || [];
+    return json.data?.ccrlistings?.nodes || [];
   } catch (error) {
     console.error("Fetch Error:", error);
     return [];
@@ -218,12 +238,12 @@ export async function getListingsByCategory(categorySlug, directoryType = null) 
   try {
     const res = await fetch(process.env.NEXT_PUBLIC_WORDPRESS_API_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json", "User-Agent": "CCR-NextJS-Frontend/1.0" },
+      headers: { "Content-Type": "application/json", "Accept": "application/json", "User-Agent": "CCR-NextJS-Frontend/1.0" },
       body: JSON.stringify({ query, variables }),
       next: { revalidate: 60 },
     });
-    const json = await res.json();
-    return json.data?.ccrlistings?.nodes || [];
+    const json = await safeJsonParse(res);
+    return json?.data?.ccrlistings?.nodes || [];
   } catch (error) {
     return [];
   }
@@ -246,12 +266,12 @@ export async function getListingsByDirectoryType(directoryTypeSlug) {
   try {
     const res = await fetch(process.env.NEXT_PUBLIC_WORDPRESS_API_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json", "User-Agent": "CCR-NextJS-Frontend/1.0" },
+      headers: { "Content-Type": "application/json", "Accept": "application/json", "User-Agent": "CCR-NextJS-Frontend/1.0" },
       body: JSON.stringify({ query, variables: { directoryType: [directoryTypeSlug] } }),
       next: { revalidate: 60 },
     });
-    const json = await res.json();
-    return json.data?.ccrlistings?.nodes || [];
+    const json = await safeJsonParse(res);
+    return json?.data?.ccrlistings?.nodes || [];
   } catch (error) {
     return [];
   }
@@ -287,18 +307,21 @@ export async function updateUserFavorites(userId, favoriteIdsArray, authToken) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Accept": "application/json",
         Authorization: `Bearer ${authToken}`,
         "User-Agent": "CCR-NextJS-Frontend/1.0",
       },
       body: JSON.stringify({ query: mutation, variables }),
     });
 
-    const json = await res.json();
+    const json = await safeJsonParse(res);
+    if (!json) return null;
+
     if (json.errors) {
       console.error("GraphQL Errors:", json.errors);
       throw new Error("Failed to update favorites");
     }
-    return json.data.updateUser.user;
+    return json.data?.updateUser?.user;
   } catch (error) {
     console.error("Error updating favorites:", error);
     return null;

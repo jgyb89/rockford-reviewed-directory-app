@@ -11,14 +11,8 @@ export default function BlogView({ posts, dict = {}, locale = "en" }) {
   
   const TABS = [
     { id: 'all', label: t.all || 'All Posts' },
-    { id: 'business', label: t.business || 'Business' },
-    { id: 'featured-business', label: t.featured || 'Featured Business' },
-    { id: 'food-and-drink', label: t.food || 'Food & Drink' },
-    { id: 'health-wellness', label: t.health || 'Health & Wellness' },
-    { id: 'home-local-services', label: t.home || 'Home & Local Services' },
-    { id: 'lawn-care', label: t.lawnCare || 'Lawn Care' },
-    { id: 'news', label: t.news || 'News' },
-    { id: 'reviews', label: t.reviews || 'Reviews' }
+    { id: 'local-reviews', label: t.localReviews || 'Local Reviews' },
+    { id: 'news-events', label: t.newsEvents || 'News & Events' }
   ];
 
   const [activeTab, setActiveTab] = useState('all');
