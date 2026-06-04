@@ -26,7 +26,7 @@ export default function EventCard({ event, locale = 'en' }) {
   const venueName = eventDetails?.venueName || "TBA";
   const price = eventDetails?.price || "Free";
   
-  const descriptionSnippet = content ? (content.replace(/<[^>]+>/g, '').substring(0, 100) + (content.length > 100 ? '...' : '')) : '';
+  const descriptionSnippet = content ? (content.slice(0, 1000).replace(/<[^<>]+>/g, '').substring(0, 100) + (content.length > 100 ? '...' : '')) : '';
 
   return (
     <div className={styles.eventCard}>
