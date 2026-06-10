@@ -67,7 +67,8 @@ const Step3Media = ({ formData, updateFormData, prevStep }) => {
       const result = await createEventMutation({
         title: formData.title,
         content: formData.description,
-        categories: formData.categories,
+        primaryCategory: formData.primaryCategory,
+        customTags: formData.customTags,
         start_date: formData.start_date,
         end_date: formData.end_date,
         venue_name: formData.venue_name,

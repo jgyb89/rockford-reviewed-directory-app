@@ -62,7 +62,7 @@ const Step1BasicInfo = ({ formData, updateFormData, nextStep }) => {
         <select
           id="primaryCategory"
           className={`${styles['step-form__input']} ${errors.primaryCategory ? styles['step-form__input--error'] : ''}`}
-          value={formData.primaryCategory}
+          value={formData.primaryCategory || ''}
           onChange={(e) => {
             updateFormData({ primaryCategory: e.target.value });
           }}

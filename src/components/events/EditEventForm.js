@@ -525,7 +525,11 @@ export default function EditEventForm({ initialData, locale }) {
           <div>
             <label htmlFor="event_address" style={labelStyle}>Street Address</label>
             {isLoaded ? (
-              <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
+              <Autocomplete 
+                onLoad={onLoad} 
+                onPlaceChanged={onPlaceChanged}
+                options={{ fields: ["address_components", "geometry", "name", "formatted_address"] }}
+              >
                 <input
                   type="text"
                   id="event_address"

@@ -96,7 +96,11 @@ const Step2Details = ({ formData, updateFormData, nextStep, prevStep }) => {
       <div className={styles['step-form__group']}>
         <label htmlFor="event_address" className={styles['step-form__label']}>Street Address</label>
         {isLoaded ? (
-          <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
+          <Autocomplete 
+            onLoad={onLoad} 
+            onPlaceChanged={onPlaceChanged}
+            options={{ fields: ["address_components", "geometry", "name", "formatted_address"] }}
+          >
             <input
               type="text"
               id="event_address"
