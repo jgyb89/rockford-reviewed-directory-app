@@ -5,7 +5,7 @@ import gsap from 'gsap';
 import { toggleFavoriteListing, getCurrentViewer } from '@/lib/actions';
 import heartStyles from '@/components/common/HeartButton.module.css';
 
-export default function FavoriteButton({ listingId, initialIsFavorite = false, currentUser: propCurrentUser, label = "Favorite" }) {
+export default function FavoriteButton({ listingId, initialIsFavorite = false, currentUser: propCurrentUser, label = "Favorite", iconOnly = false }) {
   const [currentUser, setCurrentUser] = useState(propCurrentUser);
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite);
   const [toastMessage, setToastMessage] = useState(null);
@@ -89,7 +89,7 @@ export default function FavoriteButton({ listingId, initialIsFavorite = false, c
   return (
     <div style={{ position: 'relative' }}>
       <button 
-        className={`listing-action-btn ${isFavorite ? heartStyles.active : ''}`} 
+        className={`${iconOnly ? heartStyles['heart-btn'] : 'listing-action-btn'} ${isFavorite ? heartStyles.active : ''}`} 
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={(e) => {
@@ -97,12 +97,12 @@ export default function FavoriteButton({ listingId, initialIsFavorite = false, c
           e.stopPropagation();
           handleToggle();
         }}
-        style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+        style={iconOnly ? { position: 'relative', zIndex: 10 } : { display: 'inline-flex', alignItems: 'center', gap: '8px' }}
       >
         <span ref={heartRef} className={`material-symbols-outlined ${heartStyles['heart-icon']}`}>
           favorite
         </span>
-        <span className="listing-action-btn__text">{label}</span>
+        {!iconOnly && <span className="listing-action-btn__text">{label}</span>}
       </button>
 
       {toastMessage && (

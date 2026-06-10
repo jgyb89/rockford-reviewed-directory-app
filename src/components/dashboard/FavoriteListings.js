@@ -53,17 +53,19 @@ export default function FavoriteListings({ favorites: initialFavorites = [], loc
     <div className={styles['favorite-listings']}>
       <DashboardSortDropdown currentSortProp={currentSort} onSortChange={setCurrentSort} />
       <div className={styles['favorite-listings__grid']}>
-        {sortedFavorites.map((listing) => {
+        {sortedFavorites.map((listing, index) => {
+          if (!listing || !listing.title) return null;
+
           const imageUrl = formatImageUrl(listing.featuredImage?.node?.sourceUrl);
-          const listingUrl = `/listing/${listing.slug}`;
+          const listingUrl = listing.__typename === 'Event' ? `/events/${listing.slug}` : `/listing/${listing.slug}`;
 
           return (
-            <article key={listing.databaseId} className={styles['favorite-item']}>
+            <article key={listing?.databaseId || `fav-${index}`} className={styles['favorite-item']}>
               <div className={styles['favorite-item__content-wrapper']}>
                 <div className={styles['favorite-item__image-container']}>
                   <Image
                     src={imageUrl}
-                    alt={listing.title}
+                    alt={listing?.title || "Favorite Item"}
                     fill
                     sizes="120px"
                     style={{ objectFit: 'cover' }}
@@ -72,7 +74,7 @@ export default function FavoriteListings({ favorites: initialFavorites = [], loc
                 <div className={styles['favorite-item__info']}>
                   <h4 className={styles['favorite-item__title']}>{listing.title}</h4>
                   <Link href={listingUrl} className={styles['favorite-item__link']}>
-                    View Listing
+                    View {listing.__typename === 'Event' ? 'Event' : 'Listing'}
                   </Link>
                 </div>
               </div>

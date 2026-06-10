@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 const formatACFDate = (dateStr) => {
   if (!dateStr) return "";
   // Converts '2026-06-03T14:30' to '2026-06-03 14:30:00'
-  return dateStr.replace('T', ' ') + ':00'; 
+  return dateStr.replace("T", " ") + ":00";
 };
 
 const EVENT_FIELDS = `
@@ -18,7 +18,22 @@ const EVENT_FIELDS = `
   content
   status
   date
-  featuredImage { node { sourceUrl altText } }
+  commentCount
+comments(first: 100, where: { status: "approve" }) {
+    nodes {
+      id
+      databaseId
+      content
+      date
+      author {
+        node {
+          name
+          avatar { url }
+        }
+      }
+    }
+  }
+  featuredImage { node { databaseId sourceUrl altText } }
   eventCategories { nodes { name slug } }
   eventDetails {
     startDateTime
@@ -29,6 +44,8 @@ const EVENT_FIELDS = `
       city
       state
       postCode
+      latitude
+      longitude
     }
     price
     ticketUrl
@@ -38,7 +55,7 @@ const EVENT_FIELDS = `
 export async function getEvents() {
   const query = `
     query GetEvents {
-      events(first: 100, where: { stati: [PUBLISH, PENDING, DRAFT] }) {
+      events(first: 100, where: { stati: [PUBLISH] }) {
         nodes {
           ${EVENT_FIELDS}
         }
@@ -79,6 +96,31 @@ export async function getEventBySlug(slug) {
   }
 }
 
+export async function getAuthEventBySlug(slug) {
+  // Bypass the EventIdType enum by filtering the plural 'events' list by the slug (name)
+  const query = `
+    query GetAuthEventBySlug($slug: String!) {
+      events(where: { name: $slug, stati: [PUBLISH, PENDING, DRAFT] }, first: 1) {
+        nodes {
+          ${EVENT_FIELDS}
+        }
+      }
+    }
+  `;
+
+  const variables = { slug };
+
+  try {
+    // IMPORTANT: Pass 'true' as the third parameter so it requires a JWT token
+    const json = await fetchGraphQL(query, variables, true);
+    // Return the first node from the filtered list, or null if not found
+    return json?.data?.events?.nodes?.[0] || null;
+  } catch (error) {
+    console.error("Error fetching auth event by slug:", error);
+    return null;
+  }
+}
+
 export async function getUserEvents() {
   try {
     const viewer = await getViewer();
@@ -106,9 +148,17 @@ export async function createEventMutation(payload) {
     start_date: formatACFDate(payload.start_date),
     end_date: formatACFDate(payload.end_date),
     venue_name: payload.venue_name,
-    event_address: payload.event_address ? { address: payload.event_address } : null,
+    event_address: payload.event_address?.address
+      ? {
+          address: payload.event_address.address,
+          lat: payload.event_address.lat,
+          lng: payload.event_address.lng,
+        }
+      : null,
     price: payload.price,
     ticket_url: payload.ticket_url,
+    _primary_category: payload.primaryCategory || '',
+    _custom_tags: payload.customTags || [],
   };
 
   const mutation = `
@@ -130,15 +180,11 @@ export async function createEventMutation(payload) {
         input: {
           title: payload.title,
           content: payload.content,
-          status: "PENDING",
           featuredImageId: payload.featuredImageId || null,
           eventDetailsJson: JSON.stringify(acfData),
-          eventCategories: payload.categories?.length > 0
-            ? { append: false, nodes: payload.categories.map((slug) => ({ slug })) }
-            : { append: false, nodes: [] },
         },
       },
-      true
+      true,
     );
 
     const { revalidatePath } = require("next/cache");
@@ -156,9 +202,17 @@ export async function updateEventMutation(databaseId, payload) {
     start_date: formatACFDate(payload.start_date),
     end_date: formatACFDate(payload.end_date),
     venue_name: payload.venue_name,
-    event_address: payload.event_address ? { address: payload.event_address } : null,
+    event_address: payload.event_address?.address
+      ? {
+          address: payload.event_address.address,
+          lat: payload.event_address.lat,
+          lng: payload.event_address.lng,
+        }
+      : null,
     price: payload.price,
     ticket_url: payload.ticket_url,
+    _primary_category: payload.primaryCategory || '',
+    _custom_tags: payload.customTags || [],
   };
 
   const mutation = `
@@ -183,12 +237,9 @@ export async function updateEventMutation(databaseId, payload) {
           content: payload.content,
           featuredImageId: payload.featuredImageId || null,
           eventDetailsJson: JSON.stringify(acfData),
-          eventCategories: payload.categories?.length > 0
-            ? { append: false, nodes: payload.categories.map((slug) => ({ slug })) }
-            : { append: false, nodes: [] },
         },
       },
-      true
+      true,
     );
 
     const { revalidatePath } = require("next/cache");

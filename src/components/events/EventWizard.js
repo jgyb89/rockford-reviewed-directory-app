@@ -11,11 +11,12 @@ const EventWizard = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    categories: [], // maps to eventCategories
+    primaryCategory: '',
+    customTags: [],
     start_date: '',
     end_date: '',
     venue_name: '',
-    event_address: '',
+    event_address: { address: '', lat: null, lng: null },
     price: '',
     ticket_url: '',
     featuredImage: null,

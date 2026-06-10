@@ -1,11 +1,21 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useJsApiLoader, Autocomplete } from '@react-google-maps/api';
 import styles from '@/components/directory-builder/StepForm.module.css';
 import wizardStyles from '@/components/directory-builder/ListingWizard.module.css';
 
+const libraries = ['places'];
+
 const Step2Details = ({ formData, updateFormData, nextStep, prevStep }) => {
   const [errors, setErrors] = useState({});
+  const [autocomplete, setAutocomplete] = useState(null);
+
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+    libraries,
+  });
 
   const validate = () => {
     const newErrors = {};
@@ -19,6 +29,23 @@ const Step2Details = ({ formData, updateFormData, nextStep, prevStep }) => {
   const handleNext = () => {
     if (validate()) {
       nextStep();
+    }
+  };
+
+  const onLoad = (autoC) => setAutocomplete(autoC);
+
+  const onPlaceChanged = () => {
+    if (autocomplete !== null) {
+      const place = autocomplete.getPlace();
+      if (place.geometry) {
+        updateFormData({
+          event_address: {
+            address: place.formatted_address || place.name,
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng()
+          }
+        });
+      }
     }
   };
 
@@ -68,14 +95,32 @@ const Step2Details = ({ formData, updateFormData, nextStep, prevStep }) => {
 
       <div className={styles['step-form__group']}>
         <label htmlFor="event_address" className={styles['step-form__label']}>Street Address</label>
-        <input
-          type="text"
-          id="event_address"
-          className={styles['step-form__input']}
-          placeholder="123 Example St, Cape Coral, FL"
-          value={formData.event_address}
-          onChange={(e) => updateFormData({ event_address: e.target.value })}
-        />
+        {isLoaded ? (
+          <Autocomplete 
+            onLoad={onLoad} 
+            onPlaceChanged={onPlaceChanged}
+            options={{ fields: ["address_components", "geometry", "name", "formatted_address"] }}
+          >
+            <input
+              type="text"
+              id="event_address"
+              className={styles['step-form__input']}
+              placeholder="123 Example St, Cape Coral, FL"
+              value={formData.event_address?.address || ''}
+              onChange={(e) => updateFormData({
+                event_address: { ...formData.event_address, address: e.target.value }
+              })}
+            />
+          </Autocomplete>
+        ) : (
+          <input
+            type="text"
+            id="event_address"
+            className={styles['step-form__input']}
+            placeholder="Loading map..."
+            disabled
+          />
+        )}
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
@@ -104,8 +149,12 @@ const Step2Details = ({ formData, updateFormData, nextStep, prevStep }) => {
       </div>
 
       <div className={wizardStyles['wizard__actions']}>
-        <button className={`${wizardStyles['wizard__button']} ${wizardStyles['wizard__button--secondary']}`} onClick={prevStep}>Back</button>
-        <button className={`${wizardStyles['wizard__button']} ${wizardStyles['wizard__button--primary']}`} onClick={handleNext}>Next</button>
+        <button type="button" className={wizardStyles['wizard__btn-secondary']} onClick={prevStep}>
+          Back
+        </button>
+        <button type="button" className={wizardStyles['wizard__btn-primary']} onClick={handleNext}>
+          Next Step
+        </button>
       </div>
     </div>
   );

@@ -30,17 +30,19 @@ export default async function MyEvents({ locale }) {
       ) : (
         <div className="listings-grid" style={{ display: 'grid', gap: '1.5rem' }}>
           {events.map((event) => {
-            const isPending = event.status === 'PENDING';
-            const isDraft = event.status === 'DRAFT';
+            const status = event.status?.toLowerCase() || '';
             let statusBadgeColor = '#10b981'; // Publish
             let statusLabel = 'Published';
 
-            if (isPending) {
+            if (status === 'pending') {
               statusBadgeColor = '#f59e0b';
-              statusLabel = 'Pending';
-            } else if (isDraft) {
+              statusLabel = 'Pending Approval';
+            } else if (status === 'draft') {
               statusBadgeColor = '#64748b';
               statusLabel = 'Draft';
+            } else if (status === 'publish') {
+              statusBadgeColor = '#10b981';
+              statusLabel = 'Published';
             }
 
             return (
@@ -61,7 +63,7 @@ export default async function MyEvents({ locale }) {
                     View
                   </Link>
                   <span style={{ color: '#e2e8f0' }}>|</span>
-                  <Link href={getLocalizedUrl(`/dashboard/events/edit/${event.databaseId}`, locale)} style={{ color: '#4a5568', fontWeight: '600', textDecoration: 'none', fontSize: '0.95rem' }}>
+                  <Link href={getLocalizedUrl(`/dashboard/events/${event.slug}/edit`, locale)} style={{ color: '#4a5568', fontWeight: '600', textDecoration: 'none', fontSize: '0.95rem' }}>
                     Edit
                   </Link>
                   <span style={{ color: '#e2e8f0' }}>|</span>

@@ -911,3 +911,41 @@ export async function submitRecommendationForm(formData) {
   // Use the centralized Gravity Forms helper
   return submitGravityForm(8, fieldValues, false);
 }
+
+/**
+ * Server Action to submit an Event comment using native WP comments.
+ */
+export async function submitEventComment(formData) {
+  const mutation = `
+    mutation CreateEventComment($input: CreateCommentInput!) {
+      createComment(input: $input) {
+        comment {
+          id
+          databaseId
+        }
+      }
+    }
+  `;
+
+  try {
+    await fetchGraphQL(
+      mutation,
+      {
+        input: {
+          commentOn: Number.parseInt(formData.eventId, 10),
+          content: formData.content,
+        },
+      },
+      true,
+    );
+
+    revalidatePath("/events", "layout");
+    return { success: true };
+  } catch (error) {
+    console.error("Submit Event Comment Error:", error);
+    return {
+      success: false,
+      message: error.message || "Network error occurred while submitting comment.",
+    };
+  }
+}

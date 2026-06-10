@@ -48,7 +48,7 @@
 .headerLink {
   text-decoration: none;
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.15rem;
   transition: opacity 0.2s;
 }
 
@@ -58,7 +58,7 @@
 
 .title {
   font-family: var(--font-heading);
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   color: var(--color-text);
   margin: 0;
   display: -webkit-box;
@@ -81,15 +81,76 @@
   color: #64748b;
   font-size: 0.9rem;
   margin-bottom: 1rem;
+  padding-top: 0.5rem;
 }
 
 .footer {
-  margin-top: auto;
-  padding-top: 1rem;
-  border-top: 1px solid #eee;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
   font-size: 0.85rem;
   color: #666;
+}
+
+.priceTag {
+  font-weight: 600;
+  color: #111;
+}
+
+.favoriteWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.categoryPill {
+  font-size: 0.75rem;
+  margin-right: 6px;
+  margin-bottom: 4px;
+  background-color: #f1f5f9;
+  padding: 3px 8px;
+  border-radius: 999px;
+  display: inline-block;
+  color: #475569;
+  font-weight: 500;
+}
+
+.description {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.5;
+}
+
+@media (min-width: 640px) {
+  .listView {
+    flex-direction: row;
+    min-height: 220px;
+    height: auto;
+  }
+
+  .listView .imageWrapper {
+    flex: 1;
+    height: 100%;
+    min-height: 267px;
+    aspect-ratio: 4 / 3;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 12px;
+    width: auto;
+  }
+
+  .listView .image {
+    border-radius: 12px 0 0 12px;
+  }
+
+  .listView .content {
+    flex: 4;
+  }
 }

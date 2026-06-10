@@ -35,7 +35,7 @@ const SeoEnd = forwardRef((props, ref) => {
             end: "top top",
             scrub: 1,
           },
-        }
+        },
       );
 
       // 2. Background image slide in and fade
@@ -55,19 +55,18 @@ const SeoEnd = forwardRef((props, ref) => {
             },
             {
               xPercent: isDesktop ? -20 : 0, // Offset heavily to the left on desktop for padding!
-              opacity: 0.15, // Blend with yellow
+              opacity: 0.75, // Blend with yellow
               duration: 1.5,
               ease: "power3.out",
               scrollTrigger: {
                 trigger: localWrapperRef.current,
                 start: "top 75%",
                 toggleActions: "play none none reverse",
-              }
-            }
+              },
+            },
           );
-        }
+        },
       );
-
     }, localWrapperRef);
 
     return () => ctx.revert();
@@ -82,14 +81,13 @@ const SeoEnd = forwardRef((props, ref) => {
   return (
     <div ref={setRefs} className={styles.stickyWrapper}>
       <div ref={cardRef} className={styles.flashCard}>
-        
         {/* Background Image sliding in from left */}
         <div ref={bgImageRef} className={styles.bgImageWrapper}>
-          <Image 
-            src="/cape-coral-facebook-reel-grid.jpg" 
-            alt="Cape Coral Community" 
-            fill 
-            className={styles.bgImage} 
+          <Image
+            src="/cape-coral-facebook-reel-grid.jpg"
+            alt="Cape Coral Community"
+            fill
+            className={styles.bgImage}
             priority
           />
         </div>
@@ -99,10 +97,17 @@ const SeoEnd = forwardRef((props, ref) => {
             {/* TEXT COLUMN (flex-end aligns to right) */}
             <div className={styles.textColumn}>
               <div className={styles.headlineMaskContainer}>
-                <h2 className="breeze-text">Real Reviews. Local Spots. Better Recommendations.</h2>
+                <h2 className="breeze-text">
+                  Real Reviews. Local Spots. Better Recommendations.
+                </h2>
               </div>
               <p className="breeze-text">
-                We’re not here to create another noisy online group full of random posts and arguments. Cape Coral Reviewed is focused on useful information, helpful recommendations, and local businesses that are worth knowing about. Less noise. Better information. Stronger local connections. That’s Cape Coral Reviewed.
+                We’re not here to create another noisy online group full of
+                random posts and arguments. Cape Coral Reviewed is focused on
+                useful information, helpful recommendations, and local
+                businesses that are worth knowing about. Less noise. Better
+                information. Stronger local connections. That’s Cape Coral
+                Reviewed.
               </p>
             </div>
           </div>

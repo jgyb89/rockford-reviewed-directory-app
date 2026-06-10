@@ -193,6 +193,10 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
             {t.news || "News & Reviews"}
           </Link>
 
+          <Link href={getLocalizedUrl("/events", locale)} className={styles['nav-link']}>
+            {t.events || "Events"}
+          </Link>
+
           <Link href={getLocalizedUrl("/about", locale)} className={styles['nav-link']}>
             {t.about || "About"}
           </Link>
@@ -330,6 +334,15 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
                     onClick={closeMobileMenu}
                   >
                     {t.news || "News & Reviews"}
+                  </Link>
+                </li>
+                <li className={styles['flyout-item']}>
+                  <Link
+                    href={getLocalizedUrl("/events", locale)}
+                    className={styles['flyout-link']}
+                    onClick={closeMobileMenu}
+                  >
+                    {t.events || "Events"}
                   </Link>
                 </li>
                 <li className={styles['flyout-item']}>

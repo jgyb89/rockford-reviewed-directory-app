@@ -7,8 +7,9 @@ import Link from "next/link";
 import { getLocalizedUrl } from "@/lib/constants";
 import styles from "./EventCard.module.css";
 import { formatImageUrl } from "@/lib/formatImageUrl";
+import FavoriteButton from "@/components/directory/FavoriteButton";
 
-export default function EventCard({ event, locale = 'en' }) {
+export default function EventCard({ event, locale = 'en', viewMode = 'grid', currentUser }) {
   if (!event) return null;
 
   const { title, databaseId, slug, content, featuredImage, eventDetails, eventCategories } = event;
@@ -29,7 +30,7 @@ export default function EventCard({ event, locale = 'en' }) {
   const descriptionSnippet = content ? (content.slice(0, 1000).replace(/<[^<>]+>/g, '').substring(0, 100) + (content.length > 100 ? '...' : '')) : '';
 
   return (
-    <div className={styles.eventCard}>
+    <div className={`${styles.eventCard} ${viewMode === 'list' ? styles.listView : ''}`}>
       <div className={styles.imageWrapper}>
         <Link href={eventUrl} className={styles.imageLink} aria-label={title}>
           <Image
@@ -70,7 +71,14 @@ export default function EventCard({ event, locale = 'en' }) {
         </div>
 
         <div className={styles.footer}>
-          <span>{price}</span>
+          <span className={styles.priceTag}>{price}</span>
+          <div className={styles.favoriteWrapper}>
+            <FavoriteButton 
+              listingId={databaseId} 
+              initialCurrentUser={currentUser} 
+              iconOnly={true}
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -103,4 +111,5 @@ EventCard.propTypes = {
     })
   }).isRequired,
   locale: PropTypes.string,
+  viewMode: PropTypes.oneOf(['grid', 'list']),
 };
