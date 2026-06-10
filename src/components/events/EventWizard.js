@@ -11,7 +11,8 @@ const EventWizard = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    categories: [], // maps to eventCategories
+    primaryCategory: '',
+    customTags: [],
     start_date: '',
     end_date: '',
     venue_name: '',

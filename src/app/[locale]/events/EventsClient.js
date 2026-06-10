@@ -5,9 +5,14 @@ import { useRouter } from "next/navigation";
 import EventCard from "@/components/events/EventCard";
 import LoginModal from "@/components/auth/LoginModal";
 import { getLocalizedUrl } from "@/lib/constants";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import { EVENT_CATEGORIES } from "@/lib/constants/events";
+import Link from "next/link";
 import "./EventsClient.css";
+
+const DISPLAY_CATEGORIES = [
+  { name: "All", slug: "all", icon: "widgets" },
+  ...EVENT_CATEGORIES,
+];
 
 const parseSafeDate = (dateStr) => {
   if (!dateStr) return new Date(0);
@@ -16,9 +21,7 @@ const parseSafeDate = (dateStr) => {
 
 export default function EventsClient({ events, currentUser, locale }) {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [viewMode, setViewMode] = useState("grid");
-  const [sortBy, setSortBy] = useState("popular");
-  const [calendarDate, setCalendarDate] = useState(new Date());
+  const [activeCategorySlug, setActiveCategorySlug] = useState("all");
   
   const router = useRouter();
 
@@ -30,27 +33,79 @@ export default function EventsClient({ events, currentUser, locale }) {
     }
   };
 
-  const processedEvents = useMemo(() => {
-    let sorted = [...events];
+  const { eventsToday, eventsWeekend, eventsFree, otherUpcomingEvents } = useMemo(() => {
+    const today = new Date();
+    const todayStr = today.toDateString();
+
+    let filteredEvents = [...events];
     
-    if (sortBy === "upcoming") {
-      const now = new Date();
-      sorted = sorted.filter(e => {
-        const eventDate = parseSafeDate(e.eventDetails?.startDateTime || e.date);
-        return eventDate >= now;
-      });
-      sorted.sort((a, b) => {
-        const dateA = parseSafeDate(a.eventDetails?.startDateTime || a.date);
-        const dateB = parseSafeDate(b.eventDetails?.startDateTime || b.date);
-        return dateA.getTime() - dateB.getTime();
-      });
-    } else if (sortBy === "newest") {
-      sorted.sort((a, b) => parseSafeDate(b.date).getTime() - parseSafeDate(a.date).getTime());
-    } else if (sortBy === "popular") {
-      sorted.sort((a, b) => (b.commentCount || 0) - (a.commentCount || 0));
+    // Filter by active category slug
+    if (activeCategorySlug !== "all") {
+      filteredEvents = filteredEvents.filter((e) => 
+        e.eventCategories?.nodes?.some(cat => cat.slug === activeCategorySlug)
+      );
     }
-    return sorted;
-  }, [events, sortBy]);
+
+    const todayArr = [];
+    const weekendArr = [];
+    const freeArr = [];
+    const otherArr = [];
+
+    // Use a Set to track IDs and prevent an event appearing in multiple sections
+    // Or if we want them to appear in multiple sections, we just let them.
+    // The prompt says "group into distinct thematic rows". Eventbrite lets an event be in 'Today' and 'Free'. So we allow duplicates across rows.
+    
+    filteredEvents.forEach(e => {
+      const eDateStr = e.eventDetails?.startDateTime || e.date;
+      if (!eDateStr) return;
+      
+      const eventDate = parseSafeDate(eDateStr);
+      
+      // Skip past events entirely unless they are today
+      if (eventDate < today && eventDate.toDateString() !== todayStr) {
+         return;
+      }
+
+      let categorized = false;
+
+      // 1. Today
+      if (eventDate.toDateString() === todayStr) {
+        todayArr.push(e);
+        categorized = true;
+      }
+
+      // 2. Weekend
+      if (eventDate >= today && [0, 5, 6].includes(eventDate.getDay())) {
+        weekendArr.push(e);
+        categorized = true;
+      }
+
+      // 3. Free
+      const price = e.eventDetails?.price?.toLowerCase();
+      if (price === "free" || price === "0" || !price) {
+        freeArr.push(e);
+        categorized = true;
+      }
+
+      if (!categorized) {
+        otherArr.push(e);
+      }
+    });
+
+    // Sort chronologically
+    const sortChronologically = (arr) => arr.sort((a, b) => {
+      const dateA = parseSafeDate(a.eventDetails?.startDateTime || a.date);
+      const dateB = parseSafeDate(b.eventDetails?.startDateTime || b.date);
+      return dateA.getTime() - dateB.getTime();
+    });
+
+    return {
+      eventsToday: sortChronologically(todayArr),
+      eventsWeekend: sortChronologically(weekendArr),
+      eventsFree: sortChronologically(freeArr),
+      otherUpcomingEvents: sortChronologically(otherArr)
+    };
+  }, [events, activeCategorySlug]);
 
   return (
     <div>
@@ -81,99 +136,76 @@ export default function EventsClient({ events, currentUser, locale }) {
       </section>
 
       {/* Main Layout */}
-      <div style={{ maxWidth: "1600px", margin: "3rem auto", padding: "0 2vw" }}>
-        <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap", alignItems: "flex-start" }}>
-          
-          {/* Left Column (Feed & Controls) */}
-          <div style={{ flex: "2 1 60%", minWidth: "300px" }}>
-            
-            {/* Control Bar */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem", backgroundColor: "#fdfdfd", padding: "1rem", borderRadius: "12px", border: "1px solid #eaeaea", boxShadow: "0 2px 10px rgba(0,0,0,0.02)" }}>
-              
-              <div style={{ display: "flex", gap: "0.5rem" }}>
-                <button
-                  onClick={() => setViewMode("grid")}
-                  style={{
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    padding: "0.5rem", borderRadius: "8px", border: "none", cursor: "pointer",
-                    backgroundColor: viewMode === "grid" ? "#e2e8f0" : "transparent",
-                    color: viewMode === "grid" ? "#111" : "#666",
-                    transition: "all 0.2s"
-                  }}
-                  title="Grid View"
-                >
-                  <span className="material-symbols-outlined">grid_view</span>
-                </button>
-                <button
-                  onClick={() => setViewMode("list")}
-                  style={{
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    padding: "0.5rem", borderRadius: "8px", border: "none", cursor: "pointer",
-                    backgroundColor: viewMode === "list" ? "#e2e8f0" : "transparent",
-                    color: viewMode === "list" ? "#111" : "#666",
-                    transition: "all 0.2s"
-                  }}
-                  title="List View"
-                >
-                  <span className="material-symbols-outlined">view_list</span>
-                </button>
-              </div>
-
-              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <label htmlFor="sort-select" style={{ fontWeight: "600", color: "#444" }}>Sort by:</label>
-                <select
-                  id="sort-select"
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  style={{
-                    padding: "0.5rem 1rem", borderRadius: "8px", border: "1px solid #eaeaea",
-                    backgroundColor: "#fff", color: "#111", fontSize: "1rem", fontWeight: "500",
-                    cursor: "pointer", outline: "none"
-                  }}
-                >
-                  <option value="upcoming">Upcoming</option>
-                  <option value="newest">Newest</option>
-                  <option value="popular">Popular</option>
-                </select>
-              </div>
-
-            </div>
-
-            {/* Event List/Grid */}
-            {processedEvents.length > 0 ? (
-              <div style={
-                viewMode === "grid" 
-                  ? { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "2rem" }
-                  : { display: "flex", flexDirection: "column", gap: "1.5rem" }
-              }>
-                {processedEvents.map((event) => (
-                  <EventCard key={event.databaseId} event={event} locale={locale} viewMode={viewMode} />
-                ))}
-              </div>
-            ) : (
-              <div style={{ textAlign: "center", padding: "4rem 0", color: "#666", backgroundColor: "#fdfdfd", border: "1px dashed #eaeaea", borderRadius: "12px" }}>
-                <span className="material-symbols-outlined" style={{ fontSize: "3rem", color: "#ccc", marginBottom: "1rem" }}>event_busy</span>
-                <h2>No events found.</h2>
-                <p>Check back later or submit a new event!</p>
-              </div>
-            )}
-          </div>
-
-          {/* Right Column (Calendar) */}
-          <div style={{ flex: "1 1 30%", minWidth: "300px", position: "sticky", top: "2rem" }}>
-            <div style={{ backgroundColor: "#fdfdfd", padding: "1.5rem", borderRadius: "12px", boxShadow: "0 4px 24px rgba(0,0,0,0.04)", border: "1px solid #eaeaea" }}>
-              <h3 style={{ fontSize: "1.2rem", fontWeight: "700", marginBottom: "1rem", color: "#111" }}>Calendar</h3>
-              <div className="custom-calendar-container">
-                <Calendar 
-                  onChange={setCalendarDate} 
-                  value={calendarDate}
-                  className="ccr-premium-calendar"
-                />
-              </div>
-            </div>
-          </div>
-
+      <div style={{ maxWidth: "1440px", margin: "0 auto", padding: "2rem 2vw" }}>
+        
+        {/* Category Filter Bar */}
+        <div className="category-filter-bar">
+          {DISPLAY_CATEGORIES.map(cat => (
+            <button
+              key={cat.slug}
+              className={`category-btn ${activeCategorySlug === cat.slug ? "active" : ""}`}
+              onClick={() => setActiveCategorySlug(cat.slug)}
+            >
+              <span className="material-symbols-outlined">{cat.icon}</span>
+              <span>{cat.name}</span>
+            </button>
+          ))}
         </div>
+
+        {/* Feed Rows */}
+        {eventsToday.length === 0 && eventsWeekend.length === 0 && eventsFree.length === 0 && otherUpcomingEvents.length === 0 && (
+          <div style={{ textAlign: "center", padding: "4rem 0", color: "#666", backgroundColor: "#fdfdfd", border: "1px dashed #eaeaea", borderRadius: "12px" }}>
+            <span className="material-symbols-outlined" style={{ fontSize: "3rem", color: "#ccc", marginBottom: "1rem" }}>event_busy</span>
+            <h2>No upcoming events found.</h2>
+            <p>Try selecting a different category or check back later!</p>
+          </div>
+        )}
+
+        {eventsToday.length > 0 && (
+          <section>
+            <h2 className="thematic-section-header">Going on Today</h2>
+            <div className="event-discovery-grid">
+              {eventsToday.slice(0, 8).map(event => (
+                <EventCard key={`today-${event.databaseId}`} event={event} locale={locale} currentUser={currentUser} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {eventsWeekend.length > 0 && (
+          <section>
+            <h2 className="thematic-section-header">Upcoming This Weekend</h2>
+            <div className="event-discovery-grid">
+              {eventsWeekend.slice(0, 8).map(event => (
+                <EventCard key={`weekend-${event.databaseId}`} event={event} locale={locale} currentUser={currentUser} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {eventsFree.length > 0 && (
+          <section>
+            <h2 className="thematic-section-header">Free Events</h2>
+            <div className="event-discovery-grid">
+              {eventsFree.slice(0, 8).map(event => (
+                <EventCard key={`free-${event.databaseId}`} event={event} locale={locale} currentUser={currentUser} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Fallback for events that don't fit any bucket */}
+        {otherUpcomingEvents.length > 0 && (
+          <section>
+            <h2 className="thematic-section-header">More Upcoming Events</h2>
+            <div className="event-discovery-grid">
+              {otherUpcomingEvents.slice(0, 16).map(event => (
+                <EventCard key={`other-${event.databaseId}`} event={event} locale={locale} currentUser={currentUser} />
+              ))}
+            </div>
+          </section>
+        )}
+
       </div>
 
       <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />

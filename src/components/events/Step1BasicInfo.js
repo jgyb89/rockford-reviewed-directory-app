@@ -3,15 +3,22 @@
 import React, { useState } from 'react';
 import styles from '@/components/directory-builder/StepForm.module.css';
 import wizardStyles from '@/components/directory-builder/ListingWizard.module.css';
+import { EVENT_CATEGORIES } from "@/lib/constants/events";
 
 const Step1BasicInfo = ({ formData, updateFormData, nextStep }) => {
   const [errors, setErrors] = useState({});
+  const initialCustom = (formData.customTags || []).join(', ');
+
+  const [customTagsText, setCustomTagsText] = useState(initialCustom);
 
   const validate = () => {
     const newErrors = {};
     if (!formData.title.trim()) newErrors.title = 'Title is required';
     if (!formData.description.trim()) newErrors.description = 'Description is required';
-    if (formData.categories.length === 0) newErrors.categories = 'At least one category is required';
+    if (!formData.primaryCategory) newErrors.primaryCategory = 'Please select a main category';
+    
+    const tagsArr = customTagsText.split(',').map(s => s.trim()).filter(Boolean);
+    if (tagsArr.length > 3) newErrors.customTags = 'Maximum of 3 custom tags allowed';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -23,12 +30,11 @@ const Step1BasicInfo = ({ formData, updateFormData, nextStep }) => {
     }
   };
 
-  const [categoryInput, setCategoryInput] = useState(formData.categories.join(', '));
-
-  const handleCategoryChange = (e) => {
+  const handleCustomTagsChange = (e) => {
     const val = e.target.value;
-    setCategoryInput(val);
-    updateFormData({ categories: val.split(',').map(s => s.trim()).filter(Boolean) });
+    setCustomTagsText(val);
+    const tagsArr = val.split(',').map(s => s.trim()).filter(Boolean);
+    updateFormData({ customTags: tagsArr });
   };
 
   return (
@@ -52,17 +58,35 @@ const Step1BasicInfo = ({ formData, updateFormData, nextStep }) => {
       </div>
 
       <div className={styles['step-form__group']}>
-        <label htmlFor="categories" className={styles['step-form__label']}>Category (slugs comma separated) *</label>
+        <label htmlFor="primaryCategory" className={styles['step-form__label']}>Primary Category *</label>
+        <select
+          id="primaryCategory"
+          className={`${styles['step-form__input']} ${errors.primaryCategory ? styles['step-form__input--error'] : ''}`}
+          value={formData.primaryCategory}
+          onChange={(e) => {
+            updateFormData({ primaryCategory: e.target.value });
+          }}
+        >
+          <option value="">-- Select a Category --</option>
+          {EVENT_CATEGORIES.map(cat => (
+            <option key={cat.slug} value={cat.slug}>{cat.name}</option>
+          ))}
+        </select>
+        {errors.primaryCategory && <span className={styles['step-form__error-message']}>{errors.primaryCategory}</span>}
+      </div>
+
+      <div className={styles['step-form__group']}>
+        <label htmlFor="customTags" className={styles['step-form__label']}>Custom Tags (Optional, max 3)</label>
         <input
           type="text"
-          id="categories"
-          className={`${styles['step-form__input']} ${errors.categories ? styles['step-form__input--error'] : ''}`}
-          placeholder="E.g., music, festival"
-          value={categoryInput}
-          onChange={handleCategoryChange}
+          id="customTags"
+          className={`${styles['step-form__input']} ${errors.customTags ? styles['step-form__input--error'] : ''}`}
+          placeholder="E.g., acoustic, outdoor"
+          value={customTagsText}
+          onChange={handleCustomTagsChange}
         />
-        {errors.categories && <span className={styles['step-form__error-message']}>{errors.categories}</span>}
-        <p style={{ fontSize: '0.85rem', color: '#666', marginTop: '0.25rem' }}>For this demo, simply enter category slugs separated by commas.</p>
+        {errors.customTags && <span className={styles['step-form__error-message']}>{errors.customTags}</span>}
+        <p style={{ fontSize: '0.85rem', color: '#666', marginTop: '0.25rem' }}>Separate multiple tags with commas.</p>
       </div>
 
       <div className={styles['step-form__group']}>

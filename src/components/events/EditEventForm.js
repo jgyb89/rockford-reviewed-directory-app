@@ -9,6 +9,8 @@ import imageCompression from 'browser-image-compression';
 import Cropper from 'react-easy-crop';
 import { useJsApiLoader, Autocomplete } from '@react-google-maps/api';
 
+import { EVENT_CATEGORIES } from '@/lib/constants/events';
+
 const libraries = ['places'];
 
 // --- Constants & Helpers ---
@@ -265,7 +267,8 @@ export default function EditEventForm({ initialData, locale }) {
   const [formData, setFormData] = useState({
     title: initialData.title || '',
     description: formatContentForTextarea(initialData.content),
-    categories: initialData.eventCategories?.nodes?.map(n => n.slug) || [],
+    primaryCategory: initialData.eventCategories?.nodes?.[0]?.slug || '',
+    customTags: [], // Note: _custom_tags fetching logic to be added later if exposed by GraphQL
     start_date: formatForInput(initialData.eventDetails?.startDateTime || initialData.eventDetails?.startDate || initialData.eventDetails?.start_date),
     end_date: formatForInput(initialData.eventDetails?.endDateTime || initialData.eventDetails?.endDate || initialData.eventDetails?.end_date),
     venue_name: initialData.eventDetails?.venueName || '',
@@ -278,7 +281,7 @@ export default function EditEventForm({ initialData, locale }) {
     ticket_url: initialData.eventDetails?.ticketUrl || initialData.eventDetails?.ticket_url || ''
   });
 
-  const [categoryInput, setCategoryInput] = useState(formData.categories.join(', '));
+  const [customTagsText, setCustomTagsText] = useState(formData.customTags.join(', '));
   const [errors, setErrors] = useState({});
   const [uploadStep, setUploadStep] = useState("idle");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -291,17 +294,18 @@ export default function EditEventForm({ initialData, locale }) {
 
   const updateFormData = (newData) => setFormData(prev => ({ ...prev, ...newData }));
 
-  const handleCategoryChange = (e) => {
+  const handleCustomTagsChange = (e) => {
     const val = e.target.value;
-    setCategoryInput(val);
-    updateFormData({ categories: val.split(',').map(s => s.trim()).filter(Boolean) });
+    setCustomTagsText(val);
+    updateFormData({ customTags: val.split(',').map(s => s.trim()).filter(Boolean) });
   };
 
   const validate = () => {
     const newErrors = {};
     if (!formData.title.trim()) newErrors.title = 'Title is required';
     if (!formData.description.trim()) newErrors.description = 'Description is required';
-    if (formData.categories.length === 0) newErrors.categories = 'At least one category is required';
+    if (!formData.primaryCategory) newErrors.primaryCategory = 'Please select a main category';
+    if (customTagsText.split(',').filter(Boolean).length > 3) newErrors.customTags = 'Max 3 tags allowed';
     if (!formData.start_date) newErrors.start_date = 'Start Date is required';
     if (!formData.venue_name) newErrors.venue_name = 'Venue Name is required';
     setErrors(newErrors);
@@ -354,7 +358,8 @@ export default function EditEventForm({ initialData, locale }) {
       const payload = {
         title: formData.title,
         description: formData.description,
-        categories: formData.categories,
+        primaryCategory: formData.primaryCategory,
+        customTags: formData.customTags,
         start_date: formData.start_date,
         end_date: formData.end_date,
         venue_name: formData.venue_name,
@@ -436,17 +441,33 @@ export default function EditEventForm({ initialData, locale }) {
           </div>
 
           <div>
-            <label htmlFor="categories" style={labelStyle}>Category (slugs comma separated) *</label>
+            <label htmlFor="primaryCategory" style={labelStyle}>Primary Category *</label>
+            <select
+              id="primaryCategory"
+              style={inputStyle(errors.primaryCategory)}
+              value={formData.primaryCategory}
+              onChange={(e) => updateFormData({ primaryCategory: e.target.value })}
+            >
+              <option value="">-- Select a Category --</option>
+              {EVENT_CATEGORIES.map(cat => (
+                <option key={cat.slug} value={cat.slug}>{cat.name}</option>
+              ))}
+            </select>
+            {errors.primaryCategory && <span style={{ color: '#e04c4c', fontSize: '0.85rem' }}>{errors.primaryCategory}</span>}
+          </div>
+
+          <div>
+            <label htmlFor="customTags" style={labelStyle}>Custom Tags (Optional, max 3)</label>
             <input
               type="text"
-              id="categories"
-              style={inputStyle(errors.categories)}
-              placeholder="E.g., music, festival"
-              value={categoryInput}
-              onChange={handleCategoryChange}
+              id="customTags"
+              style={inputStyle(errors.customTags)}
+              placeholder="E.g., acoustic, outdoor"
+              value={customTagsText}
+              onChange={handleCustomTagsChange}
             />
-            {errors.categories && <span style={{ color: '#e04c4c', fontSize: '0.85rem' }}>{errors.categories}</span>}
-            <p style={{ fontSize: '0.85rem', color: '#666', marginTop: '0.25rem' }}>For this demo, simply enter category slugs separated by commas.</p>
+            {errors.customTags && <span style={{ color: '#e04c4c', fontSize: '0.85rem' }}>{errors.customTags}</span>}
+            <p style={{ fontSize: '0.85rem', color: '#666', marginTop: '0.25rem' }}>Separate tags with commas.</p>
           </div>
 
           <div>

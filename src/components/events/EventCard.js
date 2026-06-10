@@ -7,8 +7,9 @@ import Link from "next/link";
 import { getLocalizedUrl } from "@/lib/constants";
 import styles from "./EventCard.module.css";
 import { formatImageUrl } from "@/lib/formatImageUrl";
+import FavoriteButton from "@/components/directory/FavoriteButton";
 
-export default function EventCard({ event, locale = 'en', viewMode = 'grid' }) {
+export default function EventCard({ event, locale = 'en', viewMode = 'grid', currentUser }) {
   if (!event) return null;
 
   const { title, databaseId, slug, content, featuredImage, eventDetails, eventCategories } = event;
@@ -70,7 +71,14 @@ export default function EventCard({ event, locale = 'en', viewMode = 'grid' }) {
         </div>
 
         <div className={styles.footer}>
-          <span>{price}</span>
+          <span className={styles.priceTag}>{price}</span>
+          <div className={styles.favoriteWrapper}>
+            <FavoriteButton 
+              listingId={databaseId} 
+              initialCurrentUser={currentUser} 
+              iconOnly={true}
+            />
+          </div>
         </div>
       </div>
     </div>

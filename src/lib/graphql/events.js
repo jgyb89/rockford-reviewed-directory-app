@@ -157,6 +157,8 @@ export async function createEventMutation(payload) {
       : null,
     price: payload.price,
     ticket_url: payload.ticket_url,
+    _primary_category: payload.primaryCategory || '',
+    _custom_tags: payload.customTags || [],
   };
 
   const mutation = `
@@ -178,16 +180,8 @@ export async function createEventMutation(payload) {
         input: {
           title: payload.title,
           content: payload.content,
-          status: "PENDING",
           featuredImageId: payload.featuredImageId || null,
           eventDetailsJson: JSON.stringify(acfData),
-          eventCategories:
-            payload.categories?.length > 0
-              ? {
-                  append: false,
-                  nodes: payload.categories.map((slug) => ({ slug })),
-                }
-              : { append: false, nodes: [] },
         },
       },
       true,
@@ -217,6 +211,8 @@ export async function updateEventMutation(databaseId, payload) {
       : null,
     price: payload.price,
     ticket_url: payload.ticket_url,
+    _primary_category: payload.primaryCategory || '',
+    _custom_tags: payload.customTags || [],
   };
 
   const mutation = `
@@ -241,13 +237,6 @@ export async function updateEventMutation(databaseId, payload) {
           content: payload.content,
           featuredImageId: payload.featuredImageId || null,
           eventDetailsJson: JSON.stringify(acfData),
-          eventCategories:
-            payload.categories?.length > 0
-              ? {
-                  append: false,
-                  nodes: payload.categories.map((slug) => ({ slug })),
-                }
-              : { append: false, nodes: [] },
         },
       },
       true,

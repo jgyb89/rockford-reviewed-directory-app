@@ -116,13 +116,16 @@ export async function getViewer() {
           isFeaturedUser
           favoriteListings {
             nodes {
+              __typename
               ... on Ccrlisting {
                 databaseId
                 title
                 slug
+                date
                 featuredImage {
                   node {
                     sourceUrl
+                    altText
                   }
                 }
                 directoryTypes {
@@ -130,11 +133,23 @@ export async function getViewer() {
                     slug
                   }
                 }
+              }
+              ... on Event {
+                databaseId
+                title
+                slug
+                date
+                featuredImage {
+                  node {
+                    sourceUrl
+                    altText
+                  }
                 }
-                }
-                }
-                }
-                ccrreviews {
+              }
+            }
+          }
+        }
+        ccrreviews {
                 nodes {
                 id
                 databaseId
