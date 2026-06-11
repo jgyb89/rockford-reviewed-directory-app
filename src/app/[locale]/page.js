@@ -2,11 +2,15 @@ import PropTypes from "prop-types";
 import { getListings } from "@/lib/api";
 import { getDictionary } from "@/lib/dictionaries";
 import HeroSlideshow from "@/components/home/HeroSlideshow";
-import HorizontalListingFeed from "@/components/home/HorizontalListingFeed";
+import PaginatedFeed from "@/components/home/PaginatedFeed";
+import CcrCard from "@/components/directory/CcrCard";
 import HomepageInfo from "@/components/home/HomepageInfo";
 import SunsetTransition from "@/components/home/SunsetTransition";
 import BeachySeoStory from "@/components/home/BeachySeoStory";
 import SeoCards from "@/components/home/SeoCards";
+import { getEvents } from "@/lib/graphql/events";
+import EventCard from "@/components/events/EventCard";
+import Link from "next/link";
 import { BASE_URL } from "@/lib/constants";
 import styles from "./page.module.css";
 
@@ -36,8 +40,42 @@ export default async function HomePage({ params }) {
     (listing) => listing.author?.node?.userData?.isFeaturedUser === true,
   );
 
-  const popularNearYou = listings.slice(0, 5);
   const feedListings = listings;
+
+  const eventsResponse = await getEvents();
+  const allEvents = eventsResponse || [];
+
+  const today = new Date();
+  const todayStr = today.toDateString();
+  const startOfToday = new Date(today);
+  startOfToday.setHours(0, 0, 0, 0);
+
+  const todayAndWeekendEvents = allEvents
+    .filter((event) => {
+      const rawDate = event.eventDetails?.startDateTime || event.date;
+      if (!rawDate) return false;
+      const eventDate = new Date(rawDate.replace(" ", "T"));
+
+      // Skip past events entirely unless they are today
+      if (eventDate < startOfToday && eventDate.toDateString() !== todayStr) {
+        return false;
+      }
+
+      const isToday = eventDate.toDateString() === todayStr;
+      const isWeekend =
+        eventDate >= startOfToday && [0, 5, 6].includes(eventDate.getDay());
+
+      return isToday || isWeekend;
+    })
+    .sort((a, b) => {
+      const dateA = new Date(
+        (a.eventDetails?.startDateTime || a.date).replace(" ", "T"),
+      );
+      const dateB = new Date(
+        (b.eventDetails?.startDateTime || b.date).replace(" ", "T"),
+      );
+      return dateA - dateB;
+    });
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -62,12 +100,31 @@ export default async function HomePage({ params }) {
 
       {/* Main Content Layout - REPLACED WITH HORIZONTAL ROW */}
       <div className={styles.container}>
-        <HorizontalListingFeed
-          listings={feedListings}
-          currentUser={currentUser}
-          dict={dict.home}
-          locale={locale}
-        />
+        {/* Popular Listings Section */}
+        <PaginatedFeed
+          title="Popular Near You"
+          viewAllLink="/directory"
+          viewAllText="View All Listings"
+        >
+          {feedListings.map((listing) => (
+            <CcrCard
+              key={listing.databaseId}
+              listing={listing}
+              locale={locale}
+            />
+          ))}
+        </PaginatedFeed>
+
+        {/* Today & Weekend Events Section */}
+        <PaginatedFeed
+          title="Today & Weekend Events"
+          viewAllLink="/events"
+          viewAllText="View All Events"
+        >
+          {todayAndWeekendEvents.map((event) => (
+            <EventCard key={event.databaseId} event={event} locale={locale} />
+          ))}
+        </PaginatedFeed>
       </div>
 
       {/* Homepage Info Section */}
@@ -76,7 +133,13 @@ export default async function HomePage({ params }) {
       {/* Coastal Sunrise GSAP Journey & SEO Story */}
       <BeachySeoStory />
 
-      <section style={{ backgroundColor: "#ffffff", padding: "4rem 0", overflowX: "hidden" }}>
+      <section
+        style={{
+          backgroundColor: "#ffffff",
+          padding: "4rem 0",
+          overflowX: "hidden",
+        }}
+      >
         <div className={styles.container}>
           <SeoCards />
         </div>

@@ -27,7 +27,7 @@ export default function NewsletterTestimonial() {
           
           <blockquote style={{ margin: 0, position: "relative", zIndex: 1 }}>
             <p style={{ fontSize: "1.5rem", color: "#333", fontStyle: "italic", lineHeight: "1.6", marginBottom: "2rem" }}>
-              "I used to spend hours figuring out what to do on the weekends. Now I just wait for the Friday email from Cape Coral Reviewed!"
+              {"\"I used to spend hours figuring out what to do on the weekends. Now I just wait for the Friday email from Cape Coral Reviewed!\""}
             </p>
             <footer>
               <strong style={{ fontSize: "1.1rem", color: "#111", display: "block" }}>Sarah M.</strong>

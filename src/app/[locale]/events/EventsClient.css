@@ -29,6 +29,7 @@
 /* Category Filter Bar */
 .category-filter-bar {
   display: flex;
+  justify-content: center;
   overflow-x: auto;
   gap: 1.5rem;
   padding: 1rem 0 2rem 0;

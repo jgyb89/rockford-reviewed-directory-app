@@ -56,12 +56,12 @@ const SeoIntro = forwardRef((props, ref) => {
         if (isDesktop) {
           // Slide down vertically with a slight angle for the track
           gsap.set(trackRef.current, {
-            rotation: -4,
+            rotation: -2,
             yPercent: 0,
             xPercent: 0,
           });
           gsap.to(trackRef.current, {
-            yPercent: 50,
+            yPercent: 60,
             xPercent: 0,
             ease: "none",
             scrollTrigger: {
