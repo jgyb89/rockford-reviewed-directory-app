@@ -66,7 +66,8 @@ export async function getEvents() {
     const json = await fetchGraphQL(query, {}, false);
     return json.data?.events?.nodes || [];
   } catch (error) {
-    console.error("Error fetching events:", error);
+    const safeError = error?.message ? error.message.replace(/[\r\n]+/g, '') : 'Unknown error';
+    console.error(`Error fetching events: ${safeError}`);
     return [];
   }
 }
