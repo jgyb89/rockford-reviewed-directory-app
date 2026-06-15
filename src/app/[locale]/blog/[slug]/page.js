@@ -8,6 +8,8 @@ import { formatImageUrl } from "@/lib/formatImageUrl";
 import BlogSidebar from "@/components/blog/BlogSidebar";
 import BackButton from "@/components/blog/BackButton";
 import NewsletterWidget from '@/components/blog/NewsletterWidget';
+import BlogComments from "@/components/blog/BlogComments";
+import { getViewer } from "@/lib/auth";
 import "./BlogPost.css";
 
 export async function generateMetadata({ params }) {
@@ -30,6 +32,7 @@ export async function generateMetadata({ params }) {
 export default async function BlogPostPage({ params }) {
   const { slug, locale } = await params;
   const post = await getBlogPostBySlug(slug);
+  const viewer = await getViewer();
 
   if (!post) {
     notFound();
@@ -174,6 +177,13 @@ export default async function BlogPostPage({ params }) {
         <div className="blog-post__content">
           {parse(sanitizedContent, parseOptions)}
         </div>
+
+        {/* Inject Gated Comments Here */}
+        <BlogComments 
+          postId={post.databaseId} 
+          initialComments={post.comments?.nodes} 
+          currentUser={viewer} 
+        />
       </article>
 
       <BlogSidebar locale={locale} />
