@@ -1,29 +1,124 @@
-.backToTopBtn {
+/* Container holding the entire FAB system */
+.fabContainer {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
   z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* The invisible wrapper for the list of buttons */
+.menu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/* Accordion animation starting state */
+.menuItemWrapper {
+  opacity: 0;
+  transform: translateY(30px) scale(0.8);
+  transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  pointer-events: none;
+}
+
+/* Accordion animation open state */
+.menu.open .menuItemWrapper {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Individual Link/Action Buttons */
+.itemBtn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Anchors the icon to the right */
   background-color: #1e293b;
   color: #ffffff;
   border: none;
-  border-radius: 50%;
+  border-radius: 25px; /* Creates the perfect circle initially */
+  height: 50px;
+  width: 50px; /* Starts collapsed as a circle */
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition:
+    width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0.3s ease;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+/* Leftward Expansion on Hover */
+.itemBtn:hover,
+.itemBtn:focus {
+  width: 240px; /* Wide enough to fit "Join Facebook Group" */
+  background-color: #e04c4c;
+  outline: none;
+}
+
+/* Text inside the expanding button */
+.itemLabel {
+  opacity: 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding-left: 16px;
+  flex-grow: 1;
+  text-align: left;
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+/* Fade text in shortly after the expansion starts */
+.itemBtn:hover .itemLabel {
+  opacity: 1;
+  transition-delay: 0.1s;
+}
+
+/* Icon inside the expanding button */
+.icon {
   width: 50px;
   height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  transition: all 0.3s ease;
-}
-
-.backToTopBtn:hover,
-.backToTopBtn:focus {
-  background-color: #e04c4c;
-  transform: translateY(-3px);
-  outline: none;
-}
-
-.backToTopIcon {
+  flex-shrink: 0;
   font-size: 1.5rem;
+}
+
+/* Main Trigger Button */
+.mainBtn {
+  background-color: #e04c4c;
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 60px; /* Slightly larger than the item buttons */
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.mainBtn:hover {
+  transform: scale(1.05);
+  background-color: #c93d3d;
+}
+
+.mainIcon {
+  font-size: 2rem;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Rotates the '+' into an 'x' when open */
+.mainIcon.rotate {
+  transform: rotate(135deg);
 }

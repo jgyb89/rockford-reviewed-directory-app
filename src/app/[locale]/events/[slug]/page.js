@@ -103,7 +103,10 @@ export default async function SingleEventPage({ params }) {
   const cleanDateRange = formatEventbriteDateRange(rawStartDate, rawEndDate);
   
   const venueName = eventDetails?.venueName || "Venue TBA";
-  const price = eventDetails?.price || "Free";
+  const rawPrice = eventDetails?.price || "Free";
+  const price = (rawPrice.toLowerCase() !== "free" && !rawPrice.startsWith("$")) 
+    ? `$${rawPrice}` 
+    : rawPrice;
   const ticketUrl = eventDetails?.ticketUrl || eventDetails?.ticket_url;
 
   const addressObj = eventDetails?.eventAddress;

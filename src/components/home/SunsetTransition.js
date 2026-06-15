@@ -390,10 +390,7 @@ export default function SunsetTransition() {
         {/* Floating Intro Modal */}
         <div ref={modalRef} className={styles.introModal}>
           <div className={styles.modalContent}>
-            <h2
-              className={styles.modalTitle}
-              style={{ textAlign: "center", marginBottom: "1.5rem" }}
-            >
+            <h2 className={styles.modalTitle}>
               Explore Cape Coral
             </h2>
             <div className={styles.categoryGrid}>

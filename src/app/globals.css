@@ -245,3 +245,44 @@ h6 {
     order: 2;
   }
 }
+
+/* Reusable 80% Mobile Peek Carousel */
+.peek-carousel {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+/* Tablet: 3 columns */
+@media (max-width: 1024px) {
+  .peek-carousel {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Mobile: Horizontal scroll, 80% peek */
+@media (max-width: 768px) {
+  .peek-carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    scrollbar-width: none; /* Hide Firefox scrollbar */
+    -webkit-overflow-scrolling: touch;
+  }
+  .peek-carousel::-webkit-scrollbar {
+    display: none; /* Hide Safari/Chrome scrollbar */
+  }
+  .peek-carousel > * {
+    flex: 0 0 80%;
+    scroll-snap-align: start;
+    min-width: 0;
+  }
+}
+
+/* Ensure favorited alert overlays are decoupled from local relative scopes */
+.toast-notification-container,
+.react-toastify {
+  z-index: 999999 !important;
+}

@@ -40,8 +40,8 @@
   position: absolute;
   bottom: 10px; /* centers the 44px item behind 64px button */
   right: 10px;
-  width: 65px;
-  height: 65px;
+  width: 64px; /* Starts uniformly as a 64px circle */
+  height: 64px; /* Matches button height */
   border-radius: 99px;
   background-color: white;
   color: #1a1a1a;
@@ -49,23 +49,52 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end; /* Keeps icon pinned to right */
+  padding-right: 21px; /* Centers the 20px icon exactly */
+  box-sizing: border-box; /* Width stays 64px despite padding */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   text-decoration: none;
   z-index: 1;
   opacity: 0;
-  transform: scale(0);
   pointer-events: none; /* handled by GSAP */
+  overflow: hidden; /* Hides text by default */
+  /* Combine layout transition for width expanding */
   transition:
+    width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
     background-color 0.2s,
     color 0.2s,
     box-shadow 0.2s;
 }
 
 .fabItem:hover {
+  width: 250px; /* Expands to the left because right is anchored */
   background-color: #f8fafc;
   color: #e94f37;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* New Label styling */
+.fabLabel {
+  white-space: nowrap;
+  margin-right: 16px;
+  font-weight: 500;
+  font-size: 15px;
+  opacity: 0;
+  transform: translateX(10px);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.fabItem:hover .fabLabel {
+  opacity: 1;
+  transform: translateX(0);
+  transition-delay: 0.1s; /* Slight delay feels more organic */
+}
+
+/* Prevent SVG from squishing during transitions */
+.fabIcon {
+  flex-shrink: 0;
 }
 
 @media (max-width: 768px) {

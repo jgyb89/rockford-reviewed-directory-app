@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import styles from './BackToTop.module.css';
+import { useState, useEffect } from "react";
+import styles from "./BackToTop.module.css";
 
 export default function BackToTop() {
   const [isVisible, setIsVisible] = useState(false);
@@ -17,13 +17,13 @@ export default function BackToTop() {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', toggleVisibility);
-    return () => window.removeEventListener('scroll', toggleVisibility);
+    window.addEventListener("scroll", toggleVisibility);
+    return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 
   if (!isVisible) return null;
@@ -34,7 +34,9 @@ export default function BackToTop() {
       aria-label="Back to top"
       className={styles.backToTopBtn}
     >
-      <span className={`material-symbols-outlined ${styles.backToTopIcon}`}>arrow_upward</span>
+      <span className={`material-symbols-outlined ${styles.backToTopIcon}`}>
+        arrow_upward
+      </span>
     </button>
   );
 }

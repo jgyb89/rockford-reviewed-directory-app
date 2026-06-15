@@ -1,0 +1,47 @@
+.paginatedContainer {
+  padding: 1rem 0;
+}
+
+.paginatedHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+.paginatedLink {
+  color: #e04c4c;
+  background: transparent;
+  border: none;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.paginatedLink:hover {
+  color: #2e2e2e;
+}
+
+.paginiatedLoadMore {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0 0;
+}
+
+.paginiatedLoadMoreButton {
+  color: #e04c4c;
+  background: transparent;
+  border: none;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 480px) {
+  .paginiatedLoadMore {
+    display: none;
+  }
+}

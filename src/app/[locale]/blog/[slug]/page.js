@@ -7,6 +7,7 @@ import { getBlogPostBySlug } from "@/lib/actions";
 import { formatImageUrl } from "@/lib/formatImageUrl";
 import BlogSidebar from "@/components/blog/BlogSidebar";
 import BackButton from "@/components/blog/BackButton";
+import NewsletterWidget from '@/components/blog/NewsletterWidget';
 import "./BlogPost.css";
 
 export async function generateMetadata({ params }) {
@@ -45,10 +46,27 @@ export default async function BlogPostPage({ params }) {
     .join(", ");
 
   const rawContent = post.content || "";
-  // Extract valid video src URLs and swap the entire iframe for a safe div placeholder
-  const contentWithSafePlaceholders = rawContent.replace(
+
+  // 1. Extract valid video src URLs and swap the entire iframe for a safe div placeholder
+  let contentWithSafePlaceholders = rawContent.replace(
     /<iframe[^>]*src="(https:\/\/(?:www\.)?(?:youtube\.com|youtu\.be|player\.vimeo\.com|tiktok\.com)[^"]*)"[^>]*>[\s\S]*?<\/iframe>/gi,
     '<div class="secure-video-embed" data-src="$1"></div>'
+  );
+
+  // 2. Safely extract Newsletter Shortcode OUT of <p> tags to prevent React Hydration errors
+  contentWithSafePlaceholders = contentWithSafePlaceholders.replace(
+    /<p>([\s\S]*?)\[newsletter_widget\]([\s\S]*?)<\/p>/gi,
+    (match, before, after) => {
+      const beforeHtml = before.trim() ? `<p>${before}</p>` : '';
+      const afterHtml = after.trim() ? `<p>${after}</p>` : '';
+      return `${beforeHtml}<div class="newsletter-widget-placeholder"></div>${afterHtml}`;
+    }
+  );
+
+  // 3. Catch any remaining shortcodes that were not wrapped in <p> tags
+  contentWithSafePlaceholders = contentWithSafePlaceholders.replace(
+    /\[newsletter_widget\]/gi,
+    '<div class="newsletter-widget-placeholder"></div>'
   );
 
   const sanitizedContent = DOMPurify.sanitize(contentWithSafePlaceholders, {
@@ -98,6 +116,11 @@ export default async function BlogPostPage({ params }) {
             />
           </div>
         );
+      }
+
+      // 2. Newsletter Widget Logic
+      if (domNode.name === 'div' && domNode.attribs?.class === 'newsletter-widget-placeholder') {
+        return <NewsletterWidget />;
       }
     }
   };

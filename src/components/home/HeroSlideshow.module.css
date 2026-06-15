@@ -1,0 +1,245 @@
+.emptyState {
+  width: 100%;
+  height: 500px;
+  background-color: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroSection {
+  position: relative;
+  width: 100%;
+  margin-bottom: 140px;
+}
+
+.carouselViewport {
+  overflow: hidden;
+  position: relative;
+  height: 70vh;
+  min-height: 500px;
+}
+
+.carouselContainer {
+  display: flex;
+  height: 100%;
+}
+
+.carouselSlide {
+  flex: 0 0 100%;
+  min-width: 0;
+  position: relative;
+  height: 100%;
+}
+
+.gradientOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0) 100%);
+}
+
+.slideContent {
+  position: absolute;
+  bottom: 160px;
+  left: 10%;
+  color: white;
+  z-index: 10;
+}
+
+.slideCategory {
+  display: inline-block;
+  padding: 4px 12px;
+  background-color: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.slideLink {
+  text-decoration: none;
+  color: white;
+}
+
+.slideTitle {
+  font-size: 3.5rem;
+  font-weight: bold;
+  margin: 0;
+  color: #fff;
+}
+
+.controlButton {
+  position: absolute;
+  background: rgba(0,0,0,0.3);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.playPauseButton {
+  bottom: 110px;
+  left: 20px;
+}
+
+.navButtonLeft {
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.navButtonRight {
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.searchCard {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  width: 90%;
+  max-width: 960px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+  padding: 24px 32px;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.searchCardTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0;
+  text-align: center;
+}
+
+.searchForm {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 30px;
+  padding: 4px 16px;
+  background-color: #ffffff;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.searchForm:focus-within {
+  border-color: #e04c4c;
+  box-shadow: 0 0 0 3px rgba(224, 76, 76, 0.15);
+}
+
+.searchIcon {
+  color: #64748b;
+  font-size: 22px;
+  margin-left: 4px;
+  cursor: default;
+  user-select: none;
+}
+
+.searchInput {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 0.95rem;
+  color: #2d3748;
+  padding: 10px 12px;
+  background-color: transparent;
+}
+
+.pillsSection {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  align-items: center;
+}
+
+.pillsTrack {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  width: 100%;
+  padding: 4px 0;
+  scroll-behavior: smooth;
+}
+
+.pillsTrack::-webkit-scrollbar {
+  display: none !important;
+}
+
+.pillButton {
+  flex-shrink: 0;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pillButtonInactive {
+  border-color: #e2e8f0;
+  background-color: #f7fafc;
+  color: #4a5568;
+}
+
+.pillButtonInactive:hover {
+  background-color: #edf2f7;
+  border-color: #cbd5e0;
+  color: #2d3748;
+}
+
+.pillButtonActive {
+  border-color: #e04c4c;
+  background-color: #e04c4c;
+  color: #ffffff;
+}
+
+.pillScrollButton {
+  position: absolute;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  cursor: pointer;
+  z-index: 10;
+  color: #4a5568;
+  transition: background-color 0.2s;
+}
+
+.pillScrollButton:hover {
+  background-color: #f7fafc;
+}
+
+.pillScrollLeft {
+  left: -12px;
+}
+
+.pillScrollRight {
+  right: -12px;
+}

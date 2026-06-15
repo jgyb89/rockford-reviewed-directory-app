@@ -1,0 +1,58 @@
+.testimonialSection {
+  background-color: #f8f9fa;
+  padding: 6rem 1.5rem;
+}
+
+.testimonialContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.mainTitle {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 3rem;
+  font-family: var(--font-heading);
+}
+
+.quoteWrapper {
+  position: relative;
+}
+
+.quoteIcon {
+  font-size: 4rem;
+  color: #e2e8f0;
+  position: absolute;
+  top: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
+.blockquoteContent {
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.quoteText {
+  font-size: 1.5rem;
+  color: #333;
+  font-style: italic;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.authorName {
+  font-size: 1.1rem;
+  color: #111;
+  display: block;
+  font-weight: 700;
+}
+
+.authorTitle {
+  font-size: 1rem;
+  color: #666;
+}

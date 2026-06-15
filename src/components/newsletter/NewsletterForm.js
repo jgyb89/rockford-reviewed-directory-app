@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { submitNewsletterForm } from "@/lib/actions";
+import styles from "./NewsletterForm.module.css";
 
 export default function NewsletterForm() {
-  const [status, setStatus] = useState("idle"); // 'idle' | 'loading' | 'success' | 'error'
+  const [status, setStatus] = useState("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e) => {
@@ -25,57 +26,33 @@ export default function NewsletterForm() {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "0 auto", width: "100%" }}>
-      <form
-        onSubmit={handleSubmit}
-        style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
-      >
+    <div className={styles.formWrapper}>
+      <form onSubmit={handleSubmit} className={styles.formContainer}>
         {status === "success" ? (
-          <div style={{ padding: "1rem", backgroundColor: "#e6fffa", color: "#234e52", borderRadius: "8px", border: "1px solid #b2f5ea" }}>
-            <p style={{ margin: 0, fontWeight: "600" }}>Thanks for subscribing! Keep an eye on your inbox.</p>
+          <div className={styles.successBox}>
+            <p className={styles.successText}>Thanks for subscribing! Keep an eye on your inbox.</p>
           </div>
         ) : (
           <>
-            <div style={{ display: "flex", width: "100%", boxShadow: "0 4px 6px rgba(0,0,0,0.05)", borderRadius: "8px", overflow: "hidden" }}>
+            <div className={styles.inputGroup}>
               <input
                 type="email"
                 name="email"
-                placeholder="Enter your email address"
-                disabled={status === "loading"}
+                placeholder="Email Address"
                 required
-                style={{
-                  flex: 1,
-                  padding: "1rem 1.25rem",
-                  border: "1px solid #e2e8f0",
-                  borderRight: "none",
-                  borderRadius: "8px 0 0 8px",
-                  fontSize: "1rem",
-                  outline: "none",
-                  width: "100%"
-                }}
+                className={styles.inputField}
+                disabled={status === "loading"}
               />
               <button 
                 type="submit" 
                 disabled={status === "loading"} 
-                style={{
-                  padding: "1rem 1.5rem",
-                  backgroundColor: "#e94f37", // brand red
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "0 8px 8px 0",
-                  fontWeight: "600",
-                  fontSize: "1rem",
-                  cursor: status === "loading" ? "not-allowed" : "pointer",
-                  transition: "background-color 0.2s"
-                }}
-                onMouseEnter={(e) => { if (status !== "loading") e.target.style.backgroundColor = "#c93d28"; }}
-                onMouseLeave={(e) => { if (status !== "loading") e.target.style.backgroundColor = "#e94f37"; }}
+                className={styles.submitButton}
               >
                 {status === "loading" ? "..." : "Subscribe"}
               </button>
             </div>
             {status === "error" && (
-              <p style={{ color: "#e04c4c", fontSize: "0.875rem", margin: 0, textAlign: "left" }}>{errorMessage}</p>
+              <p className={styles.errorText}>{errorMessage}</p>
             )}
           </>
         )}

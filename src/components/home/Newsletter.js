@@ -126,7 +126,7 @@ export default function Newsletter() {
               src="/cape-coral-newsletter-pilates.png"
               alt="Pilates in Cape Coral"
               fill
-              style={{ objectFit: "cover" }}
+              className={styles.imageFit}
             />
           </div>
           <div
@@ -137,7 +137,7 @@ export default function Newsletter() {
               src="/cape-coral-newsletter-bike-night.png"
               alt="Cape Coral Bike Night"
               fill
-              style={{ objectFit: "cover" }}
+              className={styles.imageFit}
             />
           </div>
         </div>
@@ -145,11 +145,11 @@ export default function Newsletter() {
         {/* RIGHT COLUMN: Form */}
         <div className={styles.formColumn}>
           <div className={styles.headlineMaskContainer}>
-            <h2 className="breeze-text" style={{ color: "#1a1a1a" }}>
+            <h2 className="breeze-text">
               Stay Updated on Cape Coral
             </h2>
           </div>
-          <p className="breeze-text" style={{ color: "#4a4a4a" }}>
+          <p className="breeze-text">
             Want the latest Cape Coral business reviews, restaurant features,
             event coverage, and local recommendations delivered straight to your
             inbox?

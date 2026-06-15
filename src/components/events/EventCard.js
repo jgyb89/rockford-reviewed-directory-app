@@ -25,7 +25,10 @@ export default function EventCard({ event, locale = 'en', viewMode = 'grid', cur
     startDate = `${startDate} - ${endDate}`;
   }
   const venueName = eventDetails?.venueName || "TBA";
-  const price = eventDetails?.price || "Free";
+  const rawPrice = eventDetails?.price || "Free";
+  const price = (rawPrice.toLowerCase() !== "free" && !rawPrice.startsWith("$")) 
+    ? `$${rawPrice}` 
+    : rawPrice;
   
   const descriptionSnippet = content ? (content.slice(0, 1000).replace(/<[^<>]+>/g, '').substring(0, 100) + (content.length > 100 ? '...' : '')) : '';
 

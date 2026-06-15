@@ -8,11 +8,12 @@ const EXPLORE_LINKS = [
   { name: "Restaurants & Dining", href: "/directory/food-drink" },
   { name: "Home Services", href: "/directory/home-local-services" },
   { name: "Recommend a Business", href: "/recommend" },
+  { name: "Newsletter", href: "/newsletter" },
 ];
 
 const QUICK_LINKS = [
   { name: "About Us", href: "/about" },
-  { name: "Events", href: "/events" },
+  // { name: "Events", href: "/events" },
   { name: "Contact", href: "/contact" },
   { name: "Business Login", href: "/login" },
   { name: "Create an Account", href: "/register" },
@@ -28,7 +29,10 @@ export default function Footer({ locale = "en" }) {
         <div className={styles["footer__top"]}>
           {/* Column 1: Brand & About */}
           <div className={styles["footer__col"]}>
-            <Link href={getLocalizedUrl("/", locale)} className={styles["footer__logo"]}>
+            <Link
+              href={getLocalizedUrl("/", locale)}
+              className={styles["footer__logo"]}
+            >
               <Image
                 src="/cape-coral-reviewed-logo.webp"
                 alt="Cape Coral Reviewed"

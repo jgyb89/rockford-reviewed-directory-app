@@ -41,6 +41,10 @@
   align-items: center;
 }
 
+.imageFit {
+  object-fit: cover;
+}
+
 .imageWrapper {
   position: absolute;
   width: 400px;

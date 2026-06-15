@@ -371,28 +371,12 @@ export default async function DirectoryListingPage({ params }) {
 
         <section className="listing-card">
           <h2 className="listing-card__title">
-            <span className="material-symbols-outlined">schedule</span>{" "}
-            {t.businessHours || "Business Hours"}
-          </h2>
-          {hours.map((h) => (
-            <div
-              key={h.day}
-              className="listing-card__item"
-              style={{ justifyContent: "space-between" }}
-            >
-              <span style={{ fontWeight: 600 }}>{h.day}</span>
-              <span>{h.time || (t.closed || "Closed")}</span>
-            </div>
-          ))}
-        </section>
-
-        <section className="listing-card">
-          <h2 className="listing-card__title">
             <span className="material-symbols-outlined">description</span>{" "}
             {t.aboutBusiness || "About the Business"}
           </h2>
           <div
             className="listing-card__text"
+            style={{ whiteSpace: "pre-wrap" }}
             dangerouslySetInnerHTML={{ __html: cleanContent }}
           />
         </section>
@@ -456,6 +440,23 @@ export default async function DirectoryListingPage({ params }) {
           isClaimed={listing.listingdata?.isClaimed === "true"}
           dict={dict}
         />
+
+        <section className="listing-card">
+          <h2 className="listing-card__title">
+            <span className="material-symbols-outlined">schedule</span>{" "}
+            {t.businessHours || "Business Hours"}
+          </h2>
+          {hours.map((h) => (
+            <div
+              key={h.day}
+              className="listing-card__item"
+              style={{ justifyContent: "space-between" }}
+            >
+              <span style={{ fontWeight: 600 }}>{h.day}</span>
+              <span>{h.time || (t.closed || "Closed")}</span>
+            </div>
+          ))}
+        </section>
         <BlogSidebar locale={locale} />
       </aside>
     </div>

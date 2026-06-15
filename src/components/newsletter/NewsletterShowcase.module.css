@@ -1,0 +1,57 @@
+.showcaseSection {
+  padding: 4rem 0;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  background: #e94f37; /* Initial color */
+  color: #fff;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.showcaseHeader {
+  padding: 0 2rem;
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.galleryContainer {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.track {
+  display: flex;
+  gap: 2rem;
+  width: max-content;
+  padding-left: 2rem;
+}
+
+.imageCard {
+  flex: 0 0 auto;
+  width: 320px;
+  height: 400px; /* Base height (like imgPilates) */
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  overflow: hidden; /* This naturally clips the bottom quarter of the image */
+  position: relative;
+  transform: translateY(0);
+  transition: transform 0.3s ease;
+}
+
+/* Stagger the heights like the homepage */
+.imageCard:nth-child(even) {
+  height: 500px; /* Taller height (like imgBikeNight) */
+  margin-top: 2rem;
+}
+
+.imageCard:hover {
+  transform: translateY(-10px);
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%; 
+}

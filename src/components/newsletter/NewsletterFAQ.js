@@ -1,5 +1,6 @@
 import React from "react";
 import Script from "next/script";
+import styles from "./NewsletterFAQ.module.css";
 
 export default function NewsletterFAQ() {
   const faqs = [
@@ -17,7 +18,6 @@ export default function NewsletterFAQ() {
     }
   ];
 
-  // Generate FAQPage JSON-LD Schema
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -32,41 +32,24 @@ export default function NewsletterFAQ() {
   };
 
   return (
-    <section style={{ backgroundColor: "#fff", padding: "6rem 1.5rem" }}>
-      {/* Inject Schema Markup */}
+    <section className={styles.faqSection}>
       <Script
         id="faq-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-
-      <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-        
-        <div style={{ textAlign: "center", marginBottom: "4rem" }}>
-          <h2 style={{ fontSize: "2.5rem", fontWeight: "800", color: "#111", fontFamily: "var(--font-heading)" }}>
-            Frequently Asked Questions
-          </h2>
+      <div className={styles.faqContainer}>
+        <div className={styles.faqHeader}>
+          <h2 className={styles.faqMainTitle}>Frequently Asked Questions</h2>
         </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-          {faqs.map((faq, index) => (
-            <div 
-              key={index} 
-              style={{ 
-                borderBottom: index !== faqs.length - 1 ? "1px solid #eaeaea" : "none",
-                paddingBottom: index !== faqs.length - 1 ? "2rem" : "0"
-              }}
-            >
-              <h3 style={{ fontSize: "1.25rem", fontWeight: "700", color: "#111", marginBottom: "1rem" }}>
-                {faq.question}
-              </h3>
-              <p style={{ color: "#4a4a4a", lineHeight: "1.6", margin: 0 }}>
-                {faq.answer}
-              </p>
+        <div className={styles.faqList}>
+          {faqs.map((faq) => (
+            <div key={faq.question} className={styles.faqItem}>
+              <h3 className={styles.questionTitle}>{faq.question}</h3>
+              <p className={styles.answerText}>{faq.answer}</p>
             </div>
           ))}
         </div>
-
       </div>
     </section>
   );
