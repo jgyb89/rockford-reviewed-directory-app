@@ -23,8 +23,8 @@ export default function NewsletterFeatures() {
   return (
     <section className={styles.featuresSection}>
       <div className={styles.featuresGrid}>
-        {features.map((feature, index) => (
-          <div key={index} className={styles.featureCard}>
+        {features.map((feature) => (
+          <div key={feature.title} className={styles.featureCard}>
             <div className={styles.iconWrapper}>
               <span className={`material-symbols-outlined ${styles.icon}`}>
                 {feature.icon}

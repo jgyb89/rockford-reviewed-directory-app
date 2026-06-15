@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, memo } from 'react';
+import PropTypes from 'prop-types';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 
 const containerStyle = {
@@ -88,3 +89,14 @@ export default function EventMap({ lat, lng, address }) {
   // Activated State (Executes Google Maps Script)
   return <ActiveMapCanvas lat={lat} lng={lng} />;
 }
+
+ActiveMapCanvas.propTypes = {
+  lat: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  lng: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+};
+
+EventMap.propTypes = {
+  lat: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  lng: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  address: PropTypes.string,
+};

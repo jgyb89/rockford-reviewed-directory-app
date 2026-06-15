@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import Link from "next/link";
 import styles from "./PaginatedFeed.module.css";
 
@@ -47,3 +48,10 @@ export default function PaginatedFeed({
     </section>
   );
 }
+
+PaginatedFeed.propTypes = {
+  title: PropTypes.string,
+  viewAllLink: PropTypes.string,
+  viewAllText: PropTypes.string,
+  children: PropTypes.node,
+};

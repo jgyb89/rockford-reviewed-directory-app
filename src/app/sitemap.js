@@ -25,7 +25,7 @@ export default async function sitemap() {
   ];
 
   const staticEntries = staticPages.map((path) => ({
-    url: `${BASE_URL}${getLocalizedUrl(path, "en")}`,
+    url: BASE_URL + getLocalizedUrl(path, "en"),
     lastModified: new Date(),
     changeFrequency: "daily",
     priority: path === "" ? 1.0 : 0.8,
@@ -33,7 +33,7 @@ export default async function sitemap() {
 
   // Map Main Directory Types (e.g. /directory/food-drink)
   const directoryTypeEntries = DIRECTORY_TYPES.map((type) => ({
-    url: `${BASE_URL}/directory/${type.slug}`,
+    url: BASE_URL + "/directory/" + type.slug,
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: 0.9,
@@ -56,7 +56,7 @@ export default async function sitemap() {
 
 
     return {
-      url: `${BASE_URL}${path}`,
+      url: BASE_URL + path,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
@@ -64,21 +64,21 @@ export default async function sitemap() {
   }).filter(Boolean);
 
   const listingEntries = listings.map((listing) => ({
-    url: `${BASE_URL}${getLocalizedUrl(`/listing/${listing.slug}`, "en")}`,
+    url: BASE_URL + getLocalizedUrl("/listing/" + listing.slug, "en"),
     lastModified: new Date(listing.date || new Date()),
     changeFrequency: "weekly",
     priority: 0.7,
   }));
 
   const postEntries = posts.map((post) => ({
-    url: `${BASE_URL}${getLocalizedUrl(`/blog/${post.slug}`, "en")}`,
+    url: BASE_URL + getLocalizedUrl("/blog/" + post.slug, "en"),
     lastModified: new Date(post.date || new Date()),
     changeFrequency: "monthly",
     priority: 0.6,
   }));
 
   const eventEntries = events.map((event) => ({
-    url: `${BASE_URL}${getLocalizedUrl(`/events/${event.slug}`, "en")}`,
+    url: BASE_URL + getLocalizedUrl("/events/" + event.slug, "en"),
     lastModified: new Date(event.date || new Date()),
     changeFrequency: "weekly",
     priority: 0.7,

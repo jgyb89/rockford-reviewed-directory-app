@@ -61,7 +61,7 @@ export default function NewsletterShowcase() {
         {/* We map the images array twice to create a seamless infinite loop */}
         <div ref={trackRef} className={styles.track}>
           {[...images, ...images].map((img, i) => (
-            <div key={i} className={styles.imageCard}>
+            <div key={`${img}-${i}`} className={styles.imageCard}>
               <div className={styles.imageWrapper}>
                 <Image
                   src={img}

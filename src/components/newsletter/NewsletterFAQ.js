@@ -43,8 +43,8 @@ export default function NewsletterFAQ() {
           <h2 className={styles.faqMainTitle}>Frequently Asked Questions</h2>
         </div>
         <div className={styles.faqList}>
-          {faqs.map((faq, index) => (
-            <div key={index} className={styles.faqItem}>
+          {faqs.map((faq) => (
+            <div key={faq.question} className={styles.faqItem}>
               <h3 className={styles.questionTitle}>{faq.question}</h3>
               <p className={styles.answerText}>{faq.answer}</p>
             </div>

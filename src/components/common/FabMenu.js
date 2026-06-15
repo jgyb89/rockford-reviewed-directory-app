@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
 import gsap from "gsap";
 import {
   ArrowUp,
@@ -263,3 +264,12 @@ export default function FabMenu() {
     </div>
   );
 }
+
+const iconPropTypes = {
+  size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+};
+
+FacebookIcon.propTypes = iconPropTypes;
+TikTokIcon.propTypes = iconPropTypes;
+InstagramIcon.propTypes = iconPropTypes;
+YoutubeIcon.propTypes = iconPropTypes;

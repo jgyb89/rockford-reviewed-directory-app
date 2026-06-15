@@ -10,7 +10,6 @@ import BeachySeoStory from "@/components/home/BeachySeoStory";
 import SeoCards from "@/components/home/SeoCards";
 import { getEvents } from "@/lib/graphql/events";
 import EventCard from "@/components/events/EventCard";
-import Link from "next/link";
 import { BASE_URL } from "@/lib/constants";
 import styles from "./page.module.css";
 
@@ -31,9 +30,7 @@ export const metadata = {
 
 export default async function HomePage({ params }) {
   const { locale } = await params;
-  const dict = await getDictionary(locale);
   const listings = await getListings();
-  const currentUser = null;
 
   // Strict filter: only listings where the author is featured
   const featuredListings = listings.filter(
