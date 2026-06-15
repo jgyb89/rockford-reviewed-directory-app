@@ -36,14 +36,17 @@ export async function fetchGraphQL(query, variables = {}, requireAuth = true) {
     }
     const contentType = res.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
-      console.error(`Unexpected content-type inside fetchGraphQL: ${contentType}`);
+      // Strip newline characters to prevent Log Forging attacks
+      const safeContentType = contentType ? contentType.replace(/[\r\n]+/g, '') : 'null';
+      console.error(`Unexpected content-type inside fetchGraphQL: ${safeContentType}`);
       return { errors: [{ message: "Invalid JSON response" }] };
     }
     const json = await res.json();
     await handleGraphQLError(json);
     return json;
   } catch (error) {
-    console.error("GraphQL fetch failed inside fetchGraphQL:", error);
+    const safeError = error?.message ? error.message.replace(/[\r\n]+/g, '') : 'Unknown error';
+    console.error(`GraphQL fetch failed inside fetchGraphQL: ${safeError}`);
     return { errors: [{ message: error.message }] };
   }
 }
