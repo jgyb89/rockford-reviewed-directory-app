@@ -704,10 +704,24 @@ export async function getBlogPostBySlug(slug) {
   const query = `
     query GetPostBySlug($id: ID!) {
       post(id: $id, idType: SLUG) {
+        databaseId
         title content date
         featuredImage { node { sourceUrl altText } }
         categories { nodes { name } }
         seo { title metaDesc }
+        comments(first: 100, where: { order: ASC }) {
+          nodes {
+            id
+            content
+            date
+            author {
+              node {
+                name
+                avatar { url }
+              }
+            }
+          }
+        }
       }
     }
   `;
@@ -812,6 +826,39 @@ export async function submitNewsletterForm(formData) {
   } catch (error) {
     console.error("Newsletter submission error:", error);
     return { success: false, error: error.message || "Failed to join the newsletter. Please try again." };
+  }
+}
+
+/**
+ * Submit a comment to a Blog Post
+ */
+export async function submitBlogComment(postId, content) {
+  const mutation = `
+    mutation CreateComment($postId: Int!, $content: String!) {
+      createComment(input: { commentOn: $postId, content: $content }) {
+        comment {
+          id
+          content
+          date
+          author {
+            node {
+              name
+              avatar { url }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  try {
+    // requireAuth = true enforces the JWT token is sent
+    const json = await fetchGraphQL(mutation, { postId: parseInt(postId, 10), content }, true);
+    if (json.errors) return { success: false, error: json.errors[0].message };
+    return { success: true, comment: json.data.createComment.comment };
+  } catch (error) {
+    console.error("Comment submission error:", error);
+    return { success: false, error: error.message };
   }
 }
 
