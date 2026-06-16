@@ -149,10 +149,10 @@ const Step2Details = ({ formData, updateFormData, nextStep, prevStep }) => {
       </div>
 
       <div className={wizardStyles['wizard__actions']}>
-        <button type="button" className={wizardStyles['wizard__btn-secondary']} onClick={prevStep}>
+        <button type="button" className={`${wizardStyles['wizard__button']} ${wizardStyles['wizard__button--secondary']}`} onClick={prevStep}>
           Back
         </button>
-        <button type="button" className={wizardStyles['wizard__btn-primary']} onClick={handleNext}>
+        <button type="button" className={`${wizardStyles['wizard__button']} ${wizardStyles['wizard__button--primary']}`} onClick={handleNext}>
           Next Step
         </button>
       </div>
