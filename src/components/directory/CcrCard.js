@@ -142,7 +142,7 @@ export default function CcrCard({ listing, currentUser: propCurrentUser, locale 
 
         <div className={styles['ccr-card__content']}>
           <Link href={listingUrl} className={styles['ccr-card__header-link']}>
-            <h3 className={styles['ccr-card__title']} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem' }}>
+            <h3 className={styles['ccr-card__title']}>
               {title}
             </h3>
           </Link>

@@ -168,13 +168,11 @@
   color: var(--color-text);
   text-align: center;
   margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
   line-height: 1.4;
-  height: 2.8em; /* Uniform height for exactly 2 lines of text */
+  min-height: 2.8em; /* Ensures minimum uniform height, but allows expansion */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ccr-card__rating {
