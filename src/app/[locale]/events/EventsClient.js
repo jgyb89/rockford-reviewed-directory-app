@@ -6,6 +6,7 @@ import EventCard from "@/components/events/EventCard";
 import LoginModal from "@/components/auth/LoginModal";
 import { getLocalizedUrl } from "@/lib/constants";
 import { EVENT_CATEGORIES } from "@/lib/constants/events";
+import { expandRecurringEvents } from "@/lib/eventUtils";
 import Link from "next/link";
 import "./EventsClient.css";
 
@@ -38,7 +39,8 @@ export default function EventsClient({ events, currentUser, locale }) {
       const today = new Date();
       const todayStr = today.toDateString();
 
-      let filteredEvents = [...events];
+      // 1. Unpack RRULE events into virtual occurrences for the next 3 months
+      let filteredEvents = expandRecurringEvents(events, 3);
 
       // Filter by active category slug
       if (activeCategorySlug !== "all") {
@@ -234,7 +236,7 @@ export default function EventsClient({ events, currentUser, locale }) {
             <div className="event-discovery-grid">
               {eventsToday.slice(0, 8).map((event) => (
                 <EventCard
-                  key={`today-${event.databaseId}`}
+                  key={`today-${event.id}`}
                   event={event}
                   locale={locale}
                   currentUser={currentUser}
@@ -250,7 +252,7 @@ export default function EventsClient({ events, currentUser, locale }) {
             <div className="event-discovery-grid">
               {eventsUpcoming.slice(0, 8).map((event) => (
                 <EventCard
-                  key={`upcoming-${event.databaseId}`}
+                  key={`upcoming-${event.id}`}
                   event={event}
                   locale={locale}
                   currentUser={currentUser}
@@ -266,7 +268,7 @@ export default function EventsClient({ events, currentUser, locale }) {
             <div className="event-discovery-grid">
               {eventsFree.slice(0, 8).map((event) => (
                 <EventCard
-                  key={`free-${event.databaseId}`}
+                  key={`free-${event.id}`}
                   event={event}
                   locale={locale}
                   currentUser={currentUser}
@@ -283,7 +285,7 @@ export default function EventsClient({ events, currentUser, locale }) {
             <div className="event-discovery-grid">
               {otherUpcomingEvents.slice(0, 16).map((event) => (
                 <EventCard
-                  key={`other-${event.databaseId}`}
+                  key={`other-${event.id}`}
                   event={event}
                   locale={locale}
                   currentUser={currentUser}

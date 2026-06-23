@@ -11,6 +11,7 @@ import EventCommentList from "@/components/events/EventCommentList";
 import EventCard from "@/components/events/EventCard";
 import FavoriteButton from "@/components/directory/FavoriteButton";
 import ShareButton from "@/components/directory/ShareButton";
+import { expandRecurringEvents } from "@/lib/eventUtils";
 import "../../listing/[slug]/ListingPage.css";
 import "./EventPage.css";
 
@@ -39,13 +40,12 @@ export async function generateMetadata({ params }) {
   };
 }
 
-// Helper to mimic the clean Eventbrite date formatting
 const formatEventbriteDateRange = (startStr, endStr) => {
-  if (!startStr) return "Date TBA";
+  if (!startStr) return { dateString: "Date TBA", timeString: "" };
   const start = new Date(startStr);
   const end = endStr ? new Date(endStr) : null;
 
-  if (isNaN(start.getTime())) return startStr;
+  if (isNaN(start.getTime())) return { dateString: startStr, timeString: "" };
 
   const timeOpts = { hour: "numeric", minute: "2-digit", hour12: true };
   const dateOpts = {
@@ -59,19 +59,22 @@ const formatEventbriteDateRange = (startStr, endStr) => {
   const startDate = new Intl.DateTimeFormat("en-US", dateOpts).format(start);
 
   if (!end || isNaN(end.getTime())) {
-    return `${startDate} • ${startTime}`;
+    return { dateString: startDate, timeString: startTime };
   }
 
   const endTime = new Intl.DateTimeFormat("en-US", timeOpts).format(end);
   const endDate = new Intl.DateTimeFormat("en-US", dateOpts).format(end);
 
-  // Same Day: Sat, Jul 11, 2026 • 10 AM - 2 PM
+  // Same Day
   if (startDate === endDate) {
-    return `${startDate} • ${startTime} - ${endTime}`;
+    return { dateString: startDate, timeString: `${startTime} - ${endTime}` };
   }
 
-  // Different Days: Thu, Jun 4, 2026 at 5 PM – Fri, Jun 5, 2026 at 10 AM
-  return `${startDate} at ${startTime} – ${endDate} at ${endTime}`;
+  // Different Days
+  return { 
+    dateString: `${startDate} – ${endDate}`, 
+    timeString: `${startTime} to ${endTime}`
+  };
 };
 
 export default async function SingleEventPage({ params }) {
@@ -117,15 +120,26 @@ export default async function SingleEventPage({ params }) {
   const { title, content, featuredImage, eventDetails } = event;
   const imageUrl = formatImageUrl(featuredImage?.node?.sourceUrl);
 
-  const rawStartDate =
+  let rawStartDate =
     eventDetails?.startDateTime ||
     eventDetails?.startDate ||
     eventDetails?.start_date;
-  const rawEndDate =
+  let rawEndDate =
     eventDetails?.endDateTime ||
     eventDetails?.endDate ||
     eventDetails?.end_date;
-  const cleanDateRange = formatEventbriteDateRange(rawStartDate, rawEndDate);
+
+  const isRecurring = eventDetails?.isRecurring;
+  if (isRecurring && eventDetails?.recurrenceRule) {
+    const virtuals = expandRecurringEvents([event]); // Transposes to the single next occurrence
+    if (virtuals.length > 0) {
+      // Replace with the immediate next occurrence
+      rawStartDate = virtuals[0].eventDetails?.startDateTime;
+      rawEndDate = virtuals[0].eventDetails?.endDateTime;
+    }
+  }
+
+  const { dateString, timeString } = formatEventbriteDateRange(rawStartDate, rawEndDate);
 
   const venueName = eventDetails?.venueName || "Venue TBA";
   const rawPrice = eventDetails?.price || "";
@@ -355,19 +369,38 @@ export default async function SingleEventPage({ params }) {
                   Event Details
                 </h2>
 
+                {isRecurring && (
+                  <div style={{ marginBottom: "1rem" }}>
+                    <span style={{ 
+                      display: "inline-block", backgroundColor: "#e6f4ea", color: "#137333", 
+                      padding: "0.25rem 0.75rem", borderRadius: "16px", fontSize: "0.85rem", fontWeight: "600" 
+                    }}>
+                      <span className="material-symbols-outlined" style={{ fontSize: "1rem", verticalAlign: "text-bottom", marginRight: "4px" }}>update</span>
+                      Recurring Event
+                    </span>
+                  </div>
+                )}
+
                 <div
                   className="listing-card__item"
-                  style={{ alignItems: "center" }}
+                  style={{ alignItems: "flex-start", gap: '0.75rem' }}
                 >
-                  <span className="material-symbols-outlined listing-card__icon">
+                  <span className="material-symbols-outlined listing-card__icon" style={{ marginTop: '2px' }}>
                     calendar_today
                   </span>
-                  <span
-                    className="listing-card__text"
-                    style={{ fontWeight: "600" }}
-                  >
-                    {cleanDateRange}
-                  </span>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                    <span
+                      className="listing-card__text"
+                      style={{ fontWeight: "600", fontSize: '1.05rem', color: '#1a1a1a', lineHeight: '1.2' }}
+                    >
+                      {dateString}
+                    </span>
+                    {timeString && (
+                      <span style={{ fontSize: '0.95rem', color: '#555', fontWeight: '500' }}>
+                        {timeString}
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 <div

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { submitListing, uploadWPImage } from '@/lib/actions';
+import { Loader2 } from 'lucide-react';
 import imageCompression from 'browser-image-compression';
 import styles from './StepForm.module.css';
 import wizardStyles from './ListingWizard.module.css';
@@ -208,6 +209,9 @@ const Step5Finish = ({ formData, prevStep }) => {
       </p>
 
       <div className={wizardStyles['wizard__actions']}>
+        <style>{`
+          @keyframes spin { 100% { transform: rotate(360deg); } }
+        `}</style>
         <button 
           className={`${wizardStyles['wizard__button']} ${wizardStyles['wizard__button--secondary']}`} 
           onClick={prevStep}
@@ -219,9 +223,20 @@ const Step5Finish = ({ formData, prevStep }) => {
           className={`${wizardStyles['wizard__button']} ${wizardStyles['wizard__button--primary']}`} 
           onClick={handleSubmit}
           disabled={isSubmitting}
-          style={{ backgroundColor: isSubmitting ? '#ccc' : '#e04c4c' }}
+          style={{ 
+            backgroundColor: isSubmitting ? '#ccc' : '#e04c4c',
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            gap: '0.5rem'
+          }}
         >
-          {isSubmitting ? 'Processing...' : 'Submit Listing'}
+          {isSubmitting ? (
+            <>
+              <Loader2 size={20} style={{ animation: 'spin 1s linear infinite' }} />
+              Processing...
+            </>
+          ) : 'Submit Listing'}
         </button>
       </div>
     </div>

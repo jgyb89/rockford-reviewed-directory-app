@@ -264,11 +264,34 @@ export default function EditEventForm({ initialData, locale }) {
     }
   }, [autocomplete]);
   
+  const ruleStr = initialData.eventDetails?.recurrenceRule || '';
+  const ruleMap = {};
+  if (ruleStr) {
+    ruleStr.split(';').forEach(p => {
+      const [k, v] = p.split('=');
+      if (k && v) ruleMap[k] = v;
+    });
+  }
+
+  // 1. Extract saved categories from WPGraphQL
+  const savedCategories = initialData.eventCategories?.nodes || [];
+
+  // 2. Identify the Primary Category (Check which saved slug matches our main constants)
+  const matchedPrimary = savedCategories.find(cat => 
+    EVENT_CATEGORIES.some(mainCat => mainCat.slug === cat.slug)
+  );
+  const initialPrimaryCategory = matchedPrimary ? matchedPrimary.slug : "";
+
+  // 3. Filter out the primary category to leave only the Custom Tags (extracting their names)
+  const initialCustomTags = savedCategories
+    .filter(cat => cat.slug !== initialPrimaryCategory)
+    .map(cat => cat.name);
+
   const [formData, setFormData] = useState({
     title: initialData.title || '',
     description: formatContentForTextarea(initialData.content),
-    primaryCategory: initialData.eventCategories?.nodes?.[0]?.slug || '',
-    customTags: [], // Note: _custom_tags fetching logic to be added later if exposed by GraphQL
+    primaryCategory: initialPrimaryCategory,
+    customTags: initialCustomTags,
     start_date: formatForInput(initialData.eventDetails?.startDateTime || initialData.eventDetails?.startDate || initialData.eventDetails?.start_date),
     end_date: formatForInput(initialData.eventDetails?.endDateTime || initialData.eventDetails?.endDate || initialData.eventDetails?.end_date),
     venue_name: initialData.eventDetails?.venueName || '',
@@ -278,10 +301,15 @@ export default function EditEventForm({ initialData, locale }) {
       lng: initialData.eventDetails?.eventAddress?.longitude || null,
     },
     price: initialData.eventDetails?.price || '',
-    ticket_url: initialData.eventDetails?.ticketUrl || initialData.eventDetails?.ticket_url || ''
+    ticket_url: initialData.eventDetails?.ticketUrl || initialData.eventDetails?.ticket_url || '',
+    is_recurring: initialData.eventDetails?.isRecurring || false,
+    recurrence_freq: ruleMap.FREQ || 'WEEKLY',
+    recurrence_byday: ruleMap.BYDAY ? ruleMap.BYDAY.split(',') : [],
+    recurrence_until: ruleMap.UNTIL ? `${ruleMap.UNTIL.substring(0,4)}-${ruleMap.UNTIL.substring(4,6)}-${ruleMap.UNTIL.substring(6,8)}` : '',
+    recurrence_rule: ruleStr,
   });
 
-  const [customTagsText, setCustomTagsText] = useState(formData.customTags.join(', '));
+  const [customTagsText, setCustomTagsText] = useState(initialCustomTags.join(', '));
   const [errors, setErrors] = useState({});
   const [uploadStep, setUploadStep] = useState("idle");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -355,6 +383,21 @@ export default function EditEventForm({ initialData, locale }) {
       
       setUploadStep('saving_data');
       
+      let finalRule = '';
+      if (formData.is_recurring) {
+        let ruleParts = [`FREQ=${formData.recurrence_freq || 'WEEKLY'}`];
+        if (formData.recurrence_until) {
+          const untilDate = new Date(formData.recurrence_until);
+          untilDate.setHours(23, 59, 59);
+          const untilStr = untilDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+          ruleParts.push(`UNTIL=${untilStr}`);
+        }
+        if ((!formData.recurrence_freq || formData.recurrence_freq === 'WEEKLY') && formData.recurrence_byday?.length > 0) {
+          ruleParts.push(`BYDAY=${formData.recurrence_byday.join(',')}`);
+        }
+        finalRule = ruleParts.join(';');
+      }
+
       const payload = {
         title: formData.title,
         description: formData.description,
@@ -366,6 +409,8 @@ export default function EditEventForm({ initialData, locale }) {
         event_address: formData.event_address,
         price: formData.price,
         ticket_url: formData.ticket_url,
+        is_recurring: formData.is_recurring,
+        recurrence_rule: finalRule,
         featuredImageId: featuredImageId ? parseInt(featuredImageId) : null,
       };
 
@@ -508,6 +553,78 @@ export default function EditEventForm({ initialData, locale }) {
               />
             </div>
           </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
+            <input 
+              type="checkbox" 
+              id="is_recurring" 
+              checked={formData.is_recurring || false}
+              onChange={(e) => updateFormData({ is_recurring: e.target.checked })}
+              style={{ width: 'auto', margin: 0, cursor: 'pointer', transform: 'scale(1.2)' }}
+            />
+            <label htmlFor="is_recurring" style={{ margin: 0, fontWeight: 600, cursor: 'pointer' }}>This is a recurring event</label>
+          </div>
+
+          {formData.is_recurring && (
+            <div style={{ backgroundColor: '#f8f9fa', padding: '1.5rem', borderRadius: '8px', border: '1px solid #eaeaea', display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '1.5rem' }}>
+              <div>
+                <label style={labelStyle}>Repeats</label>
+                <select 
+                  style={inputStyle(false)}
+                  value={formData.recurrence_freq || 'WEEKLY'}
+                  onChange={(e) => updateFormData({ recurrence_freq: e.target.value })}
+                >
+                  <option value="DAILY">Daily</option>
+                  <option value="WEEKLY">Weekly</option>
+                  <option value="MONTHLY">Monthly</option>
+                </select>
+              </div>
+
+              {(!formData.recurrence_freq || formData.recurrence_freq === 'WEEKLY') && (
+                <div>
+                  <label style={labelStyle}>On these days</label>
+                  <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                    {[{label: 'S', val: 'SU'}, {label: 'M', val: 'MO'}, {label: 'T', val: 'TU'}, {label: 'W', val: 'WE'}, {label: 'T', val: 'TH'}, {label: 'F', val: 'FR'}, {label: 'S', val: 'SA'}].map((day) => {
+                      const isActive = (formData.recurrence_byday || []).includes(day.val);
+                      return (
+                        <button
+                          key={day.val}
+                          type="button"
+                          onClick={() => {
+                            const current = formData.recurrence_byday || [];
+                            if (isActive) {
+                              updateFormData({ recurrence_byday: current.filter(d => d !== day.val) });
+                            } else {
+                              updateFormData({ recurrence_byday: [...current, day.val] });
+                            }
+                          }}
+                          style={{
+                            width: '36px', height: '36px', borderRadius: '50%',
+                            border: isActive ? 'none' : '1px solid #ccc',
+                            backgroundColor: isActive ? '#0070f3' : '#fff',
+                            color: isActive ? 'white' : '#333',
+                            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', fontWeight: 600, transition: 'all 0.2s ease'
+                          }}
+                        >
+                          {day.label}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <label style={labelStyle}>Ends on (Optional)</label>
+                <input 
+                  type="date"
+                  style={inputStyle(false)}
+                  value={formData.recurrence_until || ''}
+                  onChange={(e) => updateFormData({ recurrence_until: e.target.value })}
+                />
+              </div>
+            </div>
+          )}
 
           <div>
             <label htmlFor="venue_name" style={labelStyle}>Venue Name *</label>

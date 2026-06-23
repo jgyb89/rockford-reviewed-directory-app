@@ -8,16 +8,12 @@ export default function PaginatedFeed({
   title,
   viewAllLink,
   viewAllText,
-  children,
+  items,
 }) {
   const [visibleCount, setVisibleCount] = useState(8);
 
-  const childrenArray = React.Children.toArray(children);
-
-  if (!childrenArray || childrenArray.length === 0) return null;
-
-  const visibleItems = childrenArray.slice(0, visibleCount);
-  const hasMore = visibleCount < childrenArray.length;
+  const visibleItems = items.slice(0, visibleCount);
+  const hasMore = visibleCount < items.length;
 
   return (
     <section className={styles.paginatedContainer}>
@@ -53,5 +49,5 @@ PaginatedFeed.propTypes = {
   title: PropTypes.string,
   viewAllLink: PropTypes.string,
   viewAllText: PropTypes.string,
-  children: PropTypes.node,
+  items: PropTypes.array,
 };

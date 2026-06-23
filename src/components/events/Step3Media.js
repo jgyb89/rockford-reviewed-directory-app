@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { createEventMutation } from '@/lib/graphql/events';
 import { uploadWPImage } from '@/lib/actions';
 import imageCompression from 'browser-image-compression';
+import { Loader2 } from 'lucide-react';
 import styles from '@/components/directory-builder/StepForm.module.css';
 import wizardStyles from '@/components/directory-builder/ListingWizard.module.css';
 import Image from 'next/image';
@@ -179,6 +180,9 @@ const Step3Media = ({ formData, updateFormData, prevStep }) => {
       </div>
 
       <div className={wizardStyles['wizard__actions']}>
+        <style>{`
+          @keyframes spin { 100% { transform: rotate(360deg); } }
+        `}</style>
         <button
           className={`${wizardStyles['wizard__button']} ${wizardStyles['wizard__button--secondary']}`}
           onClick={prevStep}
@@ -190,8 +194,20 @@ const Step3Media = ({ formData, updateFormData, prevStep }) => {
           className={`${wizardStyles['wizard__button']} ${wizardStyles['wizard__button--primary']}`}
           onClick={handleSubmit}
           disabled={isSubmitting}
+          style={{ 
+            backgroundColor: isSubmitting ? '#ccc' : '#e04c4c',
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            gap: '0.5rem'
+          }}
         >
-          Submit Event
+          {isSubmitting ? (
+            <>
+              <Loader2 size={20} style={{ animation: 'spin 1s linear infinite' }} />
+              Processing...
+            </>
+          ) : 'Submit Event'}
         </button>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { getListings } from "@/lib/api";
 import { getDictionary } from "@/lib/dictionaries";
+import Script from "next/script";
 import HeroSlideshow from "@/components/home/HeroSlideshow";
 import PaginatedFeed from "@/components/home/PaginatedFeed";
 import CcrCard from "@/components/directory/CcrCard";
@@ -9,6 +10,7 @@ import SunsetTransition from "@/components/home/SunsetTransition";
 import BeachySeoStory from "@/components/home/BeachySeoStory";
 import SeoCards from "@/components/home/SeoCards";
 import { getEvents } from "@/lib/graphql/events";
+import { expandRecurringEvents } from "@/lib/eventUtils";
 import EventCard from "@/components/events/EventCard";
 import { BASE_URL } from "@/lib/constants";
 import styles from "./page.module.css";
@@ -37,17 +39,18 @@ export default async function HomePage({ params }) {
     (listing) => listing.author?.node?.userData?.isFeaturedUser === true,
   );
 
-  const feedListings = listings;
+  const popularListings = listings;
 
   const eventsResponse = await getEvents();
-  const allEvents = eventsResponse || [];
+  const rawEvents = eventsResponse || [];
+  const allEvents = expandRecurringEvents(rawEvents, 3);
 
   const today = new Date();
   const todayStr = today.toDateString();
   const startOfToday = new Date(today);
   startOfToday.setHours(0, 0, 0, 0);
 
-  const todayAndWeekendEvents = allEvents
+  const upcomingEvents = allEvents
     .filter((event) => {
       const rawDate = event.eventDetails?.startDateTime || event.date;
       if (!rawDate) return false;
@@ -88,7 +91,8 @@ export default async function HomePage({ params }) {
 
   return (
     <main className={styles.main}>
-      <script
+      <Script
+        id="json-ld"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
@@ -98,30 +102,32 @@ export default async function HomePage({ params }) {
       {/* Main Content Layout - REPLACED WITH HORIZONTAL ROW */}
       <div className={styles.container}>
         {/* Popular Listings Section */}
-        <PaginatedFeed
-          title="Popular Near You"
-          viewAllLink="/directory"
-          viewAllText="View All Listings"
-        >
-          {feedListings.map((listing) => (
-            <CcrCard
-              key={listing.databaseId}
-              listing={listing}
-              locale={locale}
-            />
-          ))}
-        </PaginatedFeed>
+        {popularListings && popularListings.length > 0 && (
+          <PaginatedFeed
+            title="Popular Near You"
+            viewAllLink="/directory"
+            viewAllText="View All Listings &rarr;"
+            items={popularListings.map((listing) => (
+              <CcrCard
+                key={listing.databaseId}
+                listing={listing}
+                locale={locale}
+              />
+            ))}
+          />
+        )}
 
-        {/* Today & Weekend Events Section */}
-        <PaginatedFeed
-          title="Today & Weekend Events"
-          viewAllLink="/events"
-          viewAllText="View All Events"
-        >
-          {todayAndWeekendEvents.map((event) => (
-            <EventCard key={event.databaseId} event={event} locale={locale} />
-          ))}
-        </PaginatedFeed>
+        {/* Upcoming Events Section */}
+        {upcomingEvents && upcomingEvents.length > 0 && (
+          <PaginatedFeed
+            title="Upcoming Events"
+            viewAllLink="/events"
+            viewAllText="View All Events &rarr;"
+            items={upcomingEvents.map((event) => (
+              <EventCard key={event.id || event.databaseId} event={event} locale={locale} />
+            ))}
+          />
+        )}
       </div>
 
       {/* Homepage Info Section */}
