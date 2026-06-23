@@ -104,16 +104,14 @@ export default async function SingleEventPage({ params }) {
   const allEvents = await getEvents();
   const now = new Date();
   const recommendedEvents = allEvents
-    .filter(
-      (e) =>
-        (e.status === "PUBLISH" || e.status === "publish") &&
-        e.databaseId !== event.databaseId,
-    )
+    .filter((e) => (e.status === "PUBLISH" || e.status === "publish") && e.databaseId !== event.databaseId)
     .filter((e) => {
-      const start = e.eventDetails?.startDateTime
-        ? new Date(e.eventDetails.startDateTime)
-        : new Date(e.date);
-      return start >= now;
+      const startStr = e.eventDetails?.startDateTime || e.date;
+      const endStr = e.eventDetails?.endDateTime || startStr;
+      const endDate = new Date(endStr.replace(" ", "T"));
+
+      // Ensure currently ongoing events are still recommended
+      return endDate >= now;
     })
     .slice(0, 3);
 

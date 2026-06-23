@@ -46,36 +46,25 @@ export default async function HomePage({ params }) {
   const allEvents = expandRecurringEvents(rawEvents, 3);
 
   const today = new Date();
-  const todayStr = today.toDateString();
-  const startOfToday = new Date(today);
-  startOfToday.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
 
-  const upcomingEvents = allEvents
-    .filter((event) => {
-      const rawDate = event.eventDetails?.startDateTime || event.date;
-      if (!rawDate) return false;
-      const eventDate = new Date(rawDate.replace(" ", "T"));
+  const upcomingEvents = allEvents.filter(event => {
+    const eStartStr = event.eventDetails?.startDateTime || event.date;
+    if (!eStartStr) return false;
 
-      // Skip past events entirely unless they are today
-      if (eventDate < startOfToday && eventDate.toDateString() !== todayStr) {
-        return false;
-      }
+    const eEndStr = event.eventDetails?.endDateTime || eStartStr;
+    const endDate = new Date(eEndStr.replace(" ", "T"));
 
-      const isToday = eventDate.toDateString() === todayStr;
-      const isWeekend =
-        eventDate >= startOfToday && [0, 5, 6].includes(eventDate.getDay());
+    const endDay = new Date(endDate);
+    endDay.setHours(0, 0, 0, 0);
 
-      return isToday || isWeekend;
-    })
-    .sort((a, b) => {
-      const dateA = new Date(
-        (a.eventDetails?.startDateTime || a.date).replace(" ", "T"),
-      );
-      const dateB = new Date(
-        (b.eventDetails?.startDateTime || b.date).replace(" ", "T"),
-      );
-      return dateA - dateB;
-    });
+    // Keep the event if its end date is today or in the future
+    return endDay >= today;
+  }).sort((a, b) => {
+    const dateA = new Date((a.eventDetails?.startDateTime || a.date).replace(" ", "T"));
+    const dateB = new Date((b.eventDetails?.startDateTime || b.date).replace(" ", "T"));
+    return dateA - dateB;
+  });
 
   const jsonLd = {
     "@context": "https://schema.org",

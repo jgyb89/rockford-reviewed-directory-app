@@ -37,7 +37,6 @@ export default function EventsClient({ events, currentUser, locale }) {
   const { eventsToday, eventsUpcoming, eventsFree, otherUpcomingEvents } =
     useMemo(() => {
       const today = new Date();
-      const todayStr = today.toDateString();
 
       // 1. Unpack RRULE events into virtual occurrences for the next 3 months
       let filteredEvents = expandRecurringEvents(events, 3);
@@ -60,27 +59,38 @@ export default function EventsClient({ events, currentUser, locale }) {
       // Or if we want them to appear in multiple sections, we just let them.
       // The prompt says "group into distinct thematic rows". Eventbrite lets an event be in 'Today' and 'Free'. So we allow duplicates across rows.
 
+      // Normalize 'today' to midnight for day-span comparisons
+      today.setHours(0, 0, 0, 0);
+
       filteredEvents.forEach((e) => {
-        const eDateStr = e.eventDetails?.startDateTime || e.date;
-        if (!eDateStr) return;
+        const eStartStr = e.eventDetails?.startDateTime || e.date;
+        if (!eStartStr) return;
 
-        const eventDate = parseSafeDate(eDateStr);
+        // Fallback to start date if no end date is provided
+        const eEndStr = e.eventDetails?.endDateTime || eStartStr; 
 
-        // Skip past events entirely unless they are today
-        if (eventDate < today && eventDate.toDateString() !== todayStr) {
-          return;
-        }
+        const startDate = new Date(eStartStr.replace(" ", "T"));
+        const endDate = new Date(eEndStr.replace(" ", "T"));
+
+        // Normalize event dates to midnight
+        const startDay = new Date(startDate);
+        startDay.setHours(0, 0, 0, 0);
+
+        const endDay = new Date(endDate);
+        endDay.setHours(0, 0, 0, 0);
+
+        // 1. Purge events completely in the past
+        if (endDay < today) return;
 
         let categorized = false;
 
-        // 1. Today
-        if (eventDate.toDateString() === todayStr) {
+        // 2. Today (Event spans across today)
+        if (today >= startDay && today <= endDay) {
           todayArr.push(e);
           categorized = true;
         }
-
-        // 2. Upcoming
-        else if (eventDate > today) {
+        // 3. Upcoming (Event starts in the future)
+        else if (startDay > today) {
           upcomingArr.push(e);
           categorized = true;
         }
