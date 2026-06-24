@@ -45,10 +45,12 @@ export default function RecommendBusinessForm() {
     } else if (name === 'businessPhone') {
       if (value) {
         const digits = value.replace(/\D/g, "");
-        if (digits.length !== 10) error = "Phone number must be exactly 10 digits";
+        if (digits.length !== 10) return "Phone number must be exactly 10 digits";
+        return "";
       }
+      default:
+        return "";
     }
-    return error;
   };
 
   const handleChange = (e) => {
