@@ -38,28 +38,35 @@ export default function RecommendBusinessForm() {
   const [error, setError] = useState(null);
 
   const validateField = (name, value) => {
-    let error = "";
-    if (name === 'submitterName') {
-      if (!value.trim()) error = "Your name is required";
-      else if (value.trim().length < 2) error = "Your name must be at least 2 characters";
-    } else if (name === 'businessName') {
-      if (!value.trim()) error = "Business name is required";
-      else if (value.trim().length < 2) error = "Business name must be at least 2 characters";
-    } else if (name === 'businessAddress') {
-      if (!value.trim()) error = "Business address is required";
-      else if (value.trim().length < 5) error = "Business address must be at least 5 characters";
-    } else if (name === 'businessEmail') {
-      if (value) {
+    const val = value ? (typeof value === 'string' ? value.trim() : value) : "";
+    switch (name) {
+      case 'submitterName':
+        if (!val) return "Your name is required";
+        if (val.length < 2) return "Your name must be at least 2 characters";
+        return "";
+      case 'businessName':
+        if (!val) return "Business name is required";
+        if (val.length < 2) return "Business name must be at least 2 characters";
+        return "";
+      case 'businessAddress':
+        if (!val) return "Business address is required";
+        if (val.length < 5) return "Business address must be at least 5 characters";
+        return "";
+      case 'businessEmail': {
+        if (!value) return "";
         const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-        if (!emailRegex.test(value)) error = "Please enter a valid email address";
+        if (!emailRegex.test(value)) return "Please enter a valid email address";
+        return "";
       }
-    } else if (name === 'businessPhone') {
-      if (value) {
+      case 'businessPhone': {
+        if (!value) return "";
         const digits = value.replace(/\D/g, "");
-        if (digits.length !== 10) error = "Phone number must be exactly 10 digits";
+        if (digits.length !== 10) return "Phone number must be exactly 10 digits";
+        return "";
       }
+      default:
+        return "";
     }
-    return error;
   };
 
   const handleChange = (e) => {
