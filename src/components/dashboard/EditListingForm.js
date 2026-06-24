@@ -242,9 +242,6 @@ function useEditListingForm(initialData) {
     }, {}),
   });
 
-  const [selectedParentCategory, setSelectedParentCategory] = useState(initialMainCat);
-
-  // No longer need the initialization useEffect since we do it in useState
 
   const [socialErrors, setSocialErrors] = useState(
     formData.socialUrls.map(() => ""),
@@ -263,7 +260,6 @@ function useEditListingForm(initialData) {
     !!titleError ||
     !!descriptionError ||
     !formData.category ||
-    !selectedParentCategory ||
     (formData.categories || []).length === 0;
 
   const handleChange = (e) => {
@@ -277,12 +273,6 @@ function useEditListingForm(initialData) {
       category: typeSlug,
       categories: [],
     }));
-    setSelectedParentCategory(null);
-  };
-
-  const handleParentCategoryChange = (parent) => {
-    setSelectedParentCategory(parent);
-    setFormData((prev) => ({ ...prev, categories: [] }));
   };
 
   const handleCategoryToggle = (slug) => {
@@ -297,19 +287,12 @@ function useEditListingForm(initialData) {
     }
   };
 
-  const availableParentCategories = useMemo(() => {
+  const availableChildCategories = useMemo(() => {
     if (!formData.category) return [];
     return ALL_CATEGORIES.filter(
-      (cat) => cat.directoryType === formData.category && cat.isParent,
+      (cat) => cat.parentSlug === formData.category,
     );
   }, [formData.category]);
-
-  const availableChildCategories = useMemo(() => {
-    if (!selectedParentCategory) return [];
-    return ALL_CATEGORIES.filter(
-      (cat) => cat.parentSlug === selectedParentCategory.slug,
-    );
-  }, [selectedParentCategory]);
 
   const handleSocialUrlChange = (index, value) => {
     const newUrls = [...formData.socialUrls];
@@ -456,11 +439,7 @@ function useEditListingForm(initialData) {
         return acc;
       }, {});
 
-      // Capture both category fields from your form state
-      const categorySelections = [
-        selectedParentCategory?.slug,
-        ...(formData.categories || [])
-      ].filter(Boolean);
+      const categorySelections = formData.categories || [];
 
       const payload = {
         title: formData.title,
@@ -507,8 +486,6 @@ function useEditListingForm(initialData) {
     isSubmitting,
     hasErrors,
     router,
-    selectedParentCategory,
-    availableParentCategories,
     availableChildCategories,
     isCropModalOpen,
     setIsCropModalOpen,
@@ -516,7 +493,6 @@ function useEditListingForm(initialData) {
     setPendingCrop,
     handleCropSave,
     handleDirectoryTypeChange,
-    handleParentCategoryChange,
     handleCategoryToggle,
     handleChange,
     handleSocialUrlChange,
@@ -761,11 +737,8 @@ const BasicInfoSection = ({
 
 const CategorySection = ({
   formData,
-  selectedParentCategory,
-  availableParentCategories,
   availableChildCategories,
   handleDirectoryTypeChange,
-  handleParentCategoryChange,
   handleCategoryToggle,
   disabled,
 }) => {
@@ -837,38 +810,6 @@ const CategorySection = ({
       </div>
 
       {formData.category && (
-        <div style={sectionWrapperStyle}>
-          <label
-            style={{
-              fontWeight: 700,
-              fontSize: "1rem",
-              color: "#1e293b",
-              textTransform: "uppercase",
-            }}
-          >
-            Main Category
-          </label>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
-            {availableParentCategories.map((parent) => (
-              <button
-                key={parent.slug}
-                type="button"
-                disabled={disabled}
-                style={
-                  selectedParentCategory?.slug === parent.slug
-                    ? activePillStyle
-                    : pillStyle
-                }
-                onClick={() => handleParentCategoryChange(parent)}
-              >
-                {parent.name}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {selectedParentCategory && (
         <div style={sectionWrapperStyle}>
           <label
             style={{
@@ -1631,11 +1572,8 @@ export default function EditListingForm({ initialData }) {
 
         <CategorySection
           formData={hook.formData}
-          selectedParentCategory={hook.selectedParentCategory}
-          availableParentCategories={hook.availableParentCategories}
           availableChildCategories={hook.availableChildCategories}
           handleDirectoryTypeChange={hook.handleDirectoryTypeChange}
-          handleParentCategoryChange={hook.handleParentCategoryChange}
           handleCategoryToggle={hook.handleCategoryToggle}
           disabled={hook.isSubmitting}
         />

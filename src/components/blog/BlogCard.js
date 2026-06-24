@@ -12,18 +12,22 @@ export default function BlogCard({ post, locale = "en" }) {
 
   return (
     <article className={styles['blog-card']}>
-      <div className={styles['blog-card__image-wrapper']}>
-        <Image
-          src={imageUrl}
-          alt={title}
-          fill
-          style={{ objectFit: "cover" }}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        />
-      </div>
+      <Link href={getLocalizedUrl(`/blog/${slug}`, locale)} className={styles['blog-card__image-link']}>
+        <div className={styles['blog-card__image-wrapper']}>
+          <Image
+            src={imageUrl}
+            alt={title}
+            fill
+            style={{ objectFit: "cover" }}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        </div>
+      </Link>
       <div className={styles['blog-card__content']}>
         <div className={styles['blog-card__categories']}>{categories.join(", ")}</div>
-        <h3 className={styles['blog-card__title']}>{title}</h3>
+        <Link href={getLocalizedUrl(`/blog/${slug}`, locale)} style={{ textDecoration: "none", color: "inherit" }}>
+          <h3 className={styles['blog-card__title']}>{title}</h3>
+        </Link>
         <p className={styles['blog-card__excerpt']}>{excerpt}</p>
         <Link href={getLocalizedUrl(`/blog/${slug}`, locale)} className={styles['blog-card__read-more']}>
           Read More &rarr;

@@ -7,33 +7,16 @@ import { ALL_CATEGORIES, DIRECTORY_TYPES } from '@/lib/constants';
 
 const Step2Categories = ({ formData, updateFormData, nextStep, prevStep }) => {
   const [errors, setErrors] = useState({});
-  const [selectedParentCategory, setSelectedParentCategory] = useState(null);
+
+
   const [catInput, setCatInput] = useState('');
   const [isFocused, setIsFocused] = useState(false);
-
-  // Initialize selectedParentCategory if categories already exist (for edit/back navigation)
-  useEffect(() => {
-    if (formData.categories?.length > 0) {
-      const firstCatSlug = formData.categories[0];
-      const childCat = ALL_CATEGORIES.find(c => c.slug === firstCatSlug);
-      if (childCat?.parentSlug) {
-        const parent = ALL_CATEGORIES.find(c => c.slug === childCat.parentSlug);
-        setSelectedParentCategory(parent);
-      }
-    }
-  }, [formData.categories]);
 
   const handleDirectoryTypeChange = (typeSlug) => {
     updateFormData({ 
       category: typeSlug,
       categories: [] // Clear subcategories
     });
-    setSelectedParentCategory(null); // Reset parent
-  };
-
-  const handleParentCategoryChange = (parent) => {
-    setSelectedParentCategory(parent);
-    updateFormData({ categories: [] }); // Clear subcategories when parent changes
   };
 
   const handleCategoryToggle = (slug) => {
@@ -45,24 +28,16 @@ const Step2Categories = ({ formData, updateFormData, nextStep, prevStep }) => {
     }
   };
 
-  const availableParentCategories = useMemo(() => {
+  const availableChildCategories = useMemo(() => {
     if (!formData.category) return [];
     return ALL_CATEGORIES.filter(cat => 
-      cat.directoryType === formData.category && cat.isParent
+      cat.parentSlug === formData.category
     );
   }, [formData.category]);
-
-  const availableChildCategories = useMemo(() => {
-    if (!selectedParentCategory) return [];
-    return ALL_CATEGORIES.filter(cat => 
-      cat.parentSlug === selectedParentCategory.slug
-    );
-  }, [selectedParentCategory]);
 
   const validate = () => {
     const newErrors = {};
     if (!formData.category) newErrors.directoryType = 'Directory Type is required';
-    if (!selectedParentCategory) newErrors.parentCategory = 'Main Category is required';
     if (!formData.categories || formData.categories.length === 0) newErrors.categories = 'At least one sub-category is required';
 
     setErrors(newErrors);
@@ -112,28 +87,8 @@ const Step2Categories = ({ formData, updateFormData, nextStep, prevStep }) => {
         {errors.directoryType && <span className={styles['step-form__error-message']}>{errors.directoryType}</span>}
       </div>
 
-      {/* Main Category Selection */}
-      {formData.category && (
-        <div className={styles['category-section']}>
-          <label className={styles['section-label']}>Main Category</label>
-          <div className={styles['pill-container']}>
-            {availableParentCategories.map(parent => (
-              <button
-                key={parent.slug}
-                type="button"
-                className={`${styles['category-pill']} ${selectedParentCategory?.slug === parent.slug ? styles['category-pill--active'] : ''}`}
-                onClick={() => handleParentCategoryChange(parent)}
-              >
-                {parent.name}
-              </button>
-            ))}
-          </div>
-          {errors.parentCategory && <span className={styles['step-form__error-message']}>{errors.parentCategory}</span>}
-        </div>
-      )}
-
       {/* Sub Category Selection */}
-      {selectedParentCategory && (
+      {formData.category && (
         <div className={styles['category-section']}>
           <label className={styles['section-label']}>Select Category</label>
           <div className={styles['pill-container']}>
