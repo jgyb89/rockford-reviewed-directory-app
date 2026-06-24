@@ -15,6 +15,22 @@
     "signOut": "Cerrar sesión",
     "viewAllDirectory": "Ver Todo el Directorio"
   },
+  "userToBusiness": {
+    "title": "Actualizar a Negocio",
+    "subtitle": "Obtenga más del Directorio de Cape Coral actualizando su cuenta.",
+    "firstName": "Nombre *",
+    "lastName": "Apellido *",
+    "businessName": "Nombre del Negocio *",
+    "businessEmail": "Correo Electrónico *",
+    "phone": "Teléfono *",
+    "typeOfBusiness": "¿Qué tipo de negocio? *",
+    "typePlaceholder": "Selecciona una categoría...",
+    "submit": "Actualizar Cuenta",
+    "submitting": "Actualizando...",
+    "successTitle": "¡Solicitud Recibida!",
+    "successMessage": "Gracias por actualizar. Nuestro equipo revisará su solicitud y se pondrá en contacto pronto.",
+    "sidebarButton": "Actualizar a Negocio"
+  },
   "home": {
     "viewAll": "Ver todo",
     "featuredBusinesses": "Negocios Destacados",

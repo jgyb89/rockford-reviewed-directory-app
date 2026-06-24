@@ -15,6 +15,22 @@
     "signOut": "Sign Out",
     "viewAllDirectory": "View All Directory"
   },
+  "userToBusiness": {
+    "title": "Upgrade to Business",
+    "subtitle": "Get more out of Cape Coral Directory by upgrading your account.",
+    "firstName": "First Name *",
+    "lastName": "Last Name *",
+    "businessName": "Business Name *",
+    "businessEmail": "Business Email *",
+    "phone": "Business Phone *",
+    "typeOfBusiness": "What type of business? *",
+    "typePlaceholder": "Select a category...",
+    "submit": "Upgrade Account",
+    "submitting": "Upgrading...",
+    "successTitle": "Request Received!",
+    "successMessage": "Thank you for upgrading. Our team will review your request and get back to you soon.",
+    "sidebarButton": "Upgrade to Business"
+  },
   "home": {
     "viewAll": "View All",
     "featuredBusinesses": "Featured Businesses",

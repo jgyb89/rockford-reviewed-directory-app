@@ -129,6 +129,13 @@ export default function Footer({ locale = "en" }) {
             >
               Terms of Service
             </Link>
+            <span className={styles["footer__legal-sep"]}>|</span>
+            <Link
+              href={getLocalizedUrl("/mobile-terms", locale)}
+              className={styles["footer__legal-link"]}
+            >
+              Mobile Terms of Service
+            </Link>
           </div>
 
           {/* Social Icons */}

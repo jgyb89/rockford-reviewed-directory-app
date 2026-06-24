@@ -964,6 +964,22 @@ export async function submitRecommendationForm(formData) {
 }
 
 /**
+ * Submit the User to Business Upgrade Form (Gravity Form ID 5)
+ */
+export async function submitUserToBusinessForm(formData) {
+  const fieldValues = [
+    { id: 6, value: formData.get("firstName") || "" },
+    { id: 7, value: formData.get("lastName") || "" },
+    { id: 1, value: formData.get("businessName") || "" },
+    { id: 3, emailValues: { value: formData.get("businessEmail") || "" } },
+    { id: 8, value: formData.get("phone") || "" },
+    { id: 5, value: formData.get("typeOfBusiness") || "" },
+  ];
+
+  return submitGravityForm(5, fieldValues, false);
+}
+
+/**
  * Server Action to submit an Event comment using native WP comments.
  */
 export async function submitEventComment(formData) {
