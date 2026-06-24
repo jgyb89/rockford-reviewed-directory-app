@@ -348,7 +348,8 @@ function mapPayloadToAcf(payload) {
     hours_friday: ld.hoursFriday || payload.hoursFriday || "",
     hours_saturday: ld.hoursSaturday || payload.hoursSaturday || "",
     hours_sunday: ld.hoursSunday || payload.hoursSunday || "",
-    ccrlistingcategories: payload.categories || [],
+    directoryTypes: payload.selectedDirectoryType ? [payload.selectedDirectoryType] : [],
+    ccrlistingcategories: payload.selectedCategories || payload.categories || [],
   };
 }
 
