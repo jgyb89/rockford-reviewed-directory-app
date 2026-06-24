@@ -54,3 +54,12 @@
     font-size: 2rem;
   }
 }
+
+.link {
+  color: #e04c4c;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}

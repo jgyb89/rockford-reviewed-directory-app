@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import PropTypes from 'prop-types';
 import Sidebar from '@/components/dashboard/Sidebar';
+import { getDictionary } from '@/lib/dictionaries';
 import './Dashboard.css';
 
 export default async function DashboardLayout({ children, params }) {
@@ -27,10 +28,11 @@ export default async function DashboardLayout({ children, params }) {
   }
 
   const userRoles = viewer.roles.nodes.map((role) => role.name.toLowerCase());
+  const dict = await getDictionary(locale);
 
   return (
     <div className="dashboard-layout">
-      <Sidebar user={viewer} userRoles={userRoles} locale={locale} />
+      <Sidebar user={viewer} userRoles={userRoles} locale={locale} dict={dict} />
 
       <main className="dashboard-content">
         {children}

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import ProfileAvatar from './ProfileAvatar';
 import { getLocalizedUrl } from "@/lib/constants";
 
-export default function Sidebar({ user, userRoles, locale }) {
+export default function Sidebar({ user, userRoles, locale, dict }) {
   const pathname = usePathname();
   const isAdminOrBusiness = userRoles.includes('business') || userRoles.includes('administrator');
 
@@ -72,13 +72,35 @@ export default function Sidebar({ user, userRoles, locale }) {
           <a href={getLocalizedUrl("/logout", locale)} className="dashboard-nav__link dashboard-nav__link--signout">
             <div className="dashboard-nav__link-left">
               <span className="material-symbols-outlined">logout</span>
-              <span>Sign Out</span>
+              <span>{dict?.nav?.signOut || "Sign Out"}</span>
             </div>
             <span className="material-symbols-outlined dashboard-nav__link-arrow">
               chevron_right
             </span>
           </a>
         </li>
+        
+        {!isAdminOrBusiness && (
+          <li className="dashboard-nav__item" style={{ marginTop: '1rem', paddingBottom: '1rem', paddingLeft: '1rem', paddingRight: '1rem' }}>
+            <Link 
+              href={getLocalizedUrl("/user-to-business", locale)} 
+              className="dashboard-nav__link"
+              style={{
+                backgroundColor: '#e04c4c',
+                color: 'white',
+                justifyContent: 'center',
+                borderRadius: '8px',
+                padding: '0.75rem',
+                fontWeight: '600'
+              }}
+            >
+              <div className="dashboard-nav__link-left" style={{ margin: 0 }}>
+                <span className="material-symbols-outlined" style={{ color: 'white' }}>store</span>
+                <span>{dict?.userToBusiness?.sidebarButton || "Upgrade to Business"}</span>
+              </div>
+            </Link>
+          </li>
+        )}
       </ul>
     </aside>
   );
@@ -88,4 +110,5 @@ Sidebar.propTypes = {
   user: PropTypes.object.isRequired,
   userRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
   locale: PropTypes.string.isRequired,
+  dict: PropTypes.object
 };
