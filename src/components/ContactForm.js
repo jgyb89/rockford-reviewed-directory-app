@@ -37,27 +37,35 @@ export default function ContactForm() {
   const [error, setError] = useState(null);
 
   const validateField = (name, value) => {
-    let error = "";
-    if (name === 'firstName') {
-      if (!value.trim()) error = "First name is required";
-      else if (value.trim().length < 2) error = "First name must be at least 2 characters";
-    } else if (name === 'lastName') {
-      if (!value.trim()) error = "Last name is required";
-      else if (value.trim().length < 2) error = "Last name must be at least 2 characters";
-    } else if (name === 'email') {
-      const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-      if (!value) error = "Email is required";
-      else if (!emailRegex.test(value)) error = "Please enter a valid email address";
-    } else if (name === 'phone') {
-      if (value) {
-        const digits = value.replace(/\D/g, "");
-        if (digits.length !== 10) error = "Phone number must be exactly 10 digits";
+    const val = value ? (typeof value === 'string' ? value.trim() : value) : "";
+    switch (name) {
+      case 'firstName':
+        if (!val) return "First name is required";
+        if (val.length < 2) return "First name must be at least 2 characters";
+        return "";
+      case 'lastName':
+        if (!val) return "Last name is required";
+        if (val.length < 2) return "Last name must be at least 2 characters";
+        return "";
+      case 'email': {
+        const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+        if (!value) return "Email is required";
+        if (!emailRegex.test(value)) return "Please enter a valid email address";
+        return "";
       }
-    } else if (name === 'message') {
-      if (!value.trim()) error = "Message is required";
-      else if (value.trim().length < 5) error = "Message must be at least 5 characters";
+      case 'phone': {
+        if (!value) return "";
+        const digits = value.replace(/\D/g, "");
+        if (digits.length !== 10) return "Phone number must be exactly 10 digits";
+        return "";
+      }
+      case 'message':
+        if (!val) return "Message is required";
+        if (val.length < 5) return "Message must be at least 5 characters";
+        return "";
+      default:
+        return "";
     }
-    return error;
   };
 
   const handleChange = (e) => {

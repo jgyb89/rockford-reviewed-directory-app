@@ -35,7 +35,12 @@
 .gradientOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0) 100%);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 
 .slideContent {
@@ -49,7 +54,7 @@
 .slideCategory {
   display: inline-block;
   padding: 4px 12px;
-  background-color: rgba(0,0,0,0.6);
+  background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   border-radius: 20px;
   font-size: 0.9rem;
@@ -71,7 +76,7 @@
 
 .controlButton {
   position: absolute;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0, 0, 0, 0.3);
   color: white;
   border: none;
   border-radius: 50%;
@@ -110,7 +115,7 @@
   max-width: 960px;
   background-color: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
   padding: 24px 32px;
   z-index: 30;
   display: flex;
@@ -136,8 +141,10 @@
   border-radius: 30px;
   padding: 4px 16px;
   background-color: #ffffff;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
-  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .searchForm:focus-within {
@@ -188,9 +195,9 @@
 
 .pillButton {
   flex-shrink: 0;
-  padding: 8px 18px;
+  padding: 10px 20px;
   border-radius: 20px;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 500;
   border: 1px solid;
   cursor: pointer;
@@ -220,12 +227,12 @@
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   z-index: 10;
   color: #4a5568;
@@ -233,7 +240,8 @@
 }
 
 .pillScrollButton:hover {
-  background-color: #f7fafc;
+  color: #f7fafc;
+  background-color: #e04c4c;
 }
 
 .pillScrollLeft {

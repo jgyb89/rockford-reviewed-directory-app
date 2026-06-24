@@ -6,20 +6,17 @@ import DeleteListingButton from '@/components/dashboard/DeleteListingButton';
 import Pagination from '@/components/common/Pagination';
 import DashboardSortDropdown from '@/components/dashboard/DashboardSortDropdown';
 
-export default async function MyListingsPage({ params, searchParams }) {
-  const { locale } = await params;
-  const resolvedSearchParams = await searchParams;
-  const page = Number.parseInt(resolvedSearchParams?.page || '1', 10);
-  const sort = resolvedSearchParams?.sort || 'newest';
-  const ITEMS_PER_PAGE = 10;
-  
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get('authToken')?.value;
-
-  if (!authToken) {
-    redirect(``);
+function sortListings(listings, sort) {
+  const sorted = [...listings];
+  switch (sort) {
+    case 'az': return sorted.sort((a, b) => a.title.localeCompare(b.title));
+    case 'za': return sorted.sort((a, b) => b.title.localeCompare(a.title));
+    case 'oldest': return sorted.sort((a, b) => new Date(a.date) - new Date(b.date));
+    default: return sorted.sort((a, b) => new Date(b.date) - new Date(a.date));
   }
+}
 
+async function fetchMyListings(authToken) {
   const query = `
     query GetMyListings {
       viewer {
@@ -36,33 +33,48 @@ export default async function MyListingsPage({ params, searchParams }) {
     }
   `;
 
-  const res = await fetch(process.env.NEXT_PUBLIC_WORDPRESS_API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${authToken}`,
-      'User-Agent': 'CCR-NextJS-Frontend/1.0',
-    },
-    body: JSON.stringify({ query }),
-    cache: 'no-store',
-  });
-
-  let json = null;
   try {
+    const res = await fetch(process.env.NEXT_PUBLIC_WORDPRESS_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authToken}`,
+        'User-Agent': 'CCR-NextJS-Frontend/1.0',
+      },
+      body: JSON.stringify({ query }),
+      cache: 'no-store',
+    });
+
     if (res.ok) {
       const contentType = res.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
-        json = await res.json();
-      } else {
-        console.error(`Unexpected content-type in listings page: ${contentType}`);
+        return await res.json();
       }
+      console.error(`Unexpected content-type in listings page: ${contentType}`);
     } else {
       console.error(`HTTP Error in listings page: status ${res.status}`);
     }
   } catch (error) {
     console.error("Failed to parse JSON on listings page:", error);
   }
+  return null;
+}
 
+export default async function MyListingsPage({ params, searchParams }) {
+  const { locale } = await params;
+  const resolvedSearchParams = await searchParams;
+  const page = Number.parseInt(resolvedSearchParams?.page || '1', 10);
+  const sort = resolvedSearchParams?.sort || 'newest';
+  const ITEMS_PER_PAGE = 10;
+  
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get('authToken')?.value;
+
+  if (!authToken) {
+    redirect(``);
+  }
+
+  const json = await fetchMyListings(authToken);
   const viewer = json?.data?.viewer;
 
   if (!viewer) {
@@ -75,19 +87,7 @@ export default async function MyListingsPage({ params, searchParams }) {
   }
 
   const listings = viewer.ccrlistings?.nodes || [];
-
-  let sortedListings = [...listings];
-  if (sort === 'az') {
-    sortedListings.sort((a, b) => a.title.localeCompare(b.title));
-  } else if (sort === 'za') {
-    sortedListings.sort((a, b) => b.title.localeCompare(a.title));
-  } else if (sort === 'oldest') {
-    sortedListings.sort((a, b) => new Date(a.date) - new Date(b.date));
-  } else {
-    // Default: Newest
-    sortedListings.sort((a, b) => new Date(b.date) - new Date(a.date));
-  }
-
+  const sortedListings = sortListings(listings, sort);
   const paginatedListings = sortedListings.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
   return (
