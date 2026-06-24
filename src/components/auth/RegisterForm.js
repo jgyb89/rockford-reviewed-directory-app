@@ -4,6 +4,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import PropTypes from "prop-types";
+import { formatPhoneNumber } from "@/lib/formatUtils";
 import styles from '../RegisterBusinessForm.module.css';
 
 export default function RegisterForm({ dict = {}, locale = "en" }) {
@@ -24,18 +25,6 @@ export default function RegisterForm({ dict = {}, locale = "en" }) {
   const [passwordStrength, setPasswordStrength] = useState(""); // "", "weak", "medium", "strong"
   const [isLoading, setIsLoading] = useState(false);
   const [generalError, setGeneralError] = useState(null);
-
-  // Phone number masking: (XXX) XXX-XXXX
-  const formatPhoneNumber = (value) => {
-    if (!value) return value;
-    const phoneNumber = value.replaceAll(/\D/g, "");
-    const phoneNumberLength = phoneNumber.length;
-    if (phoneNumberLength < 4) return phoneNumber;
-    if (phoneNumberLength < 7) {
-      return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
-    }
-    return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
-  };
 
   // Password strength logic
   const checkPasswordStrength = (password) => {

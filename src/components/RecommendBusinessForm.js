@@ -2,18 +2,8 @@
 
 import { useState } from 'react';
 import { submitRecommendationForm } from '@/lib/actions';
+import { formatPhoneNumber, EMAIL_REGEX } from '@/lib/formatUtils';
 import styles from './RecommendBusinessForm.module.css';
-
-const formatPhoneNumber = (value) => {
-  if (!value) return value;
-  const phoneNumber = value.replace(/[^\d]/g, '');
-  const phoneNumberLength = phoneNumber.length;
-  if (phoneNumberLength < 4) return phoneNumber;
-  if (phoneNumberLength < 7) {
-    return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
-  }
-  return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
-};
 
 export default function RecommendBusinessForm() {
   const [formData, setFormData] = useState({
@@ -49,10 +39,9 @@ export default function RecommendBusinessForm() {
       if (!value.trim()) error = "Business address is required";
       else if (value.trim().length < 5) error = "Business address must be at least 5 characters";
     } else if (name === 'businessEmail') {
-      if (value) {
-        const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-        if (!emailRegex.test(value)) error = "Please enter a valid email address";
-      }
+      if (!value) return "";
+      if (!EMAIL_REGEX.test(value)) return "Please enter a valid email address";
+      return "";
     } else if (name === 'businessPhone') {
       if (value) {
         const digits = value.replace(/\D/g, "");
