@@ -33,11 +33,19 @@
 .paginiatedLoadMoreButton {
   color: #e04c4c;
   background: transparent;
-  border: none;
+  border: 1px solid #e04c4c;
+  border-radius: 24px;
+  padding: 0.75rem 2rem;
   text-decoration: none;
   font-weight: 700;
   font-size: 1rem;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.paginiatedLoadMoreButton:hover {
+  background: #e04c4c;
+  color: #ffffff;
 }
 
 @media screen and (max-width: 480px) {

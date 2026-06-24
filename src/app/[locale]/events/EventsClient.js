@@ -20,6 +20,56 @@ const parseSafeDate = (dateStr) => {
   return new Date(dateStr.replace(" ", "T"));
 };
 
+function PaginatedEventSection({ title, events, locale, currentUser }) {
+  const [visibleCount, setVisibleCount] = useState(8);
+  const visibleEvents = events.slice(0, visibleCount);
+  const hasMore = visibleCount < events.length;
+
+  return (
+    <section>
+      <h2 className="thematic-section-header">{title}</h2>
+      <div className="event-discovery-grid">
+        {visibleEvents.map((event) => (
+          <EventCard
+            key={`${title}-${event.id}`}
+            event={event}
+            locale={locale}
+            currentUser={currentUser}
+          />
+        ))}
+      </div>
+      {hasMore && (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem', marginBottom: '2rem' }}>
+          <button 
+            onClick={() => setVisibleCount(prev => prev + 4)}
+            style={{ 
+              color: '#e04c4c', 
+              background: 'transparent', 
+              border: '1px solid #e04c4c', 
+              borderRadius: '24px',
+              padding: '0.75rem 2rem',
+              fontWeight: 700, 
+              fontSize: '1rem', 
+              cursor: 'pointer',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#e04c4c';
+              e.currentTarget.style.color = '#fff';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'transparent';
+              e.currentTarget.style.color = '#e04c4c';
+            }}
+          >
+            Load More
+          </button>
+        </div>
+      )}
+    </section>
+  );
+}
+
 export default function EventsClient({ events, currentUser, locale }) {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [activeCategorySlug, setActiveCategorySlug] = useState("all");
@@ -241,68 +291,40 @@ export default function EventsClient({ events, currentUser, locale }) {
           )}
 
         {eventsToday.length > 0 && (
-          <section>
-            <h2 className="thematic-section-header">Going on Today</h2>
-            <div className="event-discovery-grid">
-              {eventsToday.slice(0, 8).map((event) => (
-                <EventCard
-                  key={`today-${event.id}`}
-                  event={event}
-                  locale={locale}
-                  currentUser={currentUser}
-                />
-              ))}
-            </div>
-          </section>
+          <PaginatedEventSection
+            title="Going on Today"
+            events={eventsToday}
+            locale={locale}
+            currentUser={currentUser}
+          />
         )}
 
         {eventsUpcoming.length > 0 && (
-          <section>
-            <h2 className="thematic-section-header">Upcoming Events</h2>
-            <div className="event-discovery-grid">
-              {eventsUpcoming.slice(0, 8).map((event) => (
-                <EventCard
-                  key={`upcoming-${event.id}`}
-                  event={event}
-                  locale={locale}
-                  currentUser={currentUser}
-                />
-              ))}
-            </div>
-          </section>
+          <PaginatedEventSection
+            title="Upcoming Events"
+            events={eventsUpcoming}
+            locale={locale}
+            currentUser={currentUser}
+          />
         )}
 
         {eventsFree.length > 0 && (
-          <section>
-            <h2 className="thematic-section-header">Free Events</h2>
-            <div className="event-discovery-grid">
-              {eventsFree.slice(0, 8).map((event) => (
-                <EventCard
-                  key={`free-${event.id}`}
-                  event={event}
-                  locale={locale}
-                  currentUser={currentUser}
-                />
-              ))}
-            </div>
-          </section>
+          <PaginatedEventSection
+            title="Free Events"
+            events={eventsFree}
+            locale={locale}
+            currentUser={currentUser}
+          />
         )}
 
         {/* Fallback for events that don't fit any bucket */}
         {otherUpcomingEvents.length > 0 && (
-          <section>
-            <h2 className="thematic-section-header">More Upcoming Events</h2>
-            <div className="event-discovery-grid">
-              {otherUpcomingEvents.slice(0, 16).map((event) => (
-                <EventCard
-                  key={`other-${event.id}`}
-                  event={event}
-                  locale={locale}
-                  currentUser={currentUser}
-                />
-              ))}
-            </div>
-          </section>
+          <PaginatedEventSection
+            title="More Upcoming Events"
+            events={otherUpcomingEvents}
+            locale={locale}
+            currentUser={currentUser}
+          />
         )}
       </div>
 
