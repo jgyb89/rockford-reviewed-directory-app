@@ -1,17 +1,18 @@
 "use client";
 
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import Image from "next/image";
 import styles from "./StepForm.module.css";
 import wizardStyles from "./ListingWizard.module.css";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
+const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/jpg"]);
 
 function validateFiles(files) {
   const errors = [];
   const valid = files.filter((file) => {
-    if (!ALLOWED_TYPES.includes(file.type)) {
+    if (!ALLOWED_TYPES.has(file.type)) {
       errors.push(
         `"${file.name}" is not a valid format (JPEG, PNG, WEBP only).`,
       );
@@ -36,17 +37,70 @@ function FeaturedImageSection({
   onFileChange,
   onRemove,
 }) {
+  let featuredBorderColor = "#cbd5e1";
+  if (fileErrors.featured) {
+    featuredBorderColor = "#ef4444";
+  } else if (dragState.featured) {
+    featuredBorderColor = "#e04c4c";
+  }
+
   return (
     <div className={styles["step-form__group"]}>
-      <label className={styles["step-form__label"]}>Featured Image</label>
+      <div className={styles["step-form__label"]}>Featured Image</div>
 
-      {!formData.featuredImage ? (
+      {formData.featuredImage ? (
+        <div
+          style={{
+            position: "relative",
+            width: "200px",
+            height: "140px",
+            borderRadius: "8px",
+            overflow: "hidden",
+            border: "1px solid #e2e8f0",
+          }}
+        >
+          <Image
+            src={URL.createObjectURL(formData.featuredImage)}
+            alt="Featured Preview"
+            fill
+            unoptimized
+            style={{ objectFit: "cover" }}
+          />
+          <button
+            onClick={onRemove}
+            title="Remove image"
+            style={{
+              position: "absolute",
+              top: "0.5rem",
+              right: "0.5rem",
+              background: "#ef4444",
+              color: "white",
+              border: "none",
+              borderRadius: "50%",
+              width: "28px",
+              height: "28px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+            }}
+          >
+            <span
+              className="material-symbols-outlined"
+              style={{ fontSize: "1rem" }}
+            >
+              close
+            </span>
+          </button>
+        </div>
+      ) : (
         <div
           onDragOver={(e) => onDragOver(e, "featured")}
           onDragLeave={(e) => onDragLeave(e, "featured")}
           onDrop={(e) => onDrop(e, "featured")}
           style={{
-            border: `2px dashed ${fileErrors.featured ? "#ef4444" : dragState.featured ? "#e04c4c" : "#cbd5e1"}`,
+            border: `2px dashed ${featuredBorderColor}`,
             backgroundColor: dragState.featured ? "#fef2f2" : "#f8fafc",
             padding: "3rem 2rem",
             borderRadius: "12px",
@@ -94,52 +148,6 @@ function FeaturedImageSection({
             Browse Files
           </label>
         </div>
-      ) : (
-        <div
-          style={{
-            position: "relative",
-            width: "200px",
-            height: "140px",
-            borderRadius: "8px",
-            overflow: "hidden",
-            border: "1px solid #e2e8f0",
-          }}
-        >
-          <Image
-            src={URL.createObjectURL(formData.featuredImage)}
-            alt="Featured Preview"
-            fill
-            unoptimized
-            style={{ objectFit: "cover" }}
-          />
-          <button
-            onClick={onRemove}
-            title="Remove image"
-            style={{
-              position: "absolute",
-              top: "0.5rem",
-              right: "0.5rem",
-              background: "#ef4444",
-              color: "white",
-              border: "none",
-              borderRadius: "50%",
-              width: "28px",
-              height: "28px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
-            }}
-          >
-            <span
-              className="material-symbols-outlined"
-              style={{ fontSize: "1rem" }}
-            >
-              close
-            </span>
-          </button>
-        </div>
       )}
 
       {fileErrors.featured && (
@@ -177,18 +185,25 @@ function GallerySection({
   onFileChange,
   onRemove,
 }) {
+  let galleryBorderColor = "#cbd5e1";
+  if (fileErrors.gallery) {
+    galleryBorderColor = "#ef4444";
+  } else if (dragState.gallery) {
+    galleryBorderColor = "#e04c4c";
+  }
+
   return (
     <div className={styles["step-form__group"]}>
-      <label className={styles["step-form__label"]}>
+      <div className={styles["step-form__label"]}>
         Gallery Images (Max 10)
-      </label>
+      </div>
 
       <div
         onDragOver={(e) => onDragOver(e, "gallery")}
         onDragLeave={(e) => onDragLeave(e, "gallery")}
         onDrop={(e) => onDrop(e, "gallery")}
         style={{
-          border: `2px dashed ${fileErrors.gallery ? "#ef4444" : dragState.gallery ? "#e04c4c" : "#cbd5e1"}`,
+          border: `2px dashed ${galleryBorderColor}`,
           backgroundColor: dragState.gallery ? "#fef2f2" : "#f8fafc",
           padding: "2rem",
           borderRadius: "12px",
@@ -200,7 +215,7 @@ function GallerySection({
           <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
             {formData.gallery.map((file, index) => (
               <div
-                key={index}
+                key={file.name ? `${file.name}-${index}` : index}
                 style={{
                   position: "relative",
                   width: "100px",
@@ -382,7 +397,7 @@ function Step4Media({ formData, updateFormData, nextStep, prevStep }) {
     try {
       const url = new URL(string);
       return url.protocol === "http:" || url.protocol === "https:";
-    } catch (_) {
+    } catch {
       return false;
     }
   };
@@ -562,5 +577,50 @@ function Step4Media({ formData, updateFormData, nextStep, prevStep }) {
     </div>
   );
 }
+
+FeaturedImageSection.propTypes = {
+  formData: PropTypes.shape({
+    featuredImage: PropTypes.any,
+  }).isRequired,
+  fileErrors: PropTypes.shape({
+    featured: PropTypes.string,
+  }).isRequired,
+  dragState: PropTypes.shape({
+    featured: PropTypes.bool,
+  }).isRequired,
+  onDragOver: PropTypes.func.isRequired,
+  onDragLeave: PropTypes.func.isRequired,
+  onDrop: PropTypes.func.isRequired,
+  onFileChange: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
+};
+
+GallerySection.propTypes = {
+  formData: PropTypes.shape({
+    gallery: PropTypes.arrayOf(PropTypes.any),
+  }).isRequired,
+  fileErrors: PropTypes.shape({
+    gallery: PropTypes.string,
+  }).isRequired,
+  dragState: PropTypes.shape({
+    gallery: PropTypes.bool,
+  }).isRequired,
+  onDragOver: PropTypes.func.isRequired,
+  onDragLeave: PropTypes.func.isRequired,
+  onDrop: PropTypes.func.isRequired,
+  onFileChange: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
+};
+
+Step4Media.propTypes = {
+  formData: PropTypes.shape({
+    featuredImage: PropTypes.any,
+    gallery: PropTypes.arrayOf(PropTypes.any),
+    videoUrl: PropTypes.string,
+  }).isRequired,
+  updateFormData: PropTypes.func.isRequired,
+  nextStep: PropTypes.func.isRequired,
+  prevStep: PropTypes.func.isRequired,
+};
 
 export default Step4Media;

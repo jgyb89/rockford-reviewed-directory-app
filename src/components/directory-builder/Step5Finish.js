@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import PropTypes from 'prop-types';
+import { useRouter } from 'next/navigation';
 import { submitListing, uploadWPImage } from '@/lib/actions';
-import { Loader2 } from 'lucide-react';
+
 import imageCompression from 'browser-image-compression';
 import styles from './StepForm.module.css';
 import wizardStyles from './ListingWizard.module.css';
@@ -33,8 +34,6 @@ const compressImage = async (file) => {
 
 const Step5Finish = ({ formData, prevStep }) => {
   const router = useRouter();
-  const params = useParams();
-  const locale = params?.locale || 'en';
   const [uploadStep, setUploadStep] = useState('idle'); // idle, compressing, uploading_featured, uploading_gallery, saving_data, complete
 
   const handleSubmit = async () => {
@@ -129,6 +128,15 @@ const Step5Finish = ({ formData, prevStep }) => {
 
   const isSubmitting = uploadStep !== 'idle';
 
+  let progressWidth = '90%';
+  if (uploadStep === 'compressing') {
+    progressWidth = '25%';
+  } else if (uploadStep === 'uploading_featured') {
+    progressWidth = '50%';
+  } else if (uploadStep === 'uploading_gallery') {
+    progressWidth = '75%';
+  }
+
   return (
     <div className={styles['step-form']}>
       {/* Progress Overlay Modal */}
@@ -155,14 +163,24 @@ const Step5Finish = ({ formData, prevStep }) => {
             width: '90%',
             boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
           }}>
-            <div className="material-symbols-outlined" style={{ fontSize: '4rem', color: '#e04c4c', marginBottom: '1.5rem', animation: 'pulse 2s infinite' }}>
-              {stepsInfo[uploadStep].icon}
+            <style>{`
+              @keyframes starBounceModal {
+                0%, 40%, 100% { transform: translateY(0); }
+                20% { transform: translateY(-12px); }
+              }
+            `}</style>
+            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginBottom: '1.5rem' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounceModal 1.5s infinite' }}>star</span>
+              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounceModal 1.5s infinite 0.1s' }}>star</span>
+              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounceModal 1.5s infinite 0.2s' }}>star</span>
+              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounceModal 1.5s infinite 0.3s' }}>star</span>
+              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounceModal 1.5s infinite 0.4s' }}>star</span>
             </div>
             <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem', color: '#1e293b' }}>{stepsInfo[uploadStep].label}</h3>
             <p style={{ color: '#64748b', marginBottom: '2rem' }}>Please wait while we process your request.</p>
             <div style={{ width: '100%', background: '#f1f5f9', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
               <div style={{ 
-                width: uploadStep === 'compressing' ? '25%' : uploadStep === 'uploading_featured' ? '50%' : uploadStep === 'uploading_gallery' ? '75%' : '90%',
+                width: progressWidth,
                 background: '#e04c4c',
                 height: '100%',
                 transition: 'width 0.5s ease'
@@ -211,6 +229,10 @@ const Step5Finish = ({ formData, prevStep }) => {
       <div className={wizardStyles['wizard__actions']}>
         <style>{`
           @keyframes spin { 100% { transform: rotate(360deg); } }
+          @keyframes starBounce {
+            0%, 40%, 100% { transform: translateY(0); }
+            20% { transform: translateY(-6px); }
+          }
         `}</style>
         <button 
           className={`${wizardStyles['wizard__button']} ${wizardStyles['wizard__button--secondary']}`} 
@@ -224,7 +246,9 @@ const Step5Finish = ({ formData, prevStep }) => {
           onClick={handleSubmit}
           disabled={isSubmitting}
           style={{ 
-            backgroundColor: isSubmitting ? '#ccc' : '#e04c4c',
+            backgroundColor: isSubmitting ? '#f8fafc' : '#e04c4c',
+            color: isSubmitting ? '#e04c4c' : '#fff',
+            border: isSubmitting ? '1px solid #e04c4c' : '1px solid transparent',
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center', 
@@ -233,8 +257,14 @@ const Step5Finish = ({ formData, prevStep }) => {
         >
           {isSubmitting ? (
             <>
-              <Loader2 size={20} style={{ animation: 'spin 1s linear infinite' }} />
-              Processing...
+              <div style={{ display: 'flex', gap: '2px' }}>
+                <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite' }}>star</span>
+                <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.1s' }}>star</span>
+                <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.2s' }}>star</span>
+                <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.3s' }}>star</span>
+                <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.4s' }}>star</span>
+              </div>
+              <span style={{ color: '#e04c4c', fontWeight: 600 }}>Processing...</span>
             </>
           ) : 'Submit Listing'}
         </button>
@@ -242,4 +272,35 @@ const Step5Finish = ({ formData, prevStep }) => {
     </div>
   );
 };
+
+Step5Finish.propTypes = {
+  formData: PropTypes.shape({
+    title: PropTypes.string,
+    category: PropTypes.string,
+    categories: PropTypes.arrayOf(PropTypes.string),
+    address: PropTypes.string,
+    city: PropTypes.string,
+    state: PropTypes.string,
+    zipCode: PropTypes.string,
+    phone: PropTypes.string,
+    email: PropTypes.string,
+    website: PropTypes.string,
+    videoUrl: PropTypes.string,
+    socialUrls: PropTypes.arrayOf(PropTypes.string),
+    description: PropTypes.string,
+    featuredImage: PropTypes.any,
+    gallery: PropTypes.arrayOf(PropTypes.any),
+    hours: PropTypes.shape({
+      Monday: PropTypes.string,
+      Tuesday: PropTypes.string,
+      Wednesday: PropTypes.string,
+      Thursday: PropTypes.string,
+      Friday: PropTypes.string,
+      Saturday: PropTypes.string,
+      Sunday: PropTypes.string,
+    }),
+  }).isRequired,
+  prevStep: PropTypes.func.isRequired,
+};
+
 export default Step5Finish;

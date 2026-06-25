@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import styles from '@/components/directory-builder/StepForm.module.css';
 import wizardStyles from '@/components/directory-builder/ListingWizard.module.css';
 import { EVENT_CATEGORIES } from "@/lib/constants/events";
@@ -113,6 +114,17 @@ const Step1BasicInfo = ({ formData, updateFormData, nextStep }) => {
       </div>
     </div>
   );
+};
+
+Step1BasicInfo.propTypes = {
+  formData: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+    primaryCategory: PropTypes.string,
+    customTags: PropTypes.arrayOf(PropTypes.string),
+  }).isRequired,
+  updateFormData: PropTypes.func.isRequired,
+  nextStep: PropTypes.func.isRequired,
 };
 
 export default Step1BasicInfo;

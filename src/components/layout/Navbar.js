@@ -65,22 +65,34 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
     }, 300);
   };
 
-  const getSubmitHref = () => {
-    if (!user) return getLocalizedUrl("/register-business", locale);
+  const t = dict?.nav || {};
+
+  const getSubmitAction = () => {
+    if (!user) {
+      return {
+        href: getLocalizedUrl("/register-business", locale),
+        label: t.submitBusiness || "Submit your Business",
+      };
+    }
     const userRoles =
       user.roles?.nodes?.map((node) => node.name.toLowerCase()) || [];
     if (userRoles.includes("business") || userRoles.includes("administrator")) {
-      return getLocalizedUrl("/submit-listing", locale);
+      return {
+        href: getLocalizedUrl("/submit-listing", locale),
+        label: t.submitBusiness || "Submit your Business",
+      };
     }
-    return getLocalizedUrl("/user-to-business", locale);
+    return {
+      href: getLocalizedUrl("/user-to-business", locale),
+      label: dict?.userToBusiness?.sidebarButton || "Upgrade to Business",
+    };
   };
 
-  const submitHref = getSubmitHref();
+  const submitAction = getSubmitAction();
 
   const userRoles = user?.roles?.nodes?.map((node) => node.name.toLowerCase()) || [];
   const isBusinessOrAdmin = userRoles.includes("business") || userRoles.includes("administrator");
 
-  const t = dict?.nav || {};
 
   return (
     <>
@@ -242,7 +254,7 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
                 )}
               </div>
               <div className={styles['business-signup']}>
-                <Link href={submitHref}>{t.submitBusiness || "Submit your Business"}</Link>
+                <Link href={submitAction.href}>{submitAction.label}</Link>
               </div>
             </>
           ) : (
@@ -258,7 +270,7 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
                 <Link href={getLocalizedUrl("/register", locale)}>{t.joinCommunity || "Join Community"}</Link>
               </div>
               <div className={styles['business-signup']}>
-                <Link href={submitHref}>{t.submitBusiness || "Submit your Business"}</Link>
+                <Link href={submitAction.href}>{submitAction.label}</Link>
               </div>
             </>
           )}
@@ -404,8 +416,8 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
                   </div>
                 )}
                 <div className={styles['business-signup']}>
-                  <Link href={submitHref} onClick={closeMobileMenu}>
-                    {t.submitBusiness || "Submit your Business"}
+                  <Link href={submitAction.href} onClick={closeMobileMenu}>
+                    {submitAction.label}
                   </Link>
                 </div>
               </div>

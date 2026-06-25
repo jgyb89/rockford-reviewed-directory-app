@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { updateEventMutation } from '@/lib/graphql/events';
@@ -145,7 +146,7 @@ const ImageCropModal = ({ file, onCancel, onSave }) => {
             max={3}
             step={0.1}
             aria-labelledby="Zoom"
-            onChange={(e) => setZoom(parseFloat(e.target.value))}
+            onChange={(e) => setZoom(Number.parseFloat(e.target.value))}
             style={{ width: "100%", cursor: "pointer" }}
           />
         </div>
@@ -196,16 +197,18 @@ const ProgressOverlay = ({ step }) => {
         className="dashboard-modal-dialog"
         style={{ textAlign: "center", padding: "3rem" }}
       >
-        <div
-          className="material-symbols-outlined"
-          style={{
-            fontSize: "4rem",
-            color: "#e04c4c",
-            marginBottom: "1.5rem",
-            animation: "pulse 2s infinite",
-          }}
-        >
-          {stepsInfo[step].icon}
+        <style>{`
+          @keyframes starBounce {
+            0%, 40%, 100% { transform: translateY(0); }
+            20% { transform: translateY(-12px); }
+          }
+        `}</style>
+        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginBottom: '1.5rem' }}>
+          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite' }}>star</span>
+          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.1s' }}>star</span>
+          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.2s' }}>star</span>
+          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.3s' }}>star</span>
+          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.4s' }}>star</span>
         </div>
         <h3 className="dashboard-modal-title">{stepsInfo[step].label}</h3>
         <p className="dashboard-modal-text">
@@ -411,7 +414,7 @@ export default function EditEventForm({ initialData, locale }) {
         ticket_url: formData.ticket_url,
         is_recurring: formData.is_recurring,
         recurrence_rule: finalRule,
-        featuredImageId: featuredImageId ? parseInt(featuredImageId) : null,
+        featuredImageId: featuredImageId ? Number.parseInt(featuredImageId, 10) : null,
       };
 
       const result = await updateEventMutation(initialData.databaseId, payload);
@@ -568,8 +571,9 @@ export default function EditEventForm({ initialData, locale }) {
           {formData.is_recurring && (
             <div style={{ backgroundColor: '#f8f9fa', padding: '1.5rem', borderRadius: '8px', border: '1px solid #eaeaea', display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '1.5rem' }}>
               <div>
-                <label style={labelStyle}>Repeats</label>
+                <label htmlFor="recurrence_freq" style={labelStyle}>Repeats</label>
                 <select 
+                  id="recurrence_freq"
                   style={inputStyle(false)}
                   value={formData.recurrence_freq || 'WEEKLY'}
                   onChange={(e) => updateFormData({ recurrence_freq: e.target.value })}
@@ -582,7 +586,7 @@ export default function EditEventForm({ initialData, locale }) {
 
               {(!formData.recurrence_freq || formData.recurrence_freq === 'WEEKLY') && (
                 <div>
-                  <label style={labelStyle}>On these days</label>
+                  <div style={labelStyle}>On these days</div>
                   <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                     {[{label: 'S', val: 'SU'}, {label: 'M', val: 'MO'}, {label: 'T', val: 'TU'}, {label: 'W', val: 'WE'}, {label: 'T', val: 'TH'}, {label: 'F', val: 'FR'}, {label: 'S', val: 'SA'}].map((day) => {
                       const isActive = (formData.recurrence_byday || []).includes(day.val);
@@ -615,9 +619,10 @@ export default function EditEventForm({ initialData, locale }) {
               )}
 
               <div>
-                <label style={labelStyle}>Ends on (Optional)</label>
+                <label htmlFor="recurrence_until" style={labelStyle}>Ends on (Optional)</label>
                 <input 
                   type="date"
+                  id="recurrence_until"
                   style={inputStyle(false)}
                   value={formData.recurrence_until || ''}
                   onChange={(e) => updateFormData({ recurrence_until: e.target.value })}
@@ -697,7 +702,7 @@ export default function EditEventForm({ initialData, locale }) {
 
         <SectionWrapper title="Event Media">
           <div>
-            <label style={labelStyle}>Featured Image</label>
+            <div style={labelStyle}>Featured Image</div>
             
             {(!existingFeaturedImage && !newFeaturedImage) ? (
               <div style={{ border: '2px dashed #cbd5e1', padding: '2rem', textAlign: 'center', borderRadius: '8px' }}>
@@ -710,7 +715,7 @@ export default function EditEventForm({ initialData, locale }) {
                 />
                 <label htmlFor="featuredImage" style={{ cursor: "pointer", color: "#1e293b", fontWeight: 600 }}>
                   <span className="material-symbols-outlined" style={{ fontSize: '2rem', display: 'block' }}>add_photo_alternate</span>
-                  Click to Browse Files
+                  {" "}Click to Browse Files
                 </label>
               </div>
             ) : (
@@ -746,3 +751,58 @@ export default function EditEventForm({ initialData, locale }) {
     </div>
   );
 }
+
+SectionWrapper.propTypes = {
+  title: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+};
+
+ImageCropModal.propTypes = {
+  file: PropTypes.any,
+  onCancel: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
+};
+
+ProgressOverlay.propTypes = {
+  step: PropTypes.string.isRequired,
+};
+
+EditEventForm.propTypes = {
+  initialData: PropTypes.shape({
+    databaseId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    title: PropTypes.string,
+    content: PropTypes.string,
+    featuredImage: PropTypes.shape({
+      node: PropTypes.object,
+    }),
+    eventCategories: PropTypes.shape({
+      nodes: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.string,
+          slug: PropTypes.string,
+        })
+      ),
+    }),
+    eventDetails: PropTypes.shape({
+      recurrenceRule: PropTypes.string,
+      startDateTime: PropTypes.string,
+      startDate: PropTypes.string,
+      start_date: PropTypes.string,
+      endDateTime: PropTypes.string,
+      endDate: PropTypes.string,
+      end_date: PropTypes.string,
+      venueName: PropTypes.string,
+      eventAddress: PropTypes.shape({
+        streetAddress: PropTypes.string,
+        address: PropTypes.string,
+        latitude: PropTypes.number,
+        longitude: PropTypes.number,
+      }),
+      price: PropTypes.string,
+      ticketUrl: PropTypes.string,
+      ticket_url: PropTypes.string,
+      isRecurring: PropTypes.bool,
+    }),
+  }).isRequired,
+  locale: PropTypes.string,
+};

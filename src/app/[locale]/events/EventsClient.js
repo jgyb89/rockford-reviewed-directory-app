@@ -4,10 +4,10 @@ import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import EventCard from "@/components/events/EventCard";
 import LoginModal from "@/components/auth/LoginModal";
+import PropTypes from "prop-types";
 import { getLocalizedUrl } from "@/lib/constants";
 import { EVENT_CATEGORIES } from "@/lib/constants/events";
 import { expandRecurringEvents } from "@/lib/eventUtils";
-import Link from "next/link";
 import "./EventsClient.css";
 
 const DISPLAY_CATEGORIES = [
@@ -69,6 +69,13 @@ function PaginatedEventSection({ title, events, locale, currentUser }) {
     </section>
   );
 }
+
+PaginatedEventSection.propTypes = {
+  title: PropTypes.string.isRequired,
+  events: PropTypes.array.isRequired,
+  locale: PropTypes.string.isRequired,
+  currentUser: PropTypes.object,
+};
 
 export default function EventsClient({ events, currentUser, locale }) {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -335,3 +342,9 @@ export default function EventsClient({ events, currentUser, locale }) {
     </div>
   );
 }
+
+EventsClient.propTypes = {
+  events: PropTypes.array.isRequired,
+  currentUser: PropTypes.object,
+  locale: PropTypes.string.isRequired,
+};

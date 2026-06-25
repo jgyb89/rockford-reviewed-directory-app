@@ -29,32 +29,16 @@ export default function RecommendBusinessForm() {
 
   const validateField = (name, value) => {
     const val = value ? (typeof value === 'string' ? value.trim() : value) : "";
-    switch (name) {
-      case 'submitterName':
-        if (!val) return "Your name is required";
-        if (val.length < 2) return "Your name must be at least 2 characters";
-        return "";
-      case 'businessName':
-        if (!val) return "Business name is required";
-        if (val.length < 2) return "Business name must be at least 2 characters";
-        return "";
-      case 'businessAddress':
-        if (!val) return "Business address is required";
-        if (val.length < 5) return "Business address must be at least 5 characters";
-        return "";
-      case 'businessEmail':
-        if (!value) return "";
-        if (!EMAIL_REGEX.test(value)) return "Please enter a valid email address";
-        return "";
-      case 'businessPhone': {
-        if (!value) return "";
-        const digits = value.replace(/\D/g, "");
-        if (digits.length !== 10) return "Phone number must be exactly 10 digits";
-        return "";
-      }
-      default:
-        return "";
-    }
+    
+    const rules = {
+      submitterName: () => !val ? "Your name is required" : (val.length < 2 ? "Your name must be at least 2 characters" : ""),
+      businessName: () => !val ? "Business name is required" : (val.length < 2 ? "Business name must be at least 2 characters" : ""),
+      businessAddress: () => !val ? "Business address is required" : (val.length < 5 ? "Business address must be at least 5 characters" : ""),
+      businessEmail: () => !value ? "" : (!EMAIL_REGEX.test(value) ? "Please enter a valid email address" : ""),
+      businessPhone: () => !value ? "" : (value.replace(/\D/g, "").length !== 10 ? "Phone number must be exactly 10 digits" : "")
+    };
+
+    return rules[name] ? rules[name]() : "";
   };
 
   const handleChange = (e) => {

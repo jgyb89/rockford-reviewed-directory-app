@@ -12,12 +12,11 @@ export default async function NotFound() {
   const viewer = await getViewer();
 
   return (
-    <div 
-      className={`${poppins.variable} ${openSans.variable}`}
-      style={{ margin: 0, padding: 0, minHeight: '100vh', backgroundColor: '#f8fafc', fontFamily: 'var(--font-open-sans), sans-serif' }}
-    >
-      {/* Inject Navbar with fallback locale */}
-      <Navbar locale="en" currentUser={viewer} />
+    <html lang="en">
+      <body className={`${poppins.variable} ${openSans.variable}`} style={{ margin: 0, padding: 0 }}>
+        <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', fontFamily: 'var(--font-open-sans), sans-serif' }}>
+          {/* Inject Navbar with fallback locale */}
+          <Navbar locale="en" currentUser={viewer} />
       
       <div style={{ minHeight: 'calc(100vh - 80px)', backgroundColor: '#f8fafc' }}>
         <div className={styles['not-found']}>
@@ -54,5 +53,7 @@ export default async function NotFound() {
         </div>
       </div>
     </div>
+  </body>
+</html>
   );
 }

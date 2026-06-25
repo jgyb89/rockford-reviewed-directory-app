@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import PropTypes from "prop-types";
 import Link from "next/link";
 import { ALL_CATEGORIES } from "@/lib/constants";
 import styles from "./SearchModal.module.css";
@@ -40,7 +41,7 @@ const getCategoryRoute = (slug) => {
   // If it's a child, find the parent's directoryType
   if (category.parentSlug) {
     const parent = ALL_CATEGORIES.find((p) => p.slug === category.parentSlug);
-    if (parent && parent.directoryType) {
+    if (parent?.directoryType) {
       return `/directory/${parent.directoryType}/${category.slug}`;
     }
   }
@@ -66,7 +67,6 @@ export default function SearchModal({
   });
 
   const t = dict?.search || {};
-  const navT = dict?.nav || {};
 
   // Handle Escape key press to close modal
   useEffect(() => {
@@ -148,22 +148,6 @@ export default function SearchModal({
     }
   }, []);
 
-  // Hybrid Search Redirect
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (!searchTerm.trim()) return;
-
-    // Force redirect to root directory with search param
-    import("next/navigation").then(({ useRouter }) => {
-      // Note: Since this is a client component inside a hook-less or potentially complex structure,
-      // we'll assume the useRouter is available via the component scope if we refactor slightly,
-      // but for now, we'll use window.location if necessary or pass router down.
-      // Re-reading: SearchModal is a functional component, we can use useRouter hook.
-    });
-
-    // Actually, let's use the router from the component scope.
-  };
-
   // Debounced API Call (300ms)
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -183,18 +167,14 @@ export default function SearchModal({
     <div
       className={`${styles["search-modal"]} ${isOpen ? styles["search-modal--open"] : ""}`}
     >
-      <div
+      <button
+        type="button"
         className={styles["search-modal__overlay"]}
         onClick={onClose}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            onClose();
-          }
-        }}
-        role="button"
+        aria-label="Close modal backdrop"
+        style={{ border: 'none', background: 'transparent', padding: 0 }}
         tabIndex="-1"
-        aria-label="Close modal"
-      ></div>
+      ></button>
 
       <div className={styles["search-modal__container"]}>
         <div className={styles["search-modal__header"]}>
@@ -212,7 +192,7 @@ export default function SearchModal({
             onSubmit={(e) => {
               e.preventDefault();
               if (!searchTerm.trim()) return;
-              window.location.href = `/directory?search=${encodeURIComponent(searchTerm.trim())}`;
+              globalThis.location.href = `/directory?search=${encodeURIComponent(searchTerm.trim())}`;
               onClose();
             }}
             className={styles["search-modal__input-wrapper"]}
@@ -248,19 +228,7 @@ export default function SearchModal({
 
           {/* 3. Results Container or Empty State */}
           <div className={styles["search-modal__results-container"]}>
-            {!searchTerm.trim() ? (
-              /* EMPTY STATE */
-              <div className={styles["search-modal__empty-state"]}>
-                <span
-                  className={`material-symbols-outlined ${styles["search-modal__empty-icon"]}`}
-                >
-                  search_insights
-                </span>
-                <p className={styles["search-modal__empty-text"]}>
-                  Start typing to find businesses, services, or categories!
-                </p>
-              </div>
-            ) : (
+            {searchTerm.trim() ? (
               /* RESULTS STATE */
               <>
                 {isLoading ? (
@@ -339,6 +307,18 @@ export default function SearchModal({
                   </div>
                 )}
               </>
+            ) : (
+              /* EMPTY STATE */
+              <div className={styles["search-modal__empty-state"]}>
+                <span
+                  className={`material-symbols-outlined ${styles["search-modal__empty-icon"]}`}
+                >
+                  search_insights
+                </span>
+                <p className={styles["search-modal__empty-text"]}>
+                  Start typing to find businesses, services, or categories!
+                </p>
+              </div>
             )}
           </div>
         </div>
@@ -346,3 +326,10 @@ export default function SearchModal({
     </div>
   );
 }
+
+SearchModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  dict: PropTypes.object,
+  locale: PropTypes.string,
+};

@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import styles from './StepForm.module.css';
 import wizardStyles from './ListingWizard.module.css';
 import { ALL_CATEGORIES, DIRECTORY_TYPES } from '@/lib/constants';
@@ -69,9 +70,9 @@ const Step2Categories = ({ formData, updateFormData, nextStep, prevStep }) => {
 
       {/* Directory Type Selection */}
       <div className={styles['step-form__group']}>
-        <label className={styles['step-form__label']}>
+        <div className={styles['step-form__label']}>
           Directory Type <span className={styles['step-form__required']}>*</span>
-        </label>
+        </div>
         <div className={styles['pill-container']} style={{ marginTop: '0.5rem' }}>
           {DIRECTORY_TYPES.map(type => (
             <button
@@ -90,7 +91,7 @@ const Step2Categories = ({ formData, updateFormData, nextStep, prevStep }) => {
       {/* Sub Category Selection */}
       {formData.category && (
         <div className={styles['category-section']}>
-          <label className={styles['section-label']}>Select Category</label>
+          <div className={styles['section-label']}>Select Category</div>
           <div className={styles['pill-container']}>
             {availableChildCategories.map(child => (
               <button
@@ -183,6 +184,16 @@ const Step2Categories = ({ formData, updateFormData, nextStep, prevStep }) => {
       </div>
     </div>
   );
+};
+
+Step2Categories.propTypes = {
+  formData: PropTypes.shape({
+    category: PropTypes.string,
+    categories: PropTypes.arrayOf(PropTypes.string),
+  }).isRequired,
+  updateFormData: PropTypes.func.isRequired,
+  nextStep: PropTypes.func.isRequired,
+  prevStep: PropTypes.func.isRequired,
 };
 
 export default Step2Categories;

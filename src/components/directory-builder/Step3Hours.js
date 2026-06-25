@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import styles from './StepForm.module.css';
 import wizardStyles from './ListingWizard.module.css';
 
@@ -115,8 +116,8 @@ const Step3Hours = ({ formData, updateFormData, nextStep, prevStep }) => {
             const [closeTime, closeAmPm] = closeStr.split(' ');
 
             // Prefer temporary typing value, fallback to global formatted state
-            const displayOpen = tempInputs[`${day}-open`] !== undefined ? tempInputs[`${day}-open`] : openTime;
-            const displayClose = tempInputs[`${day}-close`] !== undefined ? tempInputs[`${day}-close`] : closeTime;
+            const displayOpen = tempInputs[`${day}-open`] === undefined ? openTime : tempInputs[`${day}-open`];
+            const displayClose = tempInputs[`${day}-close`] === undefined ? closeTime : tempInputs[`${day}-close`];
 
             return (
               <div key={day} style={{ display: 'grid', gridTemplateColumns: '100px 1fr 60px', alignItems: 'center', gap: '1rem' }}>
@@ -163,4 +164,16 @@ const Step3Hours = ({ formData, updateFormData, nextStep, prevStep }) => {
     </div>
   );
 };
+
+Step3Hours.propTypes = {
+  formData: PropTypes.shape({
+    hours: PropTypes.objectOf(PropTypes.string),
+    timezone: PropTypes.string,
+    is247: PropTypes.bool,
+  }).isRequired,
+  updateFormData: PropTypes.func.isRequired,
+  nextStep: PropTypes.func.isRequired,
+  prevStep: PropTypes.func.isRequired,
+};
+
 export default Step3Hours;

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useJsApiLoader, Autocomplete } from '@react-google-maps/api';
 import styles from '@/components/directory-builder/StepForm.module.css';
 import wizardStyles from '@/components/directory-builder/ListingWizard.module.css';
@@ -18,7 +19,7 @@ const Step2Details = ({ formData, updateFormData, nextStep, prevStep }) => {
     const [date, timePart] = dtStr.split('T');
     if (!timePart) return { date, time: '12:00', ampm: 'AM' };
     let [h, m] = timePart.split(':');
-    h = parseInt(h, 10);
+    h = Number.parseInt(h, 10);
     let ampm = 'AM';
     if (h >= 12) {
       ampm = 'PM';
@@ -33,7 +34,7 @@ const Step2Details = ({ formData, updateFormData, nextStep, prevStep }) => {
   const formatDateTime = (date, timeStr, ampm) => {
     if (!date) return ''; // Can't form without date
     let [h, m] = timeStr.split(':');
-    h = parseInt(h, 10);
+    h = Number.parseInt(h, 10);
     if (ampm === 'PM' && h < 12) h += 12;
     if (ampm === 'AM' && h === 12) h = 0;
     const hh = String(h).padStart(2, '0');
@@ -105,7 +106,7 @@ const Step2Details = ({ formData, updateFormData, nextStep, prevStep }) => {
 
     return (
       <div className={styles['step-form__group']}>
-        <label className={styles['step-form__label']}>{label} {required && '*'}</label>
+        <div className={styles['step-form__label']}>{label} {required && '*'}</div>
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
           <input
             type="date"
@@ -164,7 +165,9 @@ const Step2Details = ({ formData, updateFormData, nextStep, prevStep }) => {
           const untilStr = untilDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
           ruleParts.push(`UNTIL=${untilStr}`);
         }
-        if ((!formData.recurrence_freq || formData.recurrence_freq === 'WEEKLY') && formData.recurrence_byday?.length > 0) {
+        
+        const isWeeklyOrEmpty = formData.recurrence_freq === 'WEEKLY' || !formData.recurrence_freq;
+        if (isWeeklyOrEmpty && formData.recurrence_byday?.length > 0) {
           ruleParts.push(`BYDAY=${formData.recurrence_byday.join(',')}`);
         }
         updateFormData({ recurrence_rule: ruleParts.join(';') });
@@ -219,8 +222,9 @@ const Step2Details = ({ formData, updateFormData, nextStep, prevStep }) => {
         {formData.is_recurring && (
           <div style={{ backgroundColor: '#f8f9fa', padding: '1.5rem', borderRadius: '8px', border: '1px solid #eaeaea', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             <div className={styles['step-form__group']}>
-              <label className={styles['step-form__label']}>Repeats</label>
+              <label htmlFor="recurrence_freq" className={styles['step-form__label']}>Repeats</label>
               <select 
+                id="recurrence_freq"
                 className={styles['step-form__select']}
                 value={formData.recurrence_freq || 'WEEKLY'}
                 onChange={(e) => updateFormData({ recurrence_freq: e.target.value })}
@@ -231,9 +235,9 @@ const Step2Details = ({ formData, updateFormData, nextStep, prevStep }) => {
               </select>
             </div>
 
-            {(!formData.recurrence_freq || formData.recurrence_freq === 'WEEKLY') && (
+            {(formData.recurrence_freq === 'WEEKLY' || !formData.recurrence_freq) && (
               <div className={styles['step-form__group']}>
-                <label className={styles['step-form__label']}>On these days</label>
+                <div className={styles['step-form__label']}>On these days</div>
                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                   {[{label: 'S', val: 'SU'}, {label: 'M', val: 'MO'}, {label: 'T', val: 'TU'}, {label: 'W', val: 'WE'}, {label: 'T', val: 'TH'}, {label: 'F', val: 'FR'}, {label: 'S', val: 'SA'}].map((day) => {
                     const isActive = (formData.recurrence_byday || []).includes(day.val);
@@ -266,8 +270,9 @@ const Step2Details = ({ formData, updateFormData, nextStep, prevStep }) => {
             )}
 
             <div className={styles['step-form__group']}>
-              <label className={styles['step-form__label']}>Ends on (Optional)</label>
+              <label htmlFor="recurrence_until" className={styles['step-form__label']}>Ends on (Optional)</label>
               <input 
+                id="recurrence_until"
                 type="date"
                 className={styles['step-form__input']}
                 value={formData.recurrence_until || ''}
@@ -365,6 +370,29 @@ const Step2Details = ({ formData, updateFormData, nextStep, prevStep }) => {
       </div>
     </div>
   );
+};
+
+Step2Details.propTypes = {
+  formData: PropTypes.shape({
+    start_date: PropTypes.string,
+    end_date: PropTypes.string,
+    venue_name: PropTypes.string,
+    is_recurring: PropTypes.bool,
+    recurrence_freq: PropTypes.string,
+    recurrence_until: PropTypes.string,
+    recurrence_byday: PropTypes.arrayOf(PropTypes.string),
+    recurrence_rule: PropTypes.string,
+    event_address: PropTypes.shape({
+      address: PropTypes.string,
+      lat: PropTypes.number,
+      lng: PropTypes.number,
+    }),
+    price: PropTypes.string,
+    ticket_url: PropTypes.string,
+  }).isRequired,
+  updateFormData: PropTypes.func.isRequired,
+  nextStep: PropTypes.func.isRequired,
+  prevStep: PropTypes.func.isRequired,
 };
 
 export default Step2Details;

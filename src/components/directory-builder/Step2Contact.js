@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import styles from './StepForm.module.css';
 import wizardStyles from './ListingWizard.module.css';
 
@@ -11,7 +12,7 @@ const Step2Contact = ({ formData, updateFormData, nextStep, prevStep }) => {
     try {
       const url = new URL(string);
       return url.protocol === "http:" || url.protocol === "https:";
-    } catch (_) {
+    } catch {
       return false;
     }
   };
@@ -30,7 +31,7 @@ const Step2Contact = ({ formData, updateFormData, nextStep, prevStep }) => {
     if (!formData.address?.trim()) newErrors.address = 'Street Address is required';
     
     const unformattedPhone = formData.phone?.replace(/\D/g, '');
-    if (!unformattedPhone || unformattedPhone.length !== 10) {
+    if (unformattedPhone?.length !== 10) {
       newErrors.phone = 'Valid 10-digit Phone Number is required';
     }
     
@@ -179,6 +180,22 @@ const Step2Contact = ({ formData, updateFormData, nextStep, prevStep }) => {
       </div>
     </div>
   );
+};
+
+Step2Contact.propTypes = {
+  formData: PropTypes.shape({
+    address: PropTypes.string,
+    city: PropTypes.string,
+    state: PropTypes.string,
+    zipCode: PropTypes.string,
+    phone: PropTypes.string,
+    email: PropTypes.string,
+    website: PropTypes.string,
+    socialUrls: PropTypes.arrayOf(PropTypes.string),
+  }).isRequired,
+  updateFormData: PropTypes.func.isRequired,
+  nextStep: PropTypes.func.isRequired,
+  prevStep: PropTypes.func.isRequired,
 };
 
 export default Step2Contact;

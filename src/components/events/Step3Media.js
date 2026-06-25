@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useRouter, useParams } from 'next/navigation';
 import { createEventMutation } from '@/lib/graphql/events';
 import { uploadWPImage } from '@/lib/actions';
 import imageCompression from 'browser-image-compression';
-import { Loader2 } from 'lucide-react';
+
 import styles from '@/components/directory-builder/StepForm.module.css';
 import wizardStyles from '@/components/directory-builder/ListingWizard.module.css';
 import Image from 'next/image';
@@ -76,7 +77,7 @@ const Step3Media = ({ formData, updateFormData, prevStep }) => {
         event_address: formData.event_address,
         price: formData.price,
         ticket_url: formData.ticket_url,
-        featuredImageId: featuredImageId ? parseInt(featuredImageId) : null,
+        featuredImageId: featuredImageId ? Number.parseInt(featuredImageId, 10) : null,
       });
 
       if (result.success) {
@@ -94,6 +95,13 @@ const Step3Media = ({ formData, updateFormData, prevStep }) => {
   };
 
   const isSubmitting = uploadStep !== 'idle';
+
+  let uploadMessage = 'Saving event details';
+  if (uploadStep === 'compressing') {
+    uploadMessage = 'Compressing images';
+  } else if (uploadStep === 'uploading') {
+    uploadMessage = 'Uploading media';
+  }
 
   if (uploadStep === 'complete') {
     return (
@@ -115,6 +123,13 @@ const Step3Media = ({ formData, updateFormData, prevStep }) => {
     );
   }
 
+  let progressWidth = '90%';
+  if (uploadStep === 'compressing') {
+    progressWidth = '33%';
+  } else if (uploadStep === 'uploading') {
+    progressWidth = '66%';
+  }
+
   return (
     <div className={styles['step-form']}>
       {/* Progress Overlay */}
@@ -122,11 +137,41 @@ const Step3Media = ({ formData, updateFormData, prevStep }) => {
         <div style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
           backgroundColor: 'rgba(0, 0, 0, 0.7)', display: 'flex',
-          alignItems: 'center', justifyContent: 'center', zIndex: 2000
+          alignItems: 'center', justifyContent: 'center', zIndex: 2000,
+          backdropFilter: 'blur(4px)'
         }}>
-          <div style={{ backgroundColor: '#fff', padding: '3rem', borderRadius: '16px', textAlign: 'center' }}>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 700 }}>Processing...</h3>
-            <p>{uploadStep === 'compressing' ? 'Compressing images' : uploadStep === 'uploading' ? 'Uploading media' : 'Saving event details'}</p>
+          <div style={{
+            backgroundColor: '#fff',
+            padding: '3rem',
+            borderRadius: '16px',
+            textAlign: 'center',
+            maxWidth: '400px',
+            width: '90%',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+          }}>
+            <style>{`
+              @keyframes starBounceModal {
+                0%, 40%, 100% { transform: translateY(0); }
+                20% { transform: translateY(-12px); }
+              }
+            `}</style>
+            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginBottom: '1.5rem' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounceModal 1.5s infinite' }}>star</span>
+              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounceModal 1.5s infinite 0.1s' }}>star</span>
+              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounceModal 1.5s infinite 0.2s' }}>star</span>
+              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounceModal 1.5s infinite 0.3s' }}>star</span>
+              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounceModal 1.5s infinite 0.4s' }}>star</span>
+            </div>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem', color: '#1e293b' }}>{uploadMessage}...</h3>
+            <p style={{ color: '#64748b', marginBottom: '2rem' }}>Please wait while we process your request.</p>
+            <div style={{ width: '100%', background: '#f1f5f9', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
+              <div style={{ 
+                width: progressWidth,
+                background: '#e04c4c',
+                height: '100%',
+                transition: 'width 0.5s ease'
+              }} />
+            </div>
           </div>
         </div>
       )}
@@ -137,23 +182,9 @@ const Step3Media = ({ formData, updateFormData, prevStep }) => {
       </header>
 
       <div className={styles['step-form__group']}>
-        <label className={styles['step-form__label']}>Featured Image</label>
+        <div className={styles['step-form__label']}>Featured Image</div>
         
-        {!formData.featuredImage ? (
-          <div style={{ border: '2px dashed #cbd5e1', padding: '2rem', textAlign: 'center', borderRadius: '8px' }}>
-            <input
-              type="file"
-              id="featuredImage"
-              accept="image/jpeg, image/png, image/webp"
-              onChange={(e) => handleFileChange(e, "featuredImage")}
-              style={{ display: "none" }}
-            />
-            <label htmlFor="featuredImage" style={{ cursor: "pointer", color: "#1e293b", fontWeight: 600 }}>
-              <span className="material-symbols-outlined" style={{ fontSize: '2rem', display: 'block' }}>add_photo_alternate</span>
-              Click to Browse Files
-            </label>
-          </div>
-        ) : (
+        {formData.featuredImage ? (
           <div style={{ position: "relative", width: "200px", height: "140px", borderRadius: "8px", overflow: "hidden" }}>
             <Image
               src={URL.createObjectURL(formData.featuredImage)}
@@ -169,6 +200,20 @@ const Step3Media = ({ formData, updateFormData, prevStep }) => {
               <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>close</span>
             </button>
           </div>
+        ) : (
+          <div style={{ border: '2px dashed #cbd5e1', padding: '2rem', textAlign: 'center', borderRadius: '8px' }}>
+            <input
+              type="file"
+              id="featuredImage"
+              accept="image/jpeg, image/png, image/webp"
+              onChange={(e) => handleFileChange(e, "featuredImage")}
+              style={{ display: "none" }}
+            />
+            <label htmlFor="featuredImage" style={{ cursor: "pointer", color: "#1e293b", fontWeight: 600 }}>
+              <span className="material-symbols-outlined" style={{ fontSize: '2rem', display: 'block' }}>add_photo_alternate</span>
+              {' '}Click to Browse Files
+            </label>
+          </div>
         )}
       </div>
 
@@ -182,6 +227,10 @@ const Step3Media = ({ formData, updateFormData, prevStep }) => {
       <div className={wizardStyles['wizard__actions']}>
         <style>{`
           @keyframes spin { 100% { transform: rotate(360deg); } }
+          @keyframes starBounce {
+            0%, 40%, 100% { transform: translateY(0); }
+            20% { transform: translateY(-6px); }
+          }
         `}</style>
         <button
           className={`${wizardStyles['wizard__button']} ${wizardStyles['wizard__button--secondary']}`}
@@ -195,7 +244,9 @@ const Step3Media = ({ formData, updateFormData, prevStep }) => {
           onClick={handleSubmit}
           disabled={isSubmitting}
           style={{ 
-            backgroundColor: isSubmitting ? '#ccc' : '#e04c4c',
+            backgroundColor: isSubmitting ? '#f8fafc' : '#e04c4c',
+            color: isSubmitting ? '#e04c4c' : '#fff',
+            border: isSubmitting ? '1px solid #e04c4c' : '1px solid transparent',
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center', 
@@ -204,14 +255,42 @@ const Step3Media = ({ formData, updateFormData, prevStep }) => {
         >
           {isSubmitting ? (
             <>
-              <Loader2 size={20} style={{ animation: 'spin 1s linear infinite' }} />
-              Processing...
+              <div style={{ display: 'flex', gap: '2px' }}>
+                <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite' }}>star</span>
+                <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.1s' }}>star</span>
+                <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.2s' }}>star</span>
+                <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.3s' }}>star</span>
+                <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.4s' }}>star</span>
+              </div>
+              <span style={{ color: '#e04c4c', fontWeight: 600 }}>Processing...</span>
             </>
           ) : 'Submit Event'}
         </button>
       </div>
     </div>
   );
+};
+
+Step3Media.propTypes = {
+  formData: PropTypes.shape({
+    featuredImage: PropTypes.any,
+    title: PropTypes.string,
+    description: PropTypes.string,
+    primaryCategory: PropTypes.string,
+    customTags: PropTypes.arrayOf(PropTypes.string),
+    start_date: PropTypes.string,
+    end_date: PropTypes.string,
+    venue_name: PropTypes.string,
+    event_address: PropTypes.shape({
+      address: PropTypes.string,
+      lat: PropTypes.number,
+      lng: PropTypes.number,
+    }),
+    price: PropTypes.string,
+    ticket_url: PropTypes.string,
+  }).isRequired,
+  updateFormData: PropTypes.func.isRequired,
+  prevStep: PropTypes.func.isRequired,
 };
 
 export default Step3Media;

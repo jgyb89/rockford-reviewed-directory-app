@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
@@ -191,7 +192,7 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
 
   const handleCategoryClick = (slug) => {
     const segments = pathname.split('/').filter(Boolean);
-    const isSpanish = segments[0] === 'es';
+    const isSpanish = pathname.split('/').find(Boolean) === 'es';
     const localePrefix = isSpanish ? '/es' : '';
 
     if (!slug || pathname.includes(slug)) {
@@ -251,24 +252,15 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
   };
 
   const modalContent = isModalOpen ? (
-    <div 
-      className={styles['modal-overlay']} 
-      onClick={() => setIsModalOpen(false)}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          setIsModalOpen(false);
-        }
-      }}
-      role="button"
-      tabIndex={0}
-      aria-label="Close filters"
-    >
-      <div 
-        className={styles['modal-content']} 
-        onClick={(e) => e.stopPropagation()}
-        onKeyDown={(e) => e.stopPropagation()}
-        role="presentation"
-      >
+    <div className={styles['modal-overlay']}>
+      <button 
+        type="button" 
+        onClick={() => setIsModalOpen(false)}
+        aria-label="Close modal backdrop"
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', background: 'transparent', border: 'none', cursor: 'default', padding: 0 }}
+        tabIndex={-1}
+      />
+      <div className={styles['modal-content']} style={{ position: 'relative' }}>
         <div className={styles['modal-header']}>
           <h3 style={{ margin: 0, fontSize: '1.25rem', fontFamily: 'var(--font-heading)' }}>Filters</h3>
           <button onClick={() => setIsModalOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}>
@@ -278,7 +270,7 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
 
         {/* Minimum Rating (Label Top) */}
         <div className={styles['filter-group']} style={{ flexDirection: 'column', alignItems: 'flex-start', width: '100%' }}>
-          <label className={styles['filter-label']}>Minimum Rating</label>
+          <div className={styles['filter-label']}>Minimum Rating</div>
           <div className={styles['custom-select']} ref={ratingDropdownRef} style={{ width: '100%' }}>
             <button 
               type="button" 
@@ -314,8 +306,9 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
 
         {/* Open Now */}
         <div className={styles['filter-group']} style={{ justifyContent: 'space-between', width: '100%', flexDirection: 'row', alignItems: 'center' }}>
-          <label className={styles['filter-label']}>Open Now</label>
+          <div className={styles['filter-label']}>Open Now</div>
           <label className={styles['toggle-switch']}>
+            <span style={{ border: 0, clip: 'rect(0 0 0 0)', height: '1px', margin: '-1px', overflow: 'hidden', padding: 0, position: 'absolute', width: '1px' }}>Toggle Open Now</span>
             <input 
               type="checkbox" 
               checked={openNowFilter}
@@ -327,7 +320,7 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
 
         {/* Categories */}
         <div style={{ width: '100%' }}>
-          <label className={styles['filter-label']} style={{ display: 'block', marginBottom: '0.75rem' }}>Quick Categories</label>
+          <div className={styles['filter-label']} style={{ display: 'block', marginBottom: '0.75rem' }}>Quick Categories</div>
           <div className={styles['category-pills-mobile']}>
             {renderPills(true)}
           </div>
@@ -349,44 +342,47 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
   const renderPredictiveDropdown = () => {
     if (!isSearchFocused || debouncedSearch.length < 2) return null;
 
-    const segments = pathname.split('/').filter(Boolean);
-    const isSpanish = segments[0] === 'es';
+    const isSpanish = pathname.split('/').find(Boolean) === 'es';
     const localePrefix = isSpanish ? '/es' : '';
-    const hasCategories = searchResults.categories && searchResults.categories.length > 0;
-    const hasListings = searchResults.listings && searchResults.listings.length > 0;
+    const hasCategories = searchResults.categories?.length > 0;
+    const hasListings = searchResults.listings?.length > 0;
     const hasResults = hasCategories || hasListings;
+
+    let dropdownContent = null;
+    if (isLoading) {
+      dropdownContent = <div className={styles['predictive-message']}>Searching...</div>;
+    } else if (hasResults) {
+      dropdownContent = (
+        <ul className={styles['predictive-list']}>
+          {hasCategories && searchResults.categories.map(cat => {
+            const route = getCategoryRoute(cat.slug);
+            const categoryHref = `${localePrefix}${route}`;
+            return (
+              <li key={`cat-${cat.slug}`} className={styles['predictive-item']}>
+                <Link href={categoryHref} className={styles['predictive-link']}>
+                  <span className={styles['predictive-title']}>{cat.name}</span>
+                  <span className={styles['predictive-type']}>Category</span>
+                </Link>
+              </li>
+            );
+          })}
+          {hasListings && searchResults.listings.map(listing => (
+            <li key={`list-${listing.slug}`} className={styles['predictive-item']}>
+              <Link href={`${localePrefix}/listing/${listing.slug}`} className={styles['predictive-link']}>
+                <span className={styles['predictive-title']}>{listing.title}</span>
+                <span className={styles['predictive-type']}>Listing</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      );
+    } else {
+      dropdownContent = <div className={styles['predictive-message']}>No results found</div>;
+    }
 
     return (
       <div className={styles['predictive-dropdown']}>
-        {isLoading ? (
-          <div className={styles['predictive-message']}>Searching...</div>
-        ) : !hasResults ? (
-          <div className={styles['predictive-message']}>No results found</div>
-        ) : (
-          <ul className={styles['predictive-list']}>
-            {hasCategories && searchResults.categories.map(cat => {
-              const route = getCategoryRoute(cat.slug);
-              // getCategoryRoute returns /directory/..., so we prepend the locale prefix
-              const categoryHref = `${localePrefix}${route}`;
-              return (
-                <li key={`cat-${cat.slug}`} className={styles['predictive-item']}>
-                  <Link href={categoryHref} className={styles['predictive-link']}>
-                    <span className={styles['predictive-title']}>{cat.name}</span>
-                    <span className={styles['predictive-type']}>Category</span>
-                  </Link>
-                </li>
-              );
-            })}
-            {hasListings && searchResults.listings.map(listing => (
-              <li key={`list-${listing.slug}`} className={styles['predictive-item']}>
-                <Link href={`${localePrefix}/listing/${listing.slug}`} className={styles['predictive-link']}>
-                  <span className={styles['predictive-title']}>{listing.title}</span>
-                  <span className={styles['predictive-type']}>Listing</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
+        {dropdownContent}
       </div>
     );
   };
@@ -413,6 +409,11 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
       {mounted && typeof document !== 'undefined' ? createPortal(modalContent, document.body) : null}
     </>
   );
+};
+
+DirectoryFilters.propTypes = {
+  isModalOpen: PropTypes.bool.isRequired,
+  setIsModalOpen: PropTypes.func,
 };
 
 export default DirectoryFilters;

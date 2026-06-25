@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import PropTypes from "prop-types";
 import { registerBusiness } from "@/lib/actions";
 import { formatPhoneNumber } from "@/lib/formatUtils";
@@ -45,21 +44,22 @@ export default function RegisterBusinessForm({ locale = "en" }) {
 
   const validateField = (name, value) => {
     const validations = {
-      firstName: (v) => (!v ? "First name is required" : ""),
-      lastName: (v) => (!v ? "Last name is required" : ""),
-      businessName: (v) => (!v ? "Business name is required" : ""),
+      firstName: (v) => (v ? "" : "First name is required"),
+      lastName: (v) => (v ? "" : "Last name is required"),
+      businessName: (v) => (v ? "" : "Business name is required"),
       email: (v) => {
         if (!v) return "Email is required";
         // Safe email regex: avoiding nested quantifiers that cause ReDoS
         const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-        return !emailRegex.test(v) ? "Please enter a valid email address" : "";
+        return emailRegex.test(v) ? "" : "Please enter a valid email address";
       },
       website: (v) => {
         if (!v) return "";
         try {
           const url = new URL(v.startsWith('http') ? v : `https://${v}`);
           return (url.protocol === "http:" || url.protocol === "https:") ? "" : "Please enter a valid URL";
-        } catch (_) {
+        } catch (e) {
+          console.debug("Invalid URL:", e);
           return "Please enter a valid URL";
         }
       },
@@ -73,7 +73,7 @@ export default function RegisterBusinessForm({ locale = "en" }) {
         if (!v) return "Phone number is required";
         return v.length < 14 ? "Please enter a valid phone number" : "";
       },
-      consent: (v) => (!v ? "You must agree to the Terms of Services and Privacy Policy" : ""),
+      consent: (v) => (v ? "" : "You must agree to the Terms of Services and Privacy Policy"),
     };
 
     return validations[name] ? validations[name](value) : "";
@@ -139,16 +139,17 @@ export default function RegisterBusinessForm({ locale = "en" }) {
     }));
 
     // Fix Email Field (ID 2) to use emailValues as required by GraphQL schema
-    fieldValues.push({
-      id: 2,
-      emailValues: { value: formData.email },
-    });
-
     // Field 4 is the Password field.
-    fieldValues.push({
-      id: 4,
-      value: formData.password,
-    });
+    fieldValues.push(
+      {
+        id: 2,
+        emailValues: { value: formData.email },
+      },
+      {
+        id: 4,
+        value: formData.password,
+      }
+    );
 
     // Field 17 is the Consent checkbox. WPGraphQL expects a single 'value' string.
     // Gravity Forms uses "1" to mark a consent field as checked.
@@ -399,24 +400,24 @@ export default function RegisterBusinessForm({ locale = "en" }) {
             onChange={handleChange}
           />
           <label htmlFor="consent" style={{ fontSize: '0.9rem', color: '#475569', lineHeight: '1.5' }}>
-            I agree to the{' '}
+            {"I agree to the "}
             <a 
               href={`/terms-of-service`} 
               target="_blank" 
               rel="noopener noreferrer" 
               style={{ color: '#e04c4c', textDecoration: 'underline', display: 'inline-flex', alignItems: 'center', gap: '2px', fontWeight: '500' }}
             >
-              Terms of Service
+              Terms of Service{" "}
               <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>open_in_new</span>
             </a>
-            {' '}and{' '}
+            {" and "}
             <a 
               href={`/privacy-policy`} 
               target="_blank" 
               rel="noopener noreferrer" 
               style={{ color: '#e04c4c', textDecoration: 'underline', display: 'inline-flex', alignItems: 'center', gap: '2px', fontWeight: '500' }}
             >
-              Privacy Policy
+              Privacy Policy{" "}
               <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>open_in_new</span>
             </a>.
           </label>

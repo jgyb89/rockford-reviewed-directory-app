@@ -247,9 +247,9 @@ function useEditListingForm(initialData) {
     formData.socialUrls.map(() => ""),
   );
 
-  const titleError = !formData.title?.trim()
-    ? "Business Name is required."
-    : "";
+  const titleError = formData.title?.trim()
+    ? ""
+    : "Business Name is required.";
   const descriptionError =
     formData.content?.trim().length < 100
       ? "Description must be at least 100 characters."
@@ -317,12 +317,14 @@ function useEditListingForm(initialData) {
   };
 
   const handleTimeChange = (day, field, value) => {
-    const rawValue =
-      field === "closed" || field === "open24"
-        ? value
-        : field.includes("AmPm")
-          ? value
-          : value.replaceAll(/[^\d:]/g, "").slice(0, 5);
+    let rawValue;
+    if (field === "closed" || field === "open24") {
+      rawValue = value;
+    } else if (field.includes("AmPm")) {
+      rawValue = value;
+    } else {
+      rawValue = value.replaceAll(/[^\d:]/g, "").slice(0, 5);
+    }
 
     setFormData((prev) => {
       const dayParams = { ...prev.hoursParams[day], [field]: rawValue };
@@ -373,7 +375,7 @@ function useEditListingForm(initialData) {
   };
 
   const handleCropSave = async (croppedFile) => {
-    if (pendingCrop && pendingCrop.fieldType === "featured") {
+    if (pendingCrop?.fieldType === "featured") {
       setNewFeaturedImage(croppedFile);
       setExistingFeaturedImage(null);
     }
@@ -555,9 +557,9 @@ const ImageCropModal = ({ file, onCancel, onSave }) => {
           />
         </div>
         <div style={{ padding: "1.5rem 0" }}>
-          <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.9rem", fontWeight: 600 }}>
+          <div style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.9rem", fontWeight: 600 }}>
             Zoom: {Math.round(zoom * 100)}%
-          </label>
+          </div>
           <input
             type="range"
             value={zoom}
@@ -565,7 +567,7 @@ const ImageCropModal = ({ file, onCancel, onSave }) => {
             max={3}
             step={0.1}
             aria-labelledby="Zoom"
-            onChange={(e) => setZoom(parseFloat(e.target.value))}
+            onChange={(e) => setZoom(Number.parseFloat(e.target.value))}
             style={{ width: "100%", cursor: "pointer" }}
           />
         </div>
@@ -621,16 +623,18 @@ const ProgressOverlay = ({ step }) => {
         className="dashboard-modal-dialog"
         style={{ textAlign: "center", padding: "3rem" }}
       >
-        <div
-          className="material-symbols-outlined"
-          style={{
-            fontSize: "4rem",
-            color: "#e04c4c",
-            marginBottom: "1.5rem",
-            animation: "pulse 2s infinite",
-          }}
-        >
-          {stepsInfo[step].icon}
+        <style>{`
+          @keyframes starBounce {
+            0%, 40%, 100% { transform: translateY(0); }
+            20% { transform: translateY(-12px); }
+          }
+        `}</style>
+        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginBottom: '1.5rem' }}>
+          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite' }}>star</span>
+          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.1s' }}>star</span>
+          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.2s' }}>star</span>
+          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.3s' }}>star</span>
+          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.4s' }}>star</span>
         </div>
         <h3 className="dashboard-modal-title">{stepsInfo[step].label}</h3>
         <p className="dashboard-modal-text">
@@ -791,7 +795,7 @@ const CategorySection = ({
   return (
     <SectionWrapper title="Categories">
       <div style={{ display: "grid", gap: "0.5rem" }}>
-        <label style={{ fontWeight: "600" }}>Directory Type</label>
+        <div style={{ fontWeight: "600" }}>Directory Type</div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
           {DIRECTORY_TYPES.map((type) => (
             <button
@@ -811,7 +815,7 @@ const CategorySection = ({
 
       {formData.category && (
         <div style={sectionWrapperStyle}>
-          <label
+          <div
             style={{
               fontWeight: 700,
               fontSize: "1rem",
@@ -820,7 +824,7 @@ const CategorySection = ({
             }}
           >
             Select Category
-          </label>
+          </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
             {availableChildCategories.map((child) => (
               <button
@@ -937,7 +941,7 @@ const MediaGallerySection = ({
   return (
     <SectionWrapper title="Media & Gallery">
       <div style={{ display: "grid", gap: "0.5rem" }}>
-        <label style={{ fontWeight: "600" }}>Featured Image</label>
+        <div style={{ fontWeight: "600" }}>Featured Image</div>
         <div
           onDragOver={(e) => handleDragOver(e, "featured")}
           onDragLeave={(e) => handleDragLeave(e, "featured")}
@@ -960,19 +964,13 @@ const MediaGallerySection = ({
           />
 
           {existingFeatured || newFeatured ? (
-            <div
+            <button
+              type="button"
               className="featured-image-container"
               onMouseEnter={() => setIsHoveringFeatured(true)}
               onMouseLeave={() => setIsHoveringFeatured(false)}
               onClick={() => !disabled && document.getElementById("fi").click()}
-              onKeyDown={(e) => {
-                if (!disabled && (e.key === "Enter" || e.key === " ")) {
-                  e.preventDefault();
-                  document.getElementById("fi").click();
-                }
-              }}
-              role="button"
-              tabIndex={disabled ? -1 : 0}
+              disabled={disabled}
               aria-label="Change featured image"
               style={{
                 position: "relative",
@@ -983,6 +981,8 @@ const MediaGallerySection = ({
                 overflow: "hidden",
                 border: "1px solid #e2e8f0",
                 cursor: disabled ? "default" : "pointer",
+                padding: 0,
+                background: "none"
               }}
             >
               <Image
@@ -1073,7 +1073,7 @@ const MediaGallerySection = ({
                   </span>
                 </button>
               )}
-            </div>
+            </button>
           ) : (
             <div
               style={{
@@ -1112,7 +1112,7 @@ const MediaGallerySection = ({
         </div>
       </div>
       <div style={{ display: "grid", gap: "0.5rem" }}>
-        <label style={{ fontWeight: "600" }}>Gallery Images (Max 10)</label>
+        <div style={{ fontWeight: "600" }}>Gallery Images (Max 10)</div>
         <div
           onDragOver={(e) => handleDragOver(e, "gallery")}
           onDragLeave={(e) => handleDragLeave(e, "gallery")}
@@ -1173,7 +1173,7 @@ const MediaGallerySection = ({
             ))}
             {newGallery.map((file, idx) => (
               <div
-                key={idx}
+                key={file.name ? `${file.name}-${idx}` : `new-gallery-${idx}`}
                 style={{
                   position: "relative",
                   width: "100px",
@@ -1276,8 +1276,9 @@ const LocationSection = ({
       style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}
     >
       <div style={{ gridColumn: "span 2", display: "grid", gap: "0.5rem" }}>
-        <label>Street Address</label>
+        <label htmlFor="addressStreet">Street Address</label>
         <input
+          id="addressStreet"
           type="text"
           name="addressStreet"
           value={formData.addressStreet}
@@ -1300,12 +1301,13 @@ const LocationSection = ({
         "videoUrl",
       ].map((f) => (
         <div key={f} style={{ display: "grid", gap: "0.5rem" }}>
-          <label>
+          <label htmlFor={f}>
             {f
               .replace(/([A-Z])/g, " $1")
               .replace(/^./, (str) => str.toUpperCase())}
           </label>
           <input
+            id={f}
             type={f.includes("Email") ? "email" : "text"}
             name={f}
             value={formData[f]}
@@ -1320,9 +1322,9 @@ const LocationSection = ({
         </div>
       ))}
       <div style={{ gridColumn: "span 2", display: "grid", gap: "0.5rem" }}>
-        <label>Social Media URLs</label>
+        <div style={{ fontWeight: "600" }}>Social Media URLs</div>
         {formData.socialUrls.map((url, idx) => (
-          <div key={idx} style={{ marginBottom: "0.5rem" }}>
+          <div key={`social-${idx}`} style={{ marginBottom: "0.5rem" }}>
             <div style={{ display: "flex", gap: "0.5rem" }}>
               <input
                 type="url"
@@ -1399,7 +1401,7 @@ const HoursSection = ({
           marginBottom: "1rem",
         }}
       >
-        <label style={{ fontWeight: "600" }}>{day}</label>
+        <div style={{ fontWeight: "600" }}>{day}</div>
         <div
           style={{
             display: "flex",
@@ -1684,11 +1686,8 @@ BasicInfoSection.propTypes = {
 
 CategorySection.propTypes = {
   formData: PropTypes.object.isRequired,
-  selectedParentCategory: PropTypes.object,
-  availableParentCategories: PropTypes.array.isRequired,
   availableChildCategories: PropTypes.array.isRequired,
   handleDirectoryTypeChange: PropTypes.func.isRequired,
-  handleParentCategoryChange: PropTypes.func.isRequired,
   handleCategoryToggle: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
 };

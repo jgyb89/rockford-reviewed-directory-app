@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import styles from './StepForm.module.css';
 import wizardStyles from './ListingWizard.module.css';
 
@@ -68,6 +69,15 @@ const Step1General = ({ formData, updateFormData, nextStep }) => {
       </div>
     </div>
   );
+};
+
+Step1General.propTypes = {
+  formData: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+  }).isRequired,
+  updateFormData: PropTypes.func.isRequired,
+  nextStep: PropTypes.func.isRequired,
 };
 
 export default Step1General;
