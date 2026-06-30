@@ -1,7 +1,7 @@
 // src/components/directory/ReviewActionManager.js
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useCallback } from "react";
 import PropTypes from "prop-types";
 import LoginModal from "@/components/auth/LoginModal";
 import ReviewModal from "./ReviewModal";
@@ -12,25 +12,30 @@ export default function ReviewActionManager({ currentUser: propCurrentUser, list
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
-  useEffect(() => {
-    setCurrentUser(propCurrentUser);
-  }, [propCurrentUser]);
-
-  useEffect(() => {
+  // 1. Extract fetch logic into a reusable callback
+  const fetchUser = useCallback(async () => {
     if (typeof window !== "undefined" && document.cookie.includes("hasSession=true")) {
-      async function fetchUser() {
-        try {
-          const viewer = await getCurrentViewer();
-          if (viewer) {
-            setCurrentUser(viewer);
-          }
-        } catch (err) {
-          console.error("Failed to fetch current user in ReviewActionManager:", err);
-        }
+      try {
+        const viewer = await getCurrentViewer();
+        setCurrentUser(viewer || null);
+      } catch (err) {
+        console.error("Failed to fetch current user in ReviewActionManager:", err);
+        setCurrentUser(null);
       }
-      fetchUser();
+    } else {
+      setCurrentUser(null);
     }
   }, []);
+
+  // 2. Safely sync with prop if available, otherwise fetch from cookie.
+  // This prevents router.refresh() from wiping out the state with a null prop.
+  useEffect(() => {
+    if (propCurrentUser) {
+      setCurrentUser(propCurrentUser);
+    } else {
+      fetchUser();
+    }
+  }, [propCurrentUser, fetchUser]);
 
   const handleWriteReviewClick = () => {
     if (currentUser) {
@@ -55,7 +60,10 @@ export default function ReviewActionManager({ currentUser: propCurrentUser, list
       <Suspense fallback={null}>
         <LoginModal 
           isOpen={isLoginModalOpen} 
-          onClose={() => setIsLoginModalOpen(false)} 
+          onClose={() => {
+            setIsLoginModalOpen(false);
+            fetchUser();
+          }} 
           dict={dict}
           locale={locale}
         />

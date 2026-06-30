@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, useEffect } from 'react';
+import { useState, useTransition, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import PropTypes from 'prop-types';
 import DOMPurify from 'isomorphic-dompurify';
@@ -10,25 +10,28 @@ import { getCurrentViewer } from '@/lib/actions';
 export default function ReviewList({ reviews, noReviewsYet = "No reviews yet. Be the first to leave one!", currentUser: propCurrentUser }) {
   const [currentUser, setCurrentUser] = useState(propCurrentUser);
 
-  useEffect(() => {
-    setCurrentUser(propCurrentUser);
-  }, [propCurrentUser]);
-
-  useEffect(() => {
+  const fetchUser = useCallback(async () => {
     if (typeof window !== "undefined" && document.cookie.includes("hasSession=true")) {
-      async function fetchUser() {
-        try {
-          const viewer = await getCurrentViewer();
-          if (viewer) {
-            setCurrentUser(viewer);
-          }
-        } catch (err) {
-          console.error("Failed to fetch current user in ReviewList:", err);
-        }
+      try {
+        const viewer = await getCurrentViewer();
+        setCurrentUser(viewer || null);
+      } catch (err) {
+        console.error("Failed to fetch current user in ReviewList:", err);
+        setCurrentUser(null);
       }
-      fetchUser();
+    } else {
+      setCurrentUser(null);
     }
   }, []);
+
+  // Safely manage state during router refreshes
+  useEffect(() => {
+    if (propCurrentUser) {
+      setCurrentUser(propCurrentUser);
+    } else {
+      fetchUser();
+    }
+  }, [propCurrentUser, fetchUser]);
   const [visibleCount, setVisibleCount] = useState(5);
   const [expandedReviews, setExpandedReviews] = useState({});
   const [editingReview, setEditingReview] = useState(null);
