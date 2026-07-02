@@ -17,6 +17,7 @@ const QUICK_LINKS = [
   { name: "Contact", href: "/contact" },
   { name: "Business Login", href: "/login" },
   { name: "Create an Account", href: "/register" },
+  { name: "Mobile Opt-In", href: "/mobile-opt-in" },
 ];
 
 export default function Footer({ locale = "en" }) {
@@ -134,7 +135,7 @@ export default function Footer({ locale = "en" }) {
               href={getLocalizedUrl("/mobile-terms", locale)}
               className={styles["footer__legal-link"]}
             >
-              Mobile Terms of Service
+              Mobile Terms
             </Link>
           </div>
 
