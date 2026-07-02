@@ -799,6 +799,26 @@ export async function submitContactForm(formData) {
 }
 
 /**
+ * Server Action to handle Mobile Opt-In submission to Gravity Forms (Form ID: 16).
+ */
+export async function submitMobileOptInForm(formData) {
+  try {
+    await submitGravityForm(16, [
+      { id: 1, value: formData.get("firstName") || "" },
+      { id: 3, value: formData.get("lastName") || "" },
+      { id: 4, emailValues: { value: formData.get("email") || "" } },
+      { id: 5, value: formData.get("phone") || "" },
+      { id: 6, value: formData.get("consent1") ? "1" : "" },
+      { id: 7, value: formData.get("consent2") ? "1" : "" },
+    ], false);
+    return { success: true };
+  } catch (error) {
+    console.error("Mobile Opt-In Form Error:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+/**
  * Server Action to handle the Newsletter subscription via Gravity Form ID: 15.
  */
 export async function submitNewsletterForm(formData) {
