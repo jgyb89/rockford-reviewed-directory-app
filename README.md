@@ -1,4 +1,4 @@
-## Rockford Reviewed Directory App
+## Rockford Reviewed Directory Application
 
 A modern, headless business directory decoupling a lightning-fast Next.js (App Router) frontend from a secure WordPress backend. Engineered for Core Web Vitals and SEO, it utilizes WPGraphQL and Advanced Custom Fields (ACF) to serve dynamic business listings.
 
