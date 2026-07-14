@@ -43,12 +43,12 @@
 }
 
 .inputField:focus {
-  border-color: #e94f37;
+  border-color: #e57007;
 }
 
 .submitButton {
   padding: 1rem 1.5rem;
-  background-color: #e94f37;
+  background-color: #e57007;
   color: #fff;
   border: none;
   border-radius: 0 8px 8px 0;
@@ -68,7 +68,7 @@
 }
 
 .errorText {
-  color: #e04c4c;
+  color: #e57007;
   font-size: 0.875rem;
   margin: 0;
   text-align: left;

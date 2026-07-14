@@ -331,7 +331,7 @@ const DirectoryFilters = ({ isModalOpen, setIsModalOpen }) => {
           <button onClick={clearFilters} className={styles['btn-clear']} style={{ background: '#f1f5f9', borderRadius: '8px', width: '100%', padding: '0.75rem', fontWeight: 600 }}>
             Clear All Filters
           </button>
-          <button onClick={() => setIsModalOpen(false)} style={{ background: '#e04c4c', color: 'white', border: 'none', padding: '0.75rem', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', width: '100%' }}>
+          <button onClick={() => setIsModalOpen(false)} style={{ background: '#e57007', color: 'white', border: 'none', padding: '0.75rem', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', width: '100%' }}>
             Show Results
           </button>
         </div>

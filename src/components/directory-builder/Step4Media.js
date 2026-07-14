@@ -41,7 +41,7 @@ function FeaturedImageSection({
   if (fileErrors.featured) {
     featuredBorderColor = "#ef4444";
   } else if (dragState.featured) {
-    featuredBorderColor = "#e04c4c";
+    featuredBorderColor = "#e57007";
   }
 
   return (
@@ -189,7 +189,7 @@ function GallerySection({
   if (fileErrors.gallery) {
     galleryBorderColor = "#ef4444";
   } else if (dragState.gallery) {
-    galleryBorderColor = "#e04c4c";
+    galleryBorderColor = "#e57007";
   }
 
   return (

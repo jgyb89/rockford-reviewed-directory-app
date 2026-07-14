@@ -245,7 +245,7 @@ export default function ProfileAvatar({ user }) {
                       <button 
                         type="button" 
                         onClick={() => fileInputRef.current.click()} 
-                        style={{ background: 'none', border: 'none', color: '#e04c4c', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.9rem', padding: 0 }}
+                        style={{ background: 'none', border: 'none', color: '#e57007', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.9rem', padding: 0 }}
                       >
                         Select a different image
                       </button>

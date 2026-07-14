@@ -50,7 +50,7 @@ export default async function BlogSidebar({ locale = "en" }) {
                   </h4>
                   
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.9rem', color: '#64748b' }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: '1.1rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1" }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: '1.1rem', color: '#e57007', fontVariationSettings: "'FILL' 1" }}>
                       star
                     </span>
                     <span style={{ fontWeight: '700', color: '#1e293b' }}>{avgRating}</span>

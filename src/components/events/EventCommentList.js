@@ -89,7 +89,7 @@ export default function EventCommentList({ comments, noCommentsYet = "No comment
               {isLongComment && (
                 <button 
                   onClick={() => toggleExpand(index)}
-                  style={{ background: 'none', border: 'none', color: '#e94f37', cursor: 'pointer', padding: 0, marginTop: '0.75rem', fontWeight: '600', fontSize: '0.9rem' }}
+                  style={{ background: 'none', border: 'none', color: '#e57007', cursor: 'pointer', padding: 0, marginTop: '0.75rem', fontWeight: '600', fontSize: '0.9rem' }}
                 >
                   {expandedComments[index] ? 'Read less' : 'Read more'}
                 </button>

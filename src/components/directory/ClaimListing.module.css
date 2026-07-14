@@ -134,7 +134,7 @@
 }
 
 .claim-modal__label span {
-  color: #e04c4c;
+  color: #e57007;
 }
 
 .claim-modal__input,
@@ -160,7 +160,7 @@
 }
 
 .claim-modal__submit {
-  background-color: #e04c4c;
+  background-color: #e57007;
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;

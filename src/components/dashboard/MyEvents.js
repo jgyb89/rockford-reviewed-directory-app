@@ -25,7 +25,7 @@ export default async function MyEvents({ locale }) {
       {events.length === 0 ? (
         <div className="blank-state" style={{ textAlign: 'center', padding: '3rem', background: '#f9f9f9', borderRadius: '12px' }}>
           <p style={{ fontSize: '1.2rem', color: '#666', marginBottom: '1.5rem' }}>You haven&apos;t submitted any events yet.</p>
-          <Link href={getLocalizedUrl("/events/create", locale)} style={{ color: '#e04c4c', fontWeight: '600' }}>Submit your first event now</Link>
+          <Link href={getLocalizedUrl("/events/create", locale)} style={{ color: '#e57007', fontWeight: '600' }}>Submit your first event now</Link>
         </div>
       ) : (
         <div className="listings-grid" style={{ display: 'grid', gap: '1.5rem' }}>
@@ -59,7 +59,7 @@ export default async function MyEvents({ locale }) {
                   </p>
                 </div>
                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                  <Link href={getLocalizedUrl(`/events/${event.slug}`, locale)} style={{ color: '#e04c4c', fontWeight: '600', textDecoration: 'none', fontSize: '0.95rem' }}>
+                  <Link href={getLocalizedUrl(`/events/${event.slug}`, locale)} style={{ color: '#e57007', fontWeight: '600', textDecoration: 'none', fontSize: '0.95rem' }}>
                     View
                   </Link>
                   <span style={{ color: '#e2e8f0' }}>|</span>

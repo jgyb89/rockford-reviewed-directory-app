@@ -28,7 +28,7 @@
 
 /* Active State (Filled & Red) */
 .active .heart-icon {
-  color: #e04c4c;
+  color: #e57007;
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
   animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
@@ -43,7 +43,7 @@
   height: 100%;
   transform: translate(-50%, -50%) scale(0);
   border-radius: 50%;
-  border: 3px dashed #e04c4c;
+  border: 3px dashed #e57007;
   opacity: 0;
   pointer-events: none;
   z-index: 1;

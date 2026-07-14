@@ -44,7 +44,7 @@
 }
 
 .heroHighlight {
-  color: #e04c4c;
+  color: #e57007;
   display: inline-block;
 }
 
@@ -75,7 +75,7 @@
 }
 
 .featureIcon {
-  color: #e04c4c;
+  color: #e57007;
   background: #fee2e2;
   border-radius: 50%;
   padding: 0.25rem;
@@ -98,7 +98,7 @@
   right: -2rem;
   bottom: -2rem;
   left: -2rem;
-  background: linear-gradient(135deg, #e04c4c11 0%, transparent 100%);
+  background: linear-gradient(135deg, #e5700711 0%, transparent 100%);
   border-radius: 24px;
   z-index: -1;
   filter: blur(20px);
@@ -155,7 +155,7 @@
 .playButton {
   width: 80px;
   height: 80px;
-  background: #e04c4c;
+  background: #e57007;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -238,7 +238,7 @@
   position: absolute;
   top: 20%;
   left: 50%;
-  background: linear-gradient(135deg, #e04c4c 0%, #a82d1c 100%);
+  background: linear-gradient(135deg, #e57007 0%, #a82d1c 100%);
   height: 75px;
   width: 75px;
   border-radius: 50%;
@@ -265,7 +265,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #e04c4c;
+  color: #e57007;
   margin-bottom: 1.5rem;
   transition:
     background-color 0.4s ease,
@@ -278,7 +278,7 @@
 }
 
 .benefitCard:hover .benefitIcon {
-  background-image: linear-gradient(135deg, #e04c4c 0%, #a82d1c 100%);
+  background-image: linear-gradient(135deg, #e57007 0%, #a82d1c 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -339,7 +339,7 @@
 }
 
 .ctaButtonPrimary {
-  background: #e04c4c;
+  background: #e57007;
   box-shadow: 0 10px 20px -5px rgba(224, 76, 76, 0.3);
 }
 

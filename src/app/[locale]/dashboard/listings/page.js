@@ -109,7 +109,7 @@ export default async function MyListingsPage({ params, searchParams }) {
       {listings.length === 0 ? (
         <div className="blank-state" style={{ textAlign: 'center', padding: '3rem', background: '#f9f9f9', borderRadius: '12px' }}>
           <p style={{ fontSize: '1.2rem', color: '#666', marginBottom: '1.5rem' }}>You haven&apos;t posted any listings yet.</p>
-          <Link href={`/submit-listing`} style={{ color: '#e04c4c', fontWeight: '600' }}>Create your first listing now</Link>
+          <Link href={`/submit-listing`} style={{ color: '#e57007', fontWeight: '600' }}>Create your first listing now</Link>
         </div>
       ) : (
         <>
@@ -124,7 +124,7 @@ export default async function MyListingsPage({ params, searchParams }) {
                   </p>
                 </div>
                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                  <Link href={`/listing/${listing.slug}`} style={{ color: '#e04c4c', fontWeight: '600', textDecoration: 'none', fontSize: '0.95rem' }}>
+                  <Link href={`/listing/${listing.slug}`} style={{ color: '#e57007', fontWeight: '600', textDecoration: 'none', fontSize: '0.95rem' }}>
                     View
                   </Link>
                   <span style={{ color: '#e2e8f0' }}>|</span>

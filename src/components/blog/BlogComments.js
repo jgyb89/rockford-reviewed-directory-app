@@ -61,7 +61,7 @@ export default function BlogComments({ postId, initialComments = [], currentUser
             disabled={isSubmitting}
             required
           />
-          {error && <p style={{ color: '#e04c4c', fontSize: '0.9rem', marginBottom: '1rem' }}>{error}</p>}
+          {error && <p style={{ color: '#e57007', fontSize: '0.9rem', marginBottom: '1rem' }}>{error}</p>}
           <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
             {isSubmitting ? 'Posting...' : 'Post Comment'}
           </button>

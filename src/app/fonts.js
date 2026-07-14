@@ -1,9 +1,9 @@
-import { Poppins, Open_Sans } from "next/font/google";
+import { Montserrat, Open_Sans } from "next/font/google";
 
-export const poppins = Poppins({
+export const montserrat = Montserrat({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-poppins",
+  variable: "--font-montserrat",
 });
 
 export const openSans = Open_Sans({

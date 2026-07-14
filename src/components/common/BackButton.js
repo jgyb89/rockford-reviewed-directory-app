@@ -22,9 +22,9 @@ export default function BackButton() {
         padding: 0,
         transition: 'color 0.2s ease'
       }}
-      onMouseOver={(e) => e.currentTarget.style.color = '#e04c4c'}
+      onMouseOver={(e) => e.currentTarget.style.color = '#e57007'}
       onMouseOut={(e) => e.currentTarget.style.color = '#64748b'}
-      onFocus={(e) => e.currentTarget.style.color = '#e04c4c'}
+      onFocus={(e) => e.currentTarget.style.color = '#e57007'}
       onBlur={(e) => e.currentTarget.style.color = '#64748b'}
     >
       <span className="material-symbols-outlined" style={{ fontSize: '1.25rem' }}>arrow_back</span>

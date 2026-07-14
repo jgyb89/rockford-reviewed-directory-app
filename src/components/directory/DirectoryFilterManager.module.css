@@ -177,9 +177,9 @@
 }
 
 .category-pill--active {
-  background-color: #e04c4c;
+  background-color: #e57007;
   color: #ffffff;
-  border-color: #e04c4c;
+  border-color: #e57007;
 }
 
 /* Hide entirely on mobile (tablet breakpoint and below) */

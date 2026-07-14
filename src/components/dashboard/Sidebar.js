@@ -86,7 +86,7 @@ export default function Sidebar({ user, userRoles, locale, dict }) {
               href={getLocalizedUrl("/user-to-business", locale)} 
               className="dashboard-nav__link"
               style={{
-                backgroundColor: '#e04c4c',
+                backgroundColor: '#e57007',
                 color: 'white',
                 justifyContent: 'center',
                 borderRadius: '8px',

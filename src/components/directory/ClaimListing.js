@@ -108,7 +108,7 @@ export default function ClaimListing({ listingTitle, listingSlug }) {
                     <textarea required name="details" value={formData.details} onChange={handleChange} className={styles['claim-modal__textarea']} placeholder="Details description about your business..." />
                   </div>
 
-                  {error && <p style={{ color: '#e04c4c', fontSize: '0.9rem', marginBottom: '1rem' }}>{error}</p>}
+                  {error && <p style={{ color: '#e57007', fontSize: '0.9rem', marginBottom: '1rem' }}>{error}</p>}
 
                   <button type="submit" disabled={isSubmitting} className={styles['claim-modal__submit']}>
                     {isSubmitting ? 'Sending...' : 'Submit'}

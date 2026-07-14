@@ -191,7 +191,7 @@ export default function ReviewList({ reviews, noReviewsYet = "No reviews yet. Be
                 <button 
                   className="review-list__read-more" 
                   onClick={() => toggleExpand(index)}
-                  style={{ background: 'none', border: 'none', color: '#e04c4c', cursor: 'pointer', padding: 0, marginTop: '0.5rem', fontWeight: '600' }}
+                  style={{ background: 'none', border: 'none', color: '#e57007', cursor: 'pointer', padding: 0, marginTop: '0.5rem', fontWeight: '600' }}
                 >
                   {expandedReviews[index] ? 'Read less' : 'Read more'}
                 </button>

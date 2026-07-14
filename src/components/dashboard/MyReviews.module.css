@@ -49,7 +49,7 @@
 }
 
 .user-review__listing-link {
-  color: #e04c4c;
+  color: #e57007;
   text-decoration: none;
 }
 
@@ -151,7 +151,7 @@
 
 .my-reviews__modal-icon .material-symbols-outlined {
   font-size: 4rem;
-  color: #e04c4c;
+  color: #e57007;
 }
 
 .my-reviews__modal-title {
@@ -190,7 +190,7 @@
 }
 
 .my-reviews__modal-btn--delete {
-  background: #e04c4c;
-  border: 2px solid #e04c4c;
+  background: #e57007;
+  border: 2px solid #e57007;
   color: white;
 }

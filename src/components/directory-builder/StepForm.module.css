@@ -16,7 +16,7 @@
 }
 
 .step-form__header i {
-  color: #e04c4c;
+  color: #e57007;
   font-size: 1.5rem;
 }
 
@@ -41,7 +41,7 @@
 }
 
 .step-form__required {
-  color: #e04c4c;
+  color: #e57007;
   margin-left: 4px;
 }
 
@@ -62,19 +62,19 @@
 .step-form__select:focus,
 .step-form__textarea:focus {
   outline: none;
-  border-color: #e04c4c;
+  border-color: #e57007;
   box-shadow: 0 0 0 3px rgba(224, 76, 76, 0.1);
 }
 
 .step-form__input--error,
 .step-form__select--error,
 .step-form__textarea--error {
-  border-color: #e04c4c;
+  border-color: #e57007;
   background-color: #fffcfc;
 }
 
 .step-form__error-message {
-  color: #e04c4c;
+  color: #e57007;
   font-size: 0.85rem;
   margin-top: 0.25rem;
   font-weight: 500;
@@ -118,15 +118,15 @@
 }
 
 .category-pill:hover {
-  border-color: #e04c4c;
-  color: #e04c4c;
+  border-color: #e57007;
+  color: #e57007;
   background-color: #fef2f2;
 }
 
 .category-pill--active {
-  background-color: #e04c4c;
+  background-color: #e57007;
   color: #ffffff;
-  border-color: #e04c4c;
+  border-color: #e57007;
 }
 
 .category-pill--active:hover {

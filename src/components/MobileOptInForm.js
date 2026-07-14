@@ -1,11 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { useParams } from "next/navigation";
 import { submitMobileOptInForm } from "@/lib/actions";
 import { formatPhoneNumber, EMAIL_REGEX } from "@/lib/formatUtils";
+import { getLocalizedUrl } from "@/lib/constants";
 import styles from "./MobileOptInForm.module.css";
 
 export default function MobileOptInForm() {
+  const { locale } = useParams();
+  const currentLocale = locale || "en";
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -306,7 +311,7 @@ export default function MobileOptInForm() {
             Message frequency varies. Message and data rates may apply. Reply
             STOP to opt out and HELP for assistance. View our{" "}
             <a
-              href="https://www.rockfordreviewed.com/terms-of-service"
+              href={getLocalizedUrl("/terms-of-service", currentLocale)}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -314,7 +319,7 @@ export default function MobileOptInForm() {
             </a>{" "}
             |{" "}
             <a
-              href="https://www.rockfordreviewed.com/privacy-policy"
+              href={getLocalizedUrl("/privacy-policy", currentLocale)}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -322,7 +327,7 @@ export default function MobileOptInForm() {
             </a>{" "}
             |{" "}
             <a
-              href="https://www.rockfordreviewed.com/mobile-terms"
+              href={getLocalizedUrl("/mobile-terms", currentLocale)}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -359,7 +364,7 @@ export default function MobileOptInForm() {
             Message frequency varies. Message and data rates may apply. Reply
             STOP to opt out and HELP for assistance. View our{" "}
             <a
-              href="https://www.rockfordreviewed.com/terms-of-service"
+              href={getLocalizedUrl("/terms-of-service", currentLocale)}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -367,7 +372,7 @@ export default function MobileOptInForm() {
             </a>{" "}
             |{" "}
             <a
-              href="https://www.rockfordreviewed.com/privacy-policy"
+              href={getLocalizedUrl("/privacy-policy", currentLocale)}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -375,7 +380,7 @@ export default function MobileOptInForm() {
             </a>{" "}
             |{" "}
             <a
-              href="https://www.rockfordreviewed.com/mobile-terms"
+              href={getLocalizedUrl("/mobile-terms", currentLocale)}
               target="_blank"
               rel="noopener noreferrer"
             >

@@ -69,7 +69,7 @@ export default function EventMap({ lat, lng, address }) {
           textAlign: 'center'
         }}
       >
-        <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e94f37', marginBottom: '0.5rem' }}>
+        <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e57007', marginBottom: '0.5rem' }}>
           location_on
         </span>
         <p style={{ color: '#334155', fontSize: '1.1rem', marginBottom: '1.5rem', maxWidth: '80%', fontWeight: '500' }}>

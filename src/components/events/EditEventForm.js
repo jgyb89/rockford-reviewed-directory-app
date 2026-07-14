@@ -204,11 +204,11 @@ const ProgressOverlay = ({ step }) => {
           }
         `}</style>
         <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginBottom: '1.5rem' }}>
-          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite' }}>star</span>
-          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.1s' }}>star</span>
-          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.2s' }}>star</span>
-          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.3s' }}>star</span>
-          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.4s' }}>star</span>
+          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e57007', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite' }}>star</span>
+          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e57007', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.1s' }}>star</span>
+          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e57007', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.2s' }}>star</span>
+          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e57007', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.3s' }}>star</span>
+          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e57007', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.4s' }}>star</span>
         </div>
         <h3 className="dashboard-modal-title">{stepsInfo[step].label}</h3>
         <p className="dashboard-modal-text">
@@ -227,7 +227,7 @@ const ProgressOverlay = ({ step }) => {
           <div
             style={{
               width: stepsInfo[step].progress,
-              background: "#e04c4c",
+              background: "#e57007",
               height: "100%",
               transition: "width 0.5s ease",
             }}
@@ -457,7 +457,7 @@ export default function EditEventForm({ initialData, locale }) {
   }
 
   const labelStyle = { fontWeight: "600", marginBottom: "0.5rem", display: "block" };
-  const inputStyle = (hasError) => ({ padding: "0.75rem", borderRadius: "8px", border: `1px solid ${hasError ? '#e04c4c' : '#e2e8f0'}`, width: "100%", fontFamily: "inherit", boxSizing: "border-box" });
+  const inputStyle = (hasError) => ({ padding: "0.75rem", borderRadius: "8px", border: `1px solid ${hasError ? '#e57007' : '#e2e8f0'}`, width: "100%", fontFamily: "inherit", boxSizing: "border-box" });
 
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem 0' }}>
@@ -485,7 +485,7 @@ export default function EditEventForm({ initialData, locale }) {
               value={formData.title}
               onChange={(e) => updateFormData({ title: e.target.value })}
             />
-            {errors.title && <span style={{ color: '#e04c4c', fontSize: '0.85rem' }}>{errors.title}</span>}
+            {errors.title && <span style={{ color: '#e57007', fontSize: '0.85rem' }}>{errors.title}</span>}
           </div>
 
           <div>
@@ -501,7 +501,7 @@ export default function EditEventForm({ initialData, locale }) {
                 <option key={cat.slug} value={cat.slug}>{cat.name}</option>
               ))}
             </select>
-            {errors.primaryCategory && <span style={{ color: '#e04c4c', fontSize: '0.85rem' }}>{errors.primaryCategory}</span>}
+            {errors.primaryCategory && <span style={{ color: '#e57007', fontSize: '0.85rem' }}>{errors.primaryCategory}</span>}
           </div>
 
           <div>
@@ -514,7 +514,7 @@ export default function EditEventForm({ initialData, locale }) {
               value={customTagsText}
               onChange={handleCustomTagsChange}
             />
-            {errors.customTags && <span style={{ color: '#e04c4c', fontSize: '0.85rem' }}>{errors.customTags}</span>}
+            {errors.customTags && <span style={{ color: '#e57007', fontSize: '0.85rem' }}>{errors.customTags}</span>}
             <p style={{ fontSize: '0.85rem', color: '#666', marginTop: '0.25rem' }}>Separate tags with commas.</p>
           </div>
 
@@ -528,7 +528,7 @@ export default function EditEventForm({ initialData, locale }) {
               value={formData.description}
               onChange={(e) => updateFormData({ description: e.target.value })}
             ></textarea>
-            {errors.description && <span style={{ color: '#e04c4c', fontSize: '0.85rem' }}>{errors.description}</span>}
+            {errors.description && <span style={{ color: '#e57007', fontSize: '0.85rem' }}>{errors.description}</span>}
           </div>
         </SectionWrapper>
 
@@ -543,7 +543,7 @@ export default function EditEventForm({ initialData, locale }) {
                 value={formData.start_date}
                 onChange={(e) => updateFormData({ start_date: e.target.value })}
               />
-              {errors.start_date && <span style={{ color: '#e04c4c', fontSize: '0.85rem' }}>{errors.start_date}</span>}
+              {errors.start_date && <span style={{ color: '#e57007', fontSize: '0.85rem' }}>{errors.start_date}</span>}
             </div>
             <div>
               <label htmlFor="end_date" style={labelStyle}>End Date/Time</label>
@@ -641,7 +641,7 @@ export default function EditEventForm({ initialData, locale }) {
               value={formData.venue_name}
               onChange={(e) => updateFormData({ venue_name: e.target.value })}
             />
-            {errors.venue_name && <span style={{ color: '#e04c4c', fontSize: '0.85rem' }}>{errors.venue_name}</span>}
+            {errors.venue_name && <span style={{ color: '#e57007', fontSize: '0.85rem' }}>{errors.venue_name}</span>}
           </div>
 
           <div>

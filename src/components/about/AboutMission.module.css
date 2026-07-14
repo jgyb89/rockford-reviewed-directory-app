@@ -86,7 +86,7 @@
 
 .list li::before {
   content: "✦";
-  color: #e94f37;
+  color: #e57007;
   margin-right: 15px;
   font-size: 1.5rem;
 }

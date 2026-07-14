@@ -14,8 +14,8 @@
   width: 96%;
   height: 94vh;
   border-radius: 40px;
-  background-color: #ffc845; /* Sunny Yellow */
-  color: #231f20;
+  background-color: #000; /* Sunny Yellow */
+  color: #fff;
   display: flex;
   align-items: center;
   overflow: hidden;
