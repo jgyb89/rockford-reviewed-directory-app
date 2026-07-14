@@ -26,7 +26,7 @@ const Step1General = ({ formData, updateFormData, nextStep }) => {
   return (
     <div className={styles['step-form']}>
       <header className={styles['step-form__header']}>
-        <span className="material-symbols-outlined" style={{ color: '#e04c4c' }}>edit</span>
+        <span className="material-symbols-outlined" style={{ color: '#e57007' }}>edit</span>
         <h2>General Information</h2>
       </header>
 

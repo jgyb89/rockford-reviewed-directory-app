@@ -38,7 +38,7 @@ export default function Newsletter() {
 
     const ctx = gsap.context(() => {
       // 1. Background Gradient Timeline
-      const c1 = "#e94f37"; // Brand Red
+      const c1 = "#e57007"; // Brand Red
       const c2 = "#ff8c00"; // Orange
       const c3 = "#ffd700"; // Yellow
       const c4 = "#32cd32"; // Lime Green

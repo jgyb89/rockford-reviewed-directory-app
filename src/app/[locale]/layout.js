@@ -1,4 +1,4 @@
-import { poppins, openSans } from "@/app/fonts";
+import { montserrat, openSans } from "@/app/fonts";
 import PropTypes from "prop-types";
 import "../globals.css";
 import "material-symbols/outlined.css";
@@ -52,7 +52,7 @@ export default async function RootLayout({ children, params }) {
           `}
         </Script>
       </head>
-      <body className={`${poppins.variable} ${openSans.variable}`}>
+      <body className={`${montserrat.variable} ${openSans.variable}`}>
         <Preloader />
         <Navbar currentUser={null} dict={dict} locale={locale} />
         <main>{children}</main>

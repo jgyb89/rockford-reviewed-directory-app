@@ -36,7 +36,7 @@ export default function SubmissionSuccessPage() {
 
         {progress === 100 ? (
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href={`/dashboard`} style={{ padding: '0.75rem 1.5rem', backgroundColor: '#e04c4c', color: '#fff', textDecoration: 'none', borderRadius: '6px', fontWeight: '600' }}>
+            <Link href={`/dashboard`} style={{ padding: '0.75rem 1.5rem', backgroundColor: '#e57007', color: '#fff', textDecoration: 'none', borderRadius: '6px', fontWeight: '600' }}>
               Go to Dashboard
             </Link>
             <Link href={``} style={{ padding: '0.75rem 1.5rem', backgroundColor: '#edf2f7', color: '#2d3748', textDecoration: 'none', borderRadius: '6px', fontWeight: '600' }}>

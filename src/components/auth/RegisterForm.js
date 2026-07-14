@@ -277,7 +277,7 @@ export default function RegisterForm({ dict = {}, locale = "en" }) {
             href={`/terms-of-service`} 
             target="_blank" 
             rel="noopener noreferrer" 
-            style={{ color: '#e04c4c', textDecoration: 'underline', display: 'inline-flex', alignItems: 'center', gap: '2px', fontWeight: '500' }}
+            style={{ color: '#e57007', textDecoration: 'underline', display: 'inline-flex', alignItems: 'center', gap: '2px', fontWeight: '500' }}
           >
             Terms of Service
             <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>open_in_new</span>
@@ -287,7 +287,7 @@ export default function RegisterForm({ dict = {}, locale = "en" }) {
             href={`/privacy-policy`} 
             target="_blank" 
             rel="noopener noreferrer" 
-            style={{ color: '#e04c4c', textDecoration: 'underline', display: 'inline-flex', alignItems: 'center', gap: '2px', fontWeight: '500' }}
+            style={{ color: '#e57007', textDecoration: 'underline', display: 'inline-flex', alignItems: 'center', gap: '2px', fontWeight: '500' }}
           >
             Privacy Policy
             <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>open_in_new</span>

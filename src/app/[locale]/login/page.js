@@ -45,12 +45,12 @@ export default async function LoginPage({ searchParams }) {
           <LoginForm />
 
           <div style={{ marginTop: '1.5rem', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <Link href={`/login?recover=true`} style={{ color: '#e04c4c', textDecoration: 'none', fontWeight: '500' }}>
+            <Link href={`/login?recover=true`} style={{ color: '#e57007', textDecoration: 'none', fontWeight: '500' }}>
               Forgot your password?
             </Link>
             <p style={{ color: '#64748b', margin: 0 }}>
               Don&apos;t have an account?{' '}
-              <Link href={`/register`} style={{ color: '#e04c4c', fontWeight: '600', textDecoration: 'none' }}>
+              <Link href={`/register`} style={{ color: '#e57007', fontWeight: '600', textDecoration: 'none' }}>
                 Sign Up
               </Link>
             </p>

@@ -545,7 +545,7 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
                         className={styles['flyout-link']}
                         onClick={closeMobileMenu}
                       >
-                        <span className={styles['flyout-category-btn']} style={{ fontWeight: 700, color: '#e04c4c' }}>
+                        <span className={styles['flyout-category-btn']} style={{ fontWeight: 700, color: '#e57007' }}>
                           View All {activeCategory.title}
                         </span>
                       </Link>

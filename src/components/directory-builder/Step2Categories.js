@@ -64,7 +64,7 @@ const Step2Categories = ({ formData, updateFormData, nextStep, prevStep }) => {
   return (
     <div className={styles['step-form']}>
       <header className={styles['step-form__header']}>
-        <span className="material-symbols-outlined" style={{ color: '#e04c4c' }}>category</span>
+        <span className="material-symbols-outlined" style={{ color: '#e57007' }}>category</span>
         <h2>Select Categories</h2>
       </header>
 

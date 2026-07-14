@@ -54,7 +54,7 @@
 }
 
 .scroll-arrow:hover {
-  background-color: var(--color-primary, #e04c4c);
+  background-color: var(--color-primary, #e57007);
   transform: translateY(-50%) scale(1.1);
 }
 

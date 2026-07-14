@@ -10,7 +10,7 @@
 }
 
 .paginatedLink {
-  color: #e04c4c;
+  color: #e57007;
   background: transparent;
   border: none;
   text-decoration: none;
@@ -31,9 +31,9 @@
 }
 
 .paginiatedLoadMoreButton {
-  color: #e04c4c;
+  color: #e57007;
   background: transparent;
-  border: 1px solid #e04c4c;
+  border: 1px solid #e57007;
   border-radius: 24px;
   padding: 0.75rem 2rem;
   text-decoration: none;
@@ -44,7 +44,7 @@
 }
 
 .paginiatedLoadMoreButton:hover {
-  background: #e04c4c;
+  background: #e57007;
   color: #ffffff;
 }
 

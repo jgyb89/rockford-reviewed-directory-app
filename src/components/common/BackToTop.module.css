@@ -57,7 +57,7 @@
 .itemBtn:hover,
 .itemBtn:focus {
   width: 240px; /* Wide enough to fit "Join Facebook Group" */
-  background-color: #e04c4c;
+  background-color: #e57007;
   outline: none;
 }
 
@@ -92,7 +92,7 @@
 
 /* Main Trigger Button */
 .mainBtn {
-  background-color: #e04c4c;
+  background-color: #e57007;
   color: #ffffff;
   border: none;
   border-radius: 50%;

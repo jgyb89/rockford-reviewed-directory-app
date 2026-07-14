@@ -45,5 +45,5 @@
 
 .listing-gallery__thumbnail--active {
   opacity: 1;
-  border-color: #e04c4c; /* Matches var(--color-primary) if defined */
+  border-color: #e57007; /* Matches var(--color-primary) if defined */
 }

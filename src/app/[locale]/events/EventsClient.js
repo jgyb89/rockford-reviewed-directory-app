@@ -43,9 +43,9 @@ function PaginatedEventSection({ title, events, locale, currentUser }) {
           <button 
             onClick={() => setVisibleCount(prev => prev + 4)}
             style={{ 
-              color: '#e04c4c', 
+              color: '#e57007', 
               background: 'transparent', 
-              border: '1px solid #e04c4c', 
+              border: '1px solid #e57007', 
               borderRadius: '24px',
               padding: '0.75rem 2rem',
               fontWeight: 700, 
@@ -54,12 +54,12 @@ function PaginatedEventSection({ title, events, locale, currentUser }) {
               transition: 'all 0.2s ease'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#e04c4c';
+              e.currentTarget.style.background = '#e57007';
               e.currentTarget.style.color = '#fff';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.background = 'transparent';
-              e.currentTarget.style.color = '#e04c4c';
+              e.currentTarget.style.color = '#e57007';
             }}
           >
             Load More
@@ -230,7 +230,7 @@ export default function EventsClient({ events, currentUser, locale }) {
         <button
           onClick={handleCreateClick}
           style={{
-            backgroundColor: "#e94f37",
+            backgroundColor: "#e57007",
             color: "#fff",
             border: "none",
             padding: "1rem 2rem",

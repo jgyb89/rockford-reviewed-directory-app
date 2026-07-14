@@ -34,7 +34,7 @@ export default function NewsletterWidget() {
       textAlign: 'center',
       boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
     }}>
-      <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e94f37', marginBottom: '0.5rem' }}>
+      <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e57007', marginBottom: '0.5rem' }}>
         mail
       </span>
       <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.5rem', fontFamily: 'var(--font-heading)' }}>
@@ -70,7 +70,7 @@ export default function NewsletterWidget() {
               type="submit"
               disabled={status === 'loading'}
               style={{
-                background: '#e94f37',
+                background: '#e57007',
                 color: 'white',
                 border: 'none',
                 padding: '0.75rem 1.5rem',
@@ -85,7 +85,7 @@ export default function NewsletterWidget() {
             </button>
           </div>
           {status === 'error' && (
-            <p style={{ color: '#e04c4c', fontSize: '0.85rem', margin: '0.5rem 0 0 0', textAlign: 'left' }}>{errorMessage}</p>
+            <p style={{ color: '#e57007', fontSize: '0.85rem', margin: '0.5rem 0 0 0', textAlign: 'left' }}>{errorMessage}</p>
           )}
         </form>
       )}

@@ -20,7 +20,7 @@
 
 .not-found__icon {
   font-size: 5rem;
-  color: #e04c4c;
+  color: #e57007;
   margin-bottom: 1rem;
 }
 
@@ -29,7 +29,7 @@
   font-weight: 800;
   color: #1e293b;
   margin: 0 0 1rem 0;
-  font-family: var(--font-poppins, sans-serif);
+  font-family: var(--font-montserrat, sans-serif);
 }
 
 .not-found__text {
@@ -59,9 +59,9 @@
 }
 
 .not-found__btn--primary {
-  background-color: #e04c4c;
+  background-color: #e57007;
   color: #ffffff;
-  border: 2px solid #e04c4c;
+  border: 2px solid #e57007;
 }
 
 .not-found__btn--primary:hover {

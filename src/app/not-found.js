@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 import PropTypes from 'prop-types';
-import { poppins, openSans } from '@/app/fonts';
+import { montserrat, openSans } from '@/app/fonts';
 import { getViewer } from '@/lib/auth';
 import Navbar from '@/components/layout/Navbar';
 import "material-symbols/outlined.css";
@@ -13,7 +13,7 @@ export default async function NotFound() {
 
   return (
     <html lang="en">
-      <body className={`${poppins.variable} ${openSans.variable}`} style={{ margin: 0, padding: 0 }}>
+      <body className={`${montserrat.variable} ${openSans.variable}`} style={{ margin: 0, padding: 0 }}>
         <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', fontFamily: 'var(--font-open-sans), sans-serif' }}>
           {/* Inject Navbar with fallback locale */}
           <Navbar locale="en" currentUser={viewer} />

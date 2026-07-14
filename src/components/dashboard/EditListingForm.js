@@ -630,11 +630,11 @@ const ProgressOverlay = ({ step }) => {
           }
         `}</style>
         <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginBottom: '1.5rem' }}>
-          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite' }}>star</span>
-          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.1s' }}>star</span>
-          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.2s' }}>star</span>
-          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.3s' }}>star</span>
-          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.4s' }}>star</span>
+          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e57007', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite' }}>star</span>
+          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e57007', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.1s' }}>star</span>
+          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e57007', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.2s' }}>star</span>
+          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e57007', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.3s' }}>star</span>
+          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e57007', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.4s' }}>star</span>
         </div>
         <h3 className="dashboard-modal-title">{stepsInfo[step].label}</h3>
         <p className="dashboard-modal-text">
@@ -653,7 +653,7 @@ const ProgressOverlay = ({ step }) => {
           <div
             style={{
               width: stepsInfo[step].progress,
-              background: "#e04c4c",
+              background: "#e57007",
               height: "100%",
               transition: "width 0.5s ease",
             }}
@@ -703,11 +703,11 @@ const BasicInfoSection = ({
         style={{
           padding: "0.75rem",
           borderRadius: "8px",
-          border: `1px solid ${titleError ? "#e04c4c" : "#e2e8f0"}`,
+          border: `1px solid ${titleError ? "#e57007" : "#e2e8f0"}`,
         }}
       />
       {titleError && (
-        <span style={{ color: "#e04c4c", fontSize: "0.8rem" }}>
+        <span style={{ color: "#e57007", fontSize: "0.8rem" }}>
           {titleError}
         </span>
       )}
@@ -726,12 +726,12 @@ const BasicInfoSection = ({
         style={{
           padding: "0.75rem",
           borderRadius: "8px",
-          border: `1px solid ${descriptionError ? "#e04c4c" : "#e2e8f0"}`,
+          border: `1px solid ${descriptionError ? "#e57007" : "#e2e8f0"}`,
           fontFamily: "inherit",
         }}
       />
       {descriptionError && (
-        <span style={{ color: "#e04c4c", fontSize: "0.8rem" }}>
+        <span style={{ color: "#e57007", fontSize: "0.8rem" }}>
           {descriptionError}
         </span>
       )}
@@ -776,9 +776,9 @@ const CategorySection = ({
 
   const activePillStyle = {
     ...pillStyle,
-    backgroundColor: "#e04c4c",
+    backgroundColor: "#e57007",
     color: "#ffffff",
-    borderColor: "#e04c4c",
+    borderColor: "#e57007",
   };
 
   const sectionWrapperStyle = {
@@ -947,7 +947,7 @@ const MediaGallerySection = ({
           onDragLeave={(e) => handleDragLeave(e, "featured")}
           onDrop={(e) => handleDrop(e, "featured")}
           style={{
-            border: `2px dashed ${dragState.featured ? "#e04c4c" : "#cbd5e1"}`,
+            border: `2px dashed ${dragState.featured ? "#e57007" : "#cbd5e1"}`,
             backgroundColor: dragState.featured ? "#fef2f2" : "#f8fafc",
             padding: "2rem",
             borderRadius: "12px",
@@ -1031,7 +1031,7 @@ const MediaGallerySection = ({
                   <div
                     style={{
                       padding: "0.4rem 1rem",
-                      backgroundColor: "#e04c4c",
+                      backgroundColor: "#e57007",
                       color: "white",
                       borderRadius: "6px",
                       fontWeight: "600",
@@ -1118,7 +1118,7 @@ const MediaGallerySection = ({
           onDragLeave={(e) => handleDragLeave(e, "gallery")}
           onDrop={(e) => handleDrop(e, "gallery")}
           style={{
-            border: `2px dashed ${dragState.gallery ? "#e04c4c" : "#cbd5e1"}`,
+            border: `2px dashed ${dragState.gallery ? "#e57007" : "#cbd5e1"}`,
             backgroundColor: dragState.gallery ? "#fef2f2" : "#f8fafc",
             padding: "2rem",
             borderRadius: "12px",
@@ -1335,7 +1335,7 @@ const LocationSection = ({
                   flex: 1,
                   padding: "0.75rem",
                   borderRadius: "8px",
-                  border: `1px solid ${socialErrors[idx] ? "#e04c4c" : "#e2e8f0"}`,
+                  border: `1px solid ${socialErrors[idx] ? "#e57007" : "#e2e8f0"}`,
                 }}
               />
               {!disabled && formData.socialUrls.length > 1 && (
@@ -1343,7 +1343,7 @@ const LocationSection = ({
                   type="button"
                   onClick={() => handleRemoveSocialUrl(idx)}
                   style={{
-                    color: "#e04c4c",
+                    color: "#e57007",
                     cursor: "pointer",
                     border: "none",
                     background: "none",
@@ -1354,7 +1354,7 @@ const LocationSection = ({
               )}
             </div>
             {socialErrors[idx] && (
-              <span style={{ color: "#e04c4c", fontSize: "0.8rem" }}>
+              <span style={{ color: "#e57007", fontSize: "0.8rem" }}>
                 {socialErrors[idx]}
               </span>
             )}

@@ -64,7 +64,7 @@ export default function Breadcrumbs({ locale = 'en' }) {
                 <>
                   <Link 
                      href={crumb.href} 
-                     style={{ color: '#e04c4c', textDecoration: 'none', fontWeight: '500', transition: 'opacity 0.2s' }}
+                     style={{ color: '#e57007', textDecoration: 'none', fontWeight: '500', transition: 'opacity 0.2s' }}
                      onMouseOver={(e) => e.currentTarget.style.opacity = 0.7}
                      onMouseOut={(e) => e.currentTarget.style.opacity = 1}
                   >

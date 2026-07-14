@@ -170,18 +170,18 @@ const Step5Finish = ({ formData, prevStep }) => {
               }
             `}</style>
             <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginBottom: '1.5rem' }}>
-              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounceModal 1.5s infinite' }}>star</span>
-              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounceModal 1.5s infinite 0.1s' }}>star</span>
-              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounceModal 1.5s infinite 0.2s' }}>star</span>
-              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounceModal 1.5s infinite 0.3s' }}>star</span>
-              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounceModal 1.5s infinite 0.4s' }}>star</span>
+              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e57007', fontVariationSettings: "'FILL' 1", animation: 'starBounceModal 1.5s infinite' }}>star</span>
+              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e57007', fontVariationSettings: "'FILL' 1", animation: 'starBounceModal 1.5s infinite 0.1s' }}>star</span>
+              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e57007', fontVariationSettings: "'FILL' 1", animation: 'starBounceModal 1.5s infinite 0.2s' }}>star</span>
+              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e57007', fontVariationSettings: "'FILL' 1", animation: 'starBounceModal 1.5s infinite 0.3s' }}>star</span>
+              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: '#e57007', fontVariationSettings: "'FILL' 1", animation: 'starBounceModal 1.5s infinite 0.4s' }}>star</span>
             </div>
             <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem', color: '#1e293b' }}>{stepsInfo[uploadStep].label}</h3>
             <p style={{ color: '#64748b', marginBottom: '2rem' }}>Please wait while we process your request.</p>
             <div style={{ width: '100%', background: '#f1f5f9', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
               <div style={{ 
                 width: progressWidth,
-                background: '#e04c4c',
+                background: '#e57007',
                 height: '100%',
                 transition: 'width 0.5s ease'
               }} />
@@ -246,9 +246,9 @@ const Step5Finish = ({ formData, prevStep }) => {
           onClick={handleSubmit}
           disabled={isSubmitting}
           style={{ 
-            backgroundColor: isSubmitting ? '#f8fafc' : '#e04c4c',
-            color: isSubmitting ? '#e04c4c' : '#fff',
-            border: isSubmitting ? '1px solid #e04c4c' : '1px solid transparent',
+            backgroundColor: isSubmitting ? '#f8fafc' : '#e57007',
+            color: isSubmitting ? '#e57007' : '#fff',
+            border: isSubmitting ? '1px solid #e57007' : '1px solid transparent',
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center', 
@@ -258,13 +258,13 @@ const Step5Finish = ({ formData, prevStep }) => {
           {isSubmitting ? (
             <>
               <div style={{ display: 'flex', gap: '2px' }}>
-                <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite' }}>star</span>
-                <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.1s' }}>star</span>
-                <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.2s' }}>star</span>
-                <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.3s' }}>star</span>
-                <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#e04c4c', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.4s' }}>star</span>
+                <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#e57007', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite' }}>star</span>
+                <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#e57007', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.1s' }}>star</span>
+                <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#e57007', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.2s' }}>star</span>
+                <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#e57007', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.3s' }}>star</span>
+                <span className="material-symbols-outlined" style={{ fontSize: '18px', color: '#e57007', fontVariationSettings: "'FILL' 1", animation: 'starBounce 1.5s infinite 0.4s' }}>star</span>
               </div>
-              <span style={{ color: '#e04c4c', fontWeight: 600 }}>Processing...</span>
+              <span style={{ color: '#e57007', fontWeight: 600 }}>Processing...</span>
             </>
           ) : 'Submit Listing'}
         </button>

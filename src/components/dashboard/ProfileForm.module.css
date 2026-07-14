@@ -31,7 +31,7 @@
 }
 
 .profile-form__input:focus {
-  border-color: #e04c4c;
+  border-color: #e57007;
   outline: none;
   background-color: #ffffff;
   box-shadow: 0 0 0 3px rgba(224, 76, 76, 0.1);
@@ -55,7 +55,7 @@
 }
 
 .profile-form__button--primary {
-  background-color: #e04c4c;
+  background-color: #e57007;
   color: white;
 }
 
@@ -86,5 +86,5 @@
   cursor: pointer;
   width: 1.1rem;
   height: 1.1rem;
-  accent-color: #e04c4c;
+  accent-color: #e57007;
 }

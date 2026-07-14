@@ -153,19 +153,19 @@ export default function CcrCard({ listing, currentUser: propCurrentUser, locale 
               const numRating = Number.parseFloat(averageRating);
               if (numRating >= val) {
                 return (
-                  <span key={i} className="material-symbols-outlined" style={{ fontSize: "18px", color: "#e94f37", fontVariationSettings: "'FILL' 1" }}>
+                  <span key={i} className="material-symbols-outlined" style={{ fontSize: "18px", color: "#e57007", fontVariationSettings: "'FILL' 1" }}>
                     star
                   </span>
                 );
               } else if (numRating >= val - 0.5) {
                 return (
-                  <span key={i} className="material-symbols-outlined" style={{ fontSize: "18px", color: "#e94f37", fontVariationSettings: "'FILL' 1" }}>
+                  <span key={i} className="material-symbols-outlined" style={{ fontSize: "18px", color: "#e57007", fontVariationSettings: "'FILL' 1" }}>
                     star_half
                   </span>
                 );
               } else {
                 return (
-                  <span key={i} className="material-symbols-outlined" style={{ fontSize: "18px", color: "#e94f37", fontVariationSettings: "'FILL' 0" }}>
+                  <span key={i} className="material-symbols-outlined" style={{ fontSize: "18px", color: "#e57007", fontVariationSettings: "'FILL' 0" }}>
                     star
                   </span>
                 );
@@ -184,7 +184,7 @@ export default function CcrCard({ listing, currentUser: propCurrentUser, locale 
               {reviewCount > 0 ? (
                 <>{reviewCount} {reviewCount === 1 ? 'Review' : 'Reviews'}</>
               ) : (
-                <>Be the first to <Link href={listingUrl} style={{ textDecoration: 'underline', color: '#e94f37' }}>review</Link></>
+                <>Be the first to <Link href={listingUrl} style={{ textDecoration: 'underline', color: '#e57007' }}>review</Link></>
               )}
             </div>
 

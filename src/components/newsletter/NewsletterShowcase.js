@@ -21,7 +21,7 @@ export default function NewsletterShowcase() {
   useEffect(() => {
     let ctx = gsap.context(() => {
       // 1. Background Gradient Animation (From Home Page)
-      const c1 = "#e94f37";
+      const c1 = "#e57007";
       const c2 = "#ff8c00";
       const c3 = "#ffd700";
       const c4 = "#32cd32";

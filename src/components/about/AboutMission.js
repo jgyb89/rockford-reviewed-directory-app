@@ -70,7 +70,7 @@ export default function AboutMission() {
         <path
           className="animated-line"
           d="M 105 0 L 105 10000"
-          stroke="#e94f37"
+          stroke="#e57007"
           strokeWidth="32"
           fill="none"
           strokeLinecap="round"

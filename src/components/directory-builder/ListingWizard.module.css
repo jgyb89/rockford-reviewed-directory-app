@@ -63,11 +63,11 @@
 
 /* Active State */
 .wizard__step-indicator--active {
-  color: #e04c4c;
+  color: #e57007;
 }
 
 .wizard__step-indicator--active .wizard__step-number {
-  background: #e04c4c;
+  background: #e57007;
   color: white;
   box-shadow: 0 0 0 4px rgba(224, 76, 76, 0.2);
 }
@@ -121,7 +121,7 @@
 }
 
 .wizard__button--primary {
-  background: #e04c4c;
+  background: #e57007;
   color: white;
 }
 
