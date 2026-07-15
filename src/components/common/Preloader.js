@@ -12,6 +12,15 @@ export default function Preloader() {
   const logoRef = useRef(null);
 
   useEffect(() => {
+    // Track history length on initial hard load to support smart BackButton routing
+    if (typeof window !== "undefined") {
+      const navEntries = window.performance.getEntriesByType('navigation');
+      const isRefresh = navEntries.length > 0 && navEntries[0].type === 'reload';
+      if (!isRefresh) {
+        sessionStorage.setItem('ccr_initial_history_length', window.history.length.toString());
+      }
+    }
+
     // Set how often the preloader should show (e.g., 7 days in milliseconds)
     // Formula: Hours * Minutes * Seconds * Milliseconds
     const EXPIRATION_TIME = 168 * 60 * 60 * 1000;

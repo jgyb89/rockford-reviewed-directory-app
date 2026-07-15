@@ -21,7 +21,7 @@
 
 .listing-top-actions {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
@@ -179,7 +179,7 @@
   font-weight: 600;
   color: #4a5568;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
 }
 
@@ -191,7 +191,9 @@
 
 /* Review Updating Spinner */
 @keyframes review-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .review-spinner {
