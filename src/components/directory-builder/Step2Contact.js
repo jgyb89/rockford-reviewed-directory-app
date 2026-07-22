@@ -97,7 +97,7 @@ const Step2Contact = ({ formData, updateFormData, nextStep, prevStep }) => {
             type="text"
             id="state"
             className={styles['step-form__input']}
-            placeholder="FL"
+            placeholder="IL"
             value={formData.state || ''}
             onChange={(e) => updateFormData({ state: e.target.value })}
           />
@@ -110,7 +110,7 @@ const Step2Contact = ({ formData, updateFormData, nextStep, prevStep }) => {
           type="text"
           id="zipCode"
           className={styles['step-form__input']}
-          placeholder="33904"
+          placeholder="61107"
           value={formData.zipCode || ''}
           onChange={(e) => updateFormData({ zipCode: e.target.value })}
         />
@@ -124,7 +124,7 @@ const Step2Contact = ({ formData, updateFormData, nextStep, prevStep }) => {
           type="tel"
           id="phone"
           className={`${styles['step-form__input']} ${errors.phone ? styles['step-form__input--error'] : ''}`}
-          placeholder="(239) 000-0000"
+          placeholder="(815) 000-0000"
           value={formData.phone}
           onChange={(e) => updateFormData({ phone: formatPhoneNumber(e.target.value) })}
         />
