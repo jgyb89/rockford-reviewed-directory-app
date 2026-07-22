@@ -4,6 +4,8 @@ import { getViewer } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 
+export const dynamic = 'force-dynamic';
+
 export default async function SubmitListingPage() {
   
   // 1. Explicitly check for the auth cookie

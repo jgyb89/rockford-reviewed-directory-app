@@ -16,6 +16,8 @@ import { formatImageUrl } from "@/lib/formatImageUrl";
 import { BASE_URL } from "@/lib/constants";
 import "./ListingPage.css";
 
+export const dynamic = 'force-dynamic';
+
 /**
  * Converts standard YouTube/Vimeo URLs into embeddable ones.
  */

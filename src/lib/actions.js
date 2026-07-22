@@ -12,15 +12,17 @@ const GRAPHQL_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
  * Global helper to cleanly execute authenticated GraphQL mutations.
  */
 export async function fetchGraphQL(query, variables = {}, requireAuth = true) {
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get("authToken")?.value;
+
   const headers = {
     "Content-Type": "application/json",
     "User-Agent": "CCR-NextJS-Frontend/1.0",
+    ...(requireAuth && authToken ? { Authorization: `Bearer ${authToken}` } : {}),
   };
 
-  if (requireAuth) {
-    const token = (await cookies()).get("authToken")?.value;
-    if (!token) throw new Error("Not authenticated");
-    headers["Authorization"] = `Bearer ${token}`;
+  if (requireAuth && !authToken) {
+    throw new Error("Not authenticated");
   }
 
   try {
@@ -536,8 +538,8 @@ export async function submitListing(formData) {
           ? [{ id: 28, value: formData.galleryImages }]
           : []),
       ],
-      false,
-    ); // Usually listing submission doesn't strictly *require* auth but uses it if available
+      true,
+    );
 
     revalidatePath("/directory", "layout");
     return { success: true };
