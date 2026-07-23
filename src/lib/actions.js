@@ -1051,3 +1051,13 @@ export async function submitEventComment(formData) {
     };
   }
 }
+
+export async function submitEventForm(eventData) {
+  const fieldValues = [
+    { id: 1, value: eventData.title || "" },
+    { id: 4, value: eventData.description || "" },
+    { id: 5, value: eventData.author || "" },
+  ];
+
+  return await submitGravityForm(17, fieldValues, true);
+}

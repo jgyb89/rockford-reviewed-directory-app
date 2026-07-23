@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter, useParams } from 'next/navigation';
 import { createEventMutation } from '@/lib/graphql/events';
-import { uploadWPImage } from '@/lib/actions';
+import { uploadWPImage, submitEventForm } from '@/lib/actions';
 import imageCompression from 'browser-image-compression';
 
 import styles from '@/components/directory-builder/StepForm.module.css';
@@ -81,6 +81,17 @@ const Step3Media = ({ formData, updateFormData, prevStep }) => {
       });
 
       if (result.success) {
+        // Trigger Gravity Forms Notification (Form ID 17 via Server Action)
+        try {
+          await submitEventForm({
+            title: formData.title,
+            description: formData.description,
+            author: "Frontend Submission"
+          });
+        } catch (gfError) {
+          console.error("Gravity Forms notification ping failed, but event was created:", gfError);
+        }
+
         setUploadStep('complete');
         // We'll show a pending approval state before redirecting or show it inline
       } else {
