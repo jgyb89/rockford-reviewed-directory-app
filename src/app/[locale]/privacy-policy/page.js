@@ -12,18 +12,18 @@ export default function PrivacyPolicyPage() {
       <BackButton />
 
       <h1 className={styles.title}>
-        ROCKFORD REVIEWED
+        ROCKFORD REVIEWED D/B/A OF ROCKFORD REVIEWED
         <br />
         PRIVACY POLICY
       </h1>
       <p className={styles.lastUpdated}>
-        Effective Date: June 24, 2026
+        Effective Date: July 27, 2026
       </p>
 
       <div className={styles.content}>
         <h2>Introduction</h2>
         <p>
-          Rockford Reviewed ("Rockford Reviewed," "we," "our," or "us") respects your privacy and is committed to protecting the personal information you provide when visiting our website, interacting with our advertisements, participating in our community platforms, subscribing to our newsletters, requesting information, or otherwise using our services. This Privacy Policy explains how we collect, use, disclose, retain, and protect your information. By using our website or services, you consent to the collection, use, and disclosure of information as described in this Privacy Policy.
+          Rockford Reviewed (&quot;Rockford Reviewed,&quot; &quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) respects your privacy and is committed to protecting the personal information you provide when visiting our website, interacting with our advertisements, participating in our community platforms, subscribing to our newsletters, requesting information, or otherwise using our services. This Privacy Policy explains how we collect, use, disclose, retain, and protect your information. By using our website or services, you consent to the collection, use, and disclosure of information as described in this Privacy Policy.
         </p>
 
         <h2>Information We Collect</h2>
@@ -141,9 +141,9 @@ export default function PrivacyPolicyPage() {
 
         <h2>Contact Information</h2>
         <p>
-          <strong>Rockford Reviewed</strong><br/>
+          <strong>Rockford Reviewed D/B/A of Cape Coral Reviewed</strong><br/>
           944 Country Club Boulevard, Suite 205<br/>
-          Rockford, Illinois 33990<br/>
+          Cape Coral, Florida 33990<br/>
           Email: <a href="mailto:info@rockfordreviewed.com" className={styles.link}>info@rockfordreviewed.com</a><br/>
           Website: <a href="https://www.rockfordreviewed.com" target="_blank" rel="noopener noreferrer" className={styles.link}>www.rockfordreviewed.com</a>
         </p>
