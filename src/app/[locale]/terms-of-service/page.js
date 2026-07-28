@@ -12,21 +12,21 @@ export default function TermsOfServicePage() {
       <BackButton />
 
       <h1 className={styles.title}>
-        ROCKFORD REVIEWED
+        ROCKFORD REVIEWED D/B/A OF CAPE CORAL REVIEWED
         <br />
         TERMS OF SERVICE
       </h1>
-      <p className={styles.lastUpdated}>Effective Date: June 24, 2026</p>
+      <p className={styles.lastUpdated}>Effective Date: July 27, 2026</p>
 
       <div className={styles.content}>
         <h2>Acceptance of Terms</h2>
         <p>
-          PLEASE READ THESE TERMS OF SERVICE CAREFULLY BEFORE USING THIS WEBSITE. THESE TERMS OF SERVICE ("TERMS") GOVERN YOUR ACCESS TO AND USE OF THE WEBSITE, CONTENT, COMMUNICATIONS, PRODUCTS, AND SERVICES PROVIDED BY ROCKFORD REVIEWED ("ROCKFORD REVIEWED," "WE," "US," OR "OUR"). BY ACCESSING, BROWSING, USING, OR SUBMITTING INFORMATION THROUGH THE WEBSITE, YOU AGREE TO BE BOUND BY THESE TERMS AND OUR PRIVACY POLICY. IF YOU DO NOT AGREE TO THESE TERMS, YOU MUST IMMEDIATELY DISCONTINUE USE OF THE WEBSITE.
+          PLEASE READ THESE TERMS OF SERVICE CAREFULLY BEFORE USING THIS WEBSITE. THESE TERMS OF SERVICE (&quot;TERMS&quot;) GOVERN YOUR ACCESS TO AND USE OF THE WEBSITE, CONTENT, COMMUNICATIONS, PRODUCTS, AND SERVICES PROVIDED BY ROCKFORD REVIEWED (&quot;ROCKFORD REVIEWED,&quot; &quot;WE,&quot; &quot;US,&quot; OR &quot;OUR&quot;). BY ACCESSING, BROWSING, USING, OR SUBMITTING INFORMATION THROUGH THE WEBSITE, YOU AGREE TO BE BOUND BY THESE TERMS AND OUR PRIVACY POLICY. IF YOU DO NOT AGREE TO THESE TERMS, YOU MUST IMMEDIATELY DISCONTINUE USE OF THE WEBSITE.
         </p>
 
         <h2>Our Services</h2>
         <p>
-          Rockford Reviewed operates a digital media, advertising, marketing, review, referral, and lead generation platform designed to provide consumers with information regarding businesses, services, attractions, promotions, events, and opportunities located in or related to the Rockford, Illinois area. Through our website, newsletters, social media communities, advertising campaigns, and affiliated marketing channels, we may publish reviews, rankings, recommendations, editorial content, sponsored content, promotional offers, discounts, coupons, and advertisements. We may also facilitate consumer inquiries and connect consumers with independent businesses, advertisers, service providers, contractors, affiliates, marketing partners, and other third parties that may be able to provide requested products or services.
+          Rockford Reviewed operates a digital media, advertising, marketing, review, referral, and lead generation platform designed to provide consumers with information regarding businesses, services, attractions, promotions, events, and opportunities located in or related to the Rockford, Florida area. Through our website, newsletters, social media communities, advertising campaigns, and affiliated marketing channels, we may publish reviews, rankings, recommendations, editorial content, sponsored content, promotional offers, discounts, coupons, and advertisements. We may also facilitate consumer inquiries and connect consumers with independent businesses, advertisers, service providers, contractors, affiliates, marketing partners, and other third parties that may be able to provide requested products or services.
         </p>
 
         <h2>Lead Generation Disclosure</h2>
@@ -81,7 +81,7 @@ export default function TermsOfServicePage() {
 
         <h2>Disclaimer of Warranties</h2>
         <p>
-          THE WEBSITE, SERVICES, CONTENT, COMMUNICATIONS, AND ALL RELATED MATERIALS ARE PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS WITHOUT WARRANTIES OF ANY KIND. TO THE MAXIMUM EXTENT PERMITTED BY LAW, ROCKFORD REVIEWED DISCLAIMS ALL WARRANTIES, WHETHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, NON-INFRINGEMENT, ACCURACY, RELIABILITY, COMPLETENESS, SECURITY, OR AVAILABILITY. WE DO NOT WARRANT THAT THE WEBSITE WILL OPERATE WITHOUT INTERRUPTION, ERROR, OR SECURITY BREACHES.
+          THE WEBSITE, SERVICES, CONTENT, COMMUNICATIONS, AND ALL RELATED MATERIALS ARE PROVIDED ON AN &quot;AS IS&quot; AND &quot;AS AVAILABLE&quot; BASIS WITHOUT WARRANTIES OF ANY KIND. TO THE MAXIMUM EXTENT PERMITTED BY LAW, ROCKFORD REVIEWED DISCLAIMS ALL WARRANTIES, WHETHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, NON-INFRINGEMENT, ACCURACY, RELIABILITY, COMPLETENESS, SECURITY, OR AVAILABILITY. WE DO NOT WARRANT THAT THE WEBSITE WILL OPERATE WITHOUT INTERRUPTION, ERROR, OR SECURITY BREACHES.
         </p>
 
         <h2>Limitation of Liability</h2>
@@ -101,7 +101,7 @@ export default function TermsOfServicePage() {
 
         <h2>Dispute Resolution and Arbitration</h2>
         <p>
-          Any dispute, controversy, or claim arising out of or relating to these Terms, the website, or the services shall be resolved exclusively through final and binding arbitration administered by the American Arbitration Association in Lee County, Florida.
+          Any dispute, controversy, or claim arising out of or relating to these Terms, the website, or the services shall be resolved exclusively through final and binding arbitration administered by the American Arbitration Association in Bradford County, Florida.
         </p>
 
         <h2>Class Action Waiver</h2>
@@ -126,10 +126,11 @@ export default function TermsOfServicePage() {
 
         <h2>Contact Information</h2>
         <p>
-          <strong>Rockford Reviewed</strong><br/>
+          <strong>Rockford Reviewed a D/B/A of Cape Coral Reviewed</strong><br/>
           944 Country Club Boulevard, Suite 205<br/>
-          Rockford, Illinois 33990<br/>
-          Email: <a href="mailto:info@rockfordreviewed.com" className={styles.link}>info@rockfordreviewed.com</a>
+          Cape Coral, Florida 33990<br/>
+          Email: <a href="mailto:info@rockfordreviewed.com" className={styles.link}>info@rockfordreviewed.com</a><br/>
+          Website: <a href="https://www.rockfordreviewed.com" className={styles.link} target="_blank" rel="noopener noreferrer">www.rockfordreviewed.com</a>
         </p>
       </div>
     </main>

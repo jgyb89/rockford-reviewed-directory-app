@@ -12,11 +12,11 @@ export default function MobileTermsPage() {
       <BackButton />
 
       <h1 className={styles.title}>ROCKFORD REVIEWED MOBILE MESSAGING TERMS & CONDITIONS</h1>
-      <p className={styles.lastUpdated}>Last Updated: June 24, 2026</p>
+      <p className={styles.lastUpdated}>Last Updated: July 27, 2026</p>
 
       <div className={styles.content}>
         <h2>Agreement to Receive Text Messages</h2>
-        <p>By providing your mobile telephone number and affirmatively opting into any Rockford Reviewed ("Rockford Reviewed," "Company," "we," "our," or "us") text messaging program, you expressly consent to receive recurring automated marketing, promotional, informational, transactional, customer service, community-related, newsletter, lead follow-up, and account-related text messages from Rockford Reviewed at the mobile telephone number you provide.</p>
+        <p>By providing your mobile telephone number and affirmatively opting into any Rockford Reviewed (&quot;Rockford Reviewed,&quot; &quot;Company,&quot; &quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) text messaging program, you expressly consent to receive recurring automated marketing, promotional, informational, transactional, customer service, community-related, newsletter, lead follow-up, and account-related text messages from Rockford Reviewed at the mobile telephone number you provide.</p>
         <p>Messages may be sent using an automatic telephone dialing system, automated technology, artificial intelligence-enabled messaging systems, prerecorded technology where permitted by law, or other messaging technologies authorized under applicable laws and regulations.</p>
         <p>Your consent to receive text messages is voluntary and is not a condition of purchasing any goods or services.</p>
         <p>By enrolling in a messaging program, you certify that you are the authorized subscriber or customary user of the mobile telephone number provided and that you have authority to consent to receiving messages at that number.</p>
@@ -80,7 +80,7 @@ export default function MobileTermsPage() {
         <p>We reserve the right to modify message content, delivery methods, supported programs, participating carriers, enrollment procedures, eligibility requirements, and technical specifications at our sole discretion.</p>
 
         <h2>Disclaimer of Warranties</h2>
-        <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, ALL MESSAGING PROGRAMS ARE PROVIDED ON AN "AS IS," "AS AVAILABLE," AND "WITH ALL FAULTS" BASIS.</p>
+        <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, ALL MESSAGING PROGRAMS ARE PROVIDED ON AN &quot;AS IS,&quot; &quot;AS AVAILABLE,&quot; AND &quot;WITH ALL FAULTS&quot; BASIS.</p>
         <p>ROCKFORD REVIEWED DISCLAIMS ALL WARRANTIES OF ANY KIND, WHETHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, ACCURACY, RELIABILITY, AVAILABILITY, SECURITY, OR UNINTERRUPTED OPERATION.</p>
 
         <h2>Limitation of Liability</h2>
@@ -105,7 +105,7 @@ export default function MobileTermsPage() {
         <p>
           <strong>Rockford Reviewed</strong><br/>
           944 Country Club Boulevard, Suite 205<br/>
-          Rockford, Illinois 33990<br/>
+          Cape Coral, Florida 33990<br/>
           Email: <a href="mailto:info@rockfordreviewed.com" className={styles.link}>info@rockfordreviewed.com</a><br/>
           Website: <a href="https://www.rockfordreviewed.com" target="_blank" rel="noopener noreferrer" className={styles.link}>www.rockfordreviewed.com</a>
         </p>
