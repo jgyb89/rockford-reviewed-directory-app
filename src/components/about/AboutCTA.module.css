@@ -17,7 +17,7 @@
   font-size: 2.5rem;
   font-weight: 800;
   margin: 0;
-  color: #000;
+  color: #fdfdfd; /* Fixed from #000 for high contrast against dark background */
 }
 
 .section p {
@@ -38,7 +38,7 @@
 
 .headline {
   font-size: clamp(3rem, 5vw, 4.5rem) !important;
-  color: #000; /* Yellow punch */
+  color: #fdfdfd; /* Fixed from #000 for high contrast */
   line-height: 1.1;
 }
 

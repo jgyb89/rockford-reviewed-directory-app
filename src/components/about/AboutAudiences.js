@@ -52,8 +52,8 @@ export default function AboutAudiences() {
         {/* Left Column */}
         <div ref={leftColRef} className={styles.card}>
           <h3>For Rockford Residents and Visitors</h3>
-          <p>When you need a recommendation, Rockford Reviewed helps you find it. Maybe you’re searching for a new dinner spot, a reliable contractor, a local gym, a family-friendly event, a trusted lawn care company, or a business your neighbors are talking about.</p>
-          <p>Our platform gives you a place to browse, compare, review, and discover Rockford, Illinois local businesses in one location.</p>
+          <p>When you need a recommendation, Rockford Reviewed helps you find it. Maybe you re searching for a new dinner spot, a reliable contractor, a local gym, a family-friendly event, a trusted lawn care company, or a business your neighbors are talking about.</p>
+          <p>Our platform gives you a place to browse, compare, review, and discover Rockford, Michigan local businesses in one location.</p>
           <p>Your reviews and recommendations also help strengthen the community. Every time someone shares a helpful experience, another resident has an easier time choosing where to go, who to hire, and what to support.</p>
         </div>
         
