@@ -1,0 +1,13 @@
+.blogContent {
+  font-size: clamp(1rem, 3vw, 1.25rem);
+  color: "#4a5568";
+  max-width: "800px";
+  margin-bottom: "1.5rem";
+  line-height: "1.4";
+}
+
+.blogTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
