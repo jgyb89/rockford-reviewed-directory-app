@@ -6,8 +6,8 @@ import HeroSlideshow from "@/components/home/HeroSlideshow";
 import PaginatedFeed from "@/components/home/PaginatedFeed";
 import CcrCard from "@/components/directory/CcrCard";
 import HomepageInfo from "@/components/home/HomepageInfo";
-import SunsetTransition from "@/components/home/SunsetTransition";
 import BeachySeoStory from "@/components/home/BeachySeoStory";
+import NewsletterSection from "@/components/home/NewsletterSection";
 import SeoCards from "@/components/home/SeoCards";
 import { getEvents } from "@/lib/graphql/events";
 import { expandRecurringEvents } from "@/lib/eventUtils";
@@ -16,13 +16,13 @@ import { BASE_URL } from "@/lib/constants";
 import styles from "./page.module.css";
 
 export const metadata = {
-  title: "Rockford Reviewed - Local Business Directory",
+  title: "Rockford Reviewed | Rockford Reviews, Local Businesses & Community Guides",
   description:
-    "Looking for the best and most popular Rockford businesses, restaurants, services, and local spots? Rockford Reviewed helps residents, visitors, and business owners like you connect through real reviews, local recommendations, honest business spotlights, and true community-driven guides.",
+    "Find Rockford reviews, local businesses, restaurants, services, events, and community recommendations. Rockford Reviewed helps locals and visitors discover trusted businesses in Rockford, Michigan.",
   openGraph: {
-    title: "Rockford Reviewed",
+    title: "Rockford Reviewed | Rockford Reviews, Local Businesses & Community Guides",
     description:
-      "Looking for the best and most popular Rockford businesses, restaurants, services, and local spots? Rockford Reviewed helps residents, visitors, and business owners like you connect through real reviews, local recommendations, honest business spotlights, and true community-driven guides.",
+      "Find Rockford reviews, local businesses, restaurants, services, events, and community recommendations. Rockford Reviewed helps locals and visitors discover trusted businesses in Rockford, Michigan.",
     url: BASE_URL,
     siteName: "Rockford Reviewed",
     locale: "en_US",
@@ -137,8 +137,8 @@ export default async function HomePage({ params }) {
         </div>
       </section>
 
-      {/* Sunset Animation Transition */}
-      <SunsetTransition />
+      {/* Newsletter Capture Section */}
+      <NewsletterSection />
     </main>
   );
 }

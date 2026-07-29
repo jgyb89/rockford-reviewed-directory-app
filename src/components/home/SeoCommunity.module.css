@@ -61,7 +61,7 @@
   }
 }
 
-/* --- UPDATED RESPONSIVE IMAGE CONTAINERS --- */
+/* --- RESPONSIVE IMAGE CONTAINERS --- */
 .imageColumn {
   display: flex;
   flex-direction: column; /* Mobile-first: vertically stack */
@@ -74,7 +74,7 @@
   .imageColumn {
     flex-direction: row; /* Desktop: side-by-side */
     justify-content: center;
-    align-items: stretch; /* UPDATED: Forces children to stretch to the full height of the text column */
+    align-items: stretch; /* Forces children to stretch to the full height of the text column */
   }
 }
 
@@ -90,7 +90,7 @@
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* UPDATED: Remove the aspect ratio lock on desktop so the wrapper can grow vertically */
+/* Remove the aspect ratio lock on desktop so the wrapper can grow vertically */
 @media (min-width: 768px) {
   .imageWrapper {
     aspect-ratio: auto;
@@ -115,16 +115,14 @@
 
 .ctaButton {
   display: inline-block;
-  background-color: #e57007;
+  background-color: #E57007; /* Rockford brand orange */
   color: #ffffff;
   padding: 1rem 2rem;
   border-radius: 8px;
   font-weight: 600;
   text-decoration: none;
   text-align: center;
-  transition:
-    background-color 0.3s ease,
-    transform 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
   align-self: flex-start;
   margin-top: 0.5rem;
 }

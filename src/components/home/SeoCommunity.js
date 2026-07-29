@@ -5,11 +5,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import styles from './SeoMiddle.module.css';
+import styles from './SeoCommunity.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function SeoMiddle() {
+export default function SeoCommunity() {
   const cardRef = useRef(null);
 
   useEffect(() => {
@@ -43,8 +43,8 @@ export default function SeoMiddle() {
       <div className={styles.card} ref={cardRef}>
         
         <div className={styles.header}>
-          <h2 className={styles.title}>Local Reviews for a Local Community</h2>
-          <p className={styles.subtitle}>Real places. Local voices. Better recommendations.</p>
+          <h2 className={styles.title}>Supporting Rockford, Michigan Local Businesses</h2>
+          <p className={styles.subtitle}>A strong local business community makes Rockford stronger.</p>
         </div>
 
         <div className={styles.contentRow}>
@@ -52,8 +52,8 @@ export default function SeoMiddle() {
           <div className={styles.imageColumn}>
             <div className={styles.imageWrapper}>
               <Image
-                src="/rockford-city-landscape.jpg"
-                alt="Rockford City Landscape"
+                src="/rockford-fall-dam.jpg"
+                alt="Rockford Fall Dam"
                 fill
                 sizes="(max-width: 768px) 100vw, 66vw"
                 style={{ objectFit: 'cover' }}
@@ -61,8 +61,8 @@ export default function SeoMiddle() {
             </div>
             <div className={styles.imageWrapper}>
               <Image
-                src="/rockford-downtown-sunset.jpg"
-                alt="Rockford Downtown Sunset"
+                src="/rockford-lbd-exchange.jpg"
+                alt="Rockford Local Business"
                 fill
                 sizes="(max-width: 768px) 100vw, 66vw"
                 style={{ objectFit: 'cover' }}
@@ -72,16 +72,13 @@ export default function SeoMiddle() {
 
           <div className={styles.textColumn}>
             <p className={styles.text}>
-              Rockford Reviewed is built around one simple idea: local recommendations should be trustworthy, easy to find, and actually useful.
+              When residents choose local restaurants, hire local service providers, visit local shops, and recommend businesses they trust, that support stays close to home. 
             </p>
             <p className={styles.text}>
-              We’re here to highlight the restaurants, shops, services, events, and small businesses that help shape daily life in Rockford for people just like you.
+              Rockford Reviewed gives business owners another way to be found and gives the community another reason to shop, dine, hire, and support local.
             </p>
             <p className={styles.text}>
-              Our goal is to cut through the noise and give the community a cleaner, more helpful way to discover what’s nearby– and what’s worth your valuable time and hard earned money.
-            </p>
-            <p className={styles.text}>
-              That’s what Rockford Reviewed is all about.
+              We believe good Rockford businesses deserve visibility, and local residents deserve a simple way to find them.
             </p>
             
             <Link href="/directory" className={styles.ctaButton}>

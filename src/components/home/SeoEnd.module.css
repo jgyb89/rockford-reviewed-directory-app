@@ -1,139 +1,143 @@
-.stickyWrapper {
-  position: sticky;
-  top: 0;
+.section {
+  padding: 4rem 2rem;
   width: 100%;
-  height: 100vh;
-  padding: 3rem 0 6rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 3;
-}
-
-.flashCard {
-  width: 96%;
-  height: 94vh;
-  border-radius: 40px;
-  background-color: #000; /* Sunny Yellow */
-  color: #fff;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  box-shadow: 0 -25px 50px rgba(0, 0, 0, 0.2);
-  will-change: transform;
-  position: relative; /* Added to contain absolute bg Image */
-}
-
-/* Background Image Wrapper */
-.bgImageWrapper {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 60%;
-  pointer-events: none;
-  z-index: 1;
-  /* Fade out the right edge so it blends perfectly into the yellow */
-  -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
-  mask-image: linear-gradient(to right, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
-}
-
-.bgImage {
-  object-fit: cover;
-  object-position: right center; /* Focus on the right edge of the grid */
-  mix-blend-mode: multiply; /* Blends darks into the yellow naturally */
-}
-
-.contentMaxWidth {
-  width: 100%;
-  max-width: 1600px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 3rem;
-  position: relative;
-  z-index: 2; /* Sits above the background */
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem; /* Spaces the header from the content grid */
 }
 
-.contentWrapper {
+.header {
   display: flex;
-  justify-content: flex-end; /* Text on right */
+  flex-direction: column;
+  gap: 0.5rem;
   width: 100%;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: #1e293b; /* High-contrast slate */
+  margin: 0;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  font-weight: 500;
+  color: #e57007; /* Rockford Brand Orange */
+  margin: 0;
+  text-align: center;
+}
+
+.contentRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  min-height: 600px;
+}
+
+/* 50/50 split on tablet and desktop, stretching so both columns match height */
+@media (min-width: 900px) {
+  .contentRow {
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+  }
 }
 
 .textColumn {
-  width: 45%; /* Text takes up right 45% */
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  text-align: left;
+  justify-content: center;
+  align-items: flex-end;
+  text-align: right;
 }
 
-.headlineMaskContainer {
-  position: relative;
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-items: inherit;
+}
+
+.listItem {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+  font-family: var(--font-body);
+  color: #475569; /* Slate 600 */
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+/* Custom Checkmark Icon Styling */
+.checkIcon {
+  flex-shrink: 0;
+  color: #e57007;
+  width: 22px;
+  height: 22px;
+  margin-top: 2px; /* Perfectly aligns the icon with the top of the text */
+}
+
+.ctaButton {
+  display: inline-block;
+  background-color: #e57007; /* Rockford brand orange */
+  color: #ffffff;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
+  align-self: flex-end;
+  margin-top: 0.5rem;
+}
+
+.ctaButton:hover {
+  background-color: #cc6306;
+  transform: translateY(-2px);
+}
+
+/* --- RESPONSIVE IMAGE CONTAINERS --- */
+.imageColumn {
+  display: flex;
+  flex-direction: column; /* Mobile-first: vertically stack */
+  gap: 1.5rem;
   width: 100%;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .imageColumn {
+    flex-direction: row; /* Desktop: side-by-side */
+    justify-content: center;
+    align-items: stretch; /* Forces children to stretch to full height */
+  }
+}
+
+.imageWrapper {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  max-width: 980px;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
   overflow: hidden;
-  padding-bottom: 0.2em;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.textColumn h2 {
-  display: block;
-  font-size: clamp(2.5rem, 4.5vw, 4.5rem);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  margin: 0;
-}
-
-.textColumn p {
-  font-size: clamp(1.1rem, 1.8vw, 1.5rem);
-  line-height: 1.6;
-  font-weight: 400;
-  margin: 0;
-}
-
-/* ====================================================
-   MOBILE RESPONSIVENESS
-==================================================== */
-@media (max-width: 900px) {
-  .stickyWrapper {
-    height: auto;
-    min-height: 100svh;
-    padding: 1rem 0;
-  }
-
-  .flashCard {
-    height: auto;
-    min-height: 96svh;
-    padding: 3rem 0;
-    border-radius: 24px;
-    align-items: flex-end; /* Push text down to make room for image */
-  }
-
-  .contentMaxWidth {
-    padding: 0 1.5rem;
-  }
-
-  .contentWrapper {
-    justify-content: flex-start; /* Stack normally */
-  }
-
-  .textColumn {
-    width: 100%;
-  }
-
-  .textColumn h2 {
-    font-size: 2.5rem;
-  }
-
-  .textColumn p {
-    font-size: 1.1rem;
-  }
-
-  .bgImageWrapper {
-    width: 100%;
-    height: 50%; /* Image takes top half */
-    top: 0;
-    bottom: auto;
-    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
-    mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
+@media (min-width: 768px) {
+  .imageWrapper {
+    aspect-ratio: auto;
   }
 }
