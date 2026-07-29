@@ -1,121 +1,115 @@
 "use client";
 
-import { forwardRef, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./SeoEnd.module.css";
 
-const SeoEnd = forwardRef((props, ref) => {
-  const localWrapperRef = useRef(null);
-  const cardRef = useRef(null);
-  const bgImageRef = useRef(null);
+gsap.registerPlugin(ScrollTrigger);
+
+export default function SeoEnd() {
+  const sectionRef = useRef(null);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    let mm = gsap.matchMedia();
-
     const ctx = gsap.context(() => {
-      // 1. Entrance tilt animation for the card
-      gsap.fromTo(
-        cardRef.current,
-        {
-          scale: 0.85,
-          rotationZ: -4,
-          y: "25vh",
-        },
-        {
-          scale: 1,
-          rotationZ: 0,
-          y: 0,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: localWrapperRef.current,
-            start: "top 95%",
-            end: "top top",
-            scrub: 1,
-          },
-        },
-      );
+      // Grouping header to animate as a single block, matching SeoMiddle logic
+      const elementsToAnimate = gsap.utils.toArray([
+        `.${styles.header}`,
+        `.${styles.listItem}`,
+        `.${styles.ctaButton}`,
+        `.${styles.imageWrapper}`,
+      ]);
 
-      // 2. Background image slide in and fade
-      mm.add(
-        {
-          isDesktop: "(min-width: 901px)",
-          isMobile: "(max-width: 900px)",
+      gsap.from(elementsToAnimate, {
+        y: 25,
+        opacity: 0,
+        duration: 0.7,
+        stagger: 0.1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 85%",
         },
-        (context) => {
-          let { isDesktop } = context.conditions;
-
-          gsap.fromTo(
-            bgImageRef.current,
-            {
-              xPercent: -50,
-              opacity: 0,
-            },
-            {
-              xPercent: isDesktop ? -20 : 0, // Offset heavily to the left on desktop for padding!
-              opacity: 0.75, // Blend with yellow
-              duration: 1.5,
-              ease: "power3.out",
-              scrollTrigger: {
-                trigger: localWrapperRef.current,
-                start: "top 75%",
-                toggleActions: "play none none reverse",
-              },
-            },
-          );
-        },
-      );
-    }, localWrapperRef);
+      });
+    }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
-  const setRefs = (el) => {
-    localWrapperRef.current = el;
-    if (typeof ref === "function") ref(el);
-    else if (ref) ref.current = el;
-  };
+  const listItems = [
+    "Restaurants, cafes, bakeries, and coffee shops",
+    "Bars, breweries, and nightlife",
+    "Home services, contractors, and repair professionals",
+    "Health, wellness, fitness, and beauty businesses",
+    "Shops, boutiques, and retail businesses",
+    "Pet services, auto services, and local professionals",
+    "Events, attractions, and community happenings",
+    "Featured Rockford businesses and service providers",
+  ];
 
   return (
-    <div ref={setRefs} className={styles.stickyWrapper}>
-      <div ref={cardRef} className={styles.flashCard}>
-        {/* Background Image sliding in from left */}
-        <div ref={bgImageRef} className={styles.bgImageWrapper}>
-          <Image
-            src="/cape-coral-facebook-reel-grid.jpg"
-            alt="Rockford Community"
-            fill
-            className={styles.bgImage}
-            priority
-          />
+    <section className={styles.section} ref={sectionRef}>
+      {/* FULL WIDTH HEADER */}
+      <div className={styles.header}>
+        <h2 className={styles.title}>Find What You Need Around Rockford</h2>
+        <p className={styles.subtitle}>
+          Rockford Reviewed helps you explore local options across categories
+        </p>
+      </div>
+
+      <div className={styles.contentRow}>
+        {/* TEXT COLUMN (Left) */}
+        <div className={styles.textColumn}>
+          <ul className={styles.list}>
+            {listItems.map((item, index) => (
+              <li key={index} className={styles.listItem}>
+                {item}
+                <svg
+                  className={styles.checkIcon}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </li>
+            ))}
+          </ul>
+
+          <Link href="/directory" className={styles.ctaButton}>
+            Explore Rockford Businesses
+          </Link>
         </div>
 
-        <div className={styles.contentMaxWidth}>
-          <div className={styles.contentWrapper}>
-            {/* TEXT COLUMN (flex-end aligns to right) */}
-            <div className={styles.textColumn}>
-              <div className={styles.headlineMaskContainer}>
-                <h2 className="breeze-text">
-                  Real Reviews. Local Spots. Better Recommendations.
-                </h2>
-              </div>
-              <p className="breeze-text">
-                We’re not here to create another noisy online group full of
-                random posts and arguments. Rockford Reviewed is focused on
-                useful information, helpful recommendations, and local
-                businesses that are worth knowing about. Less noise. Better
-                information. Stronger local connections. That’s Rockford
-                Reviewed.
-              </p>
-            </div>
+        {/* IMAGE COLUMN (Right) */}
+        <div className={styles.imageColumn}>
+          <div className={styles.imageWrapper}>
+            <Image
+              src="/rockford-downtown-the-corner.jpg"
+              alt="Rockford Downtown The Corner"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              style={{ objectFit: "cover" }}
+            />
+          </div>
+          <div className={styles.imageWrapper}>
+            <Image
+              src="/rockford-michigan-mural.jpg"
+              alt="Rockford Michigan Mural"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              style={{ objectFit: "cover" }}
+            />
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
-});
-
-SeoEnd.displayName = "SeoEnd";
-export default SeoEnd;
+}

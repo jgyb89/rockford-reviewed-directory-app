@@ -44,7 +44,7 @@ export default function Footer({ locale = "en" }) {
             </Link>
             <p className={styles["footer__text"]}>
               Your ultimate guide to discovering the best local businesses,
-              restaurants, and services in Rockford, Illinois. Support local!
+              restaurants, and services in Rockford, Michigan. Support local!
             </p>
           </div>
 

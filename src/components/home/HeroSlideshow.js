@@ -199,7 +199,7 @@ export default function HeroSlideshow({ featuredListings = [], locale = "en" }) 
 
       <div className={styles.searchCard}>
         <h3 className={styles.searchCardTitle}>
-          Discover the Best of Rockford: Your Ultimate Local Guide
+          Rockford Reviewed: Your Local Guide to Rockford, Michigan Businesses
         </h3>
 
         <form onSubmit={handleSearch} className={styles.searchForm}>

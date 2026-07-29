@@ -3,7 +3,6 @@
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 3rem;
   padding: 10vh 0;
-  perspective: 1000px;
 }
 
 .tideCard {
