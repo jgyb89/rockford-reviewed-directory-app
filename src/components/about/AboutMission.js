@@ -107,20 +107,20 @@ export default function AboutMission() {
       <div className={styles.container}>
         <div className={styles.textBlock}>
           <p className="breeze-text">
-            We’re residents ourselves, and we built this site for residents,
+            We re residents ourselves, and we built this site for residents,
             visitors, and business owners who want a better way to connect with
             our amazing Rockford community.
           </p>
           <p className="breeze-text">
-            Whether you’re looking for a trusted local service, a new restaurant
-            to try, a weekend event, or a small business worth supporting, Cape
-            Coral Reviewed gives you a place to start. Our mission is to make
+            Whether you re looking for a trusted local service, a new restaurant
+            to try, a weekend event, or a small business worth supporting, Rockford
+            Reviewed gives you a place to start. Our mission is to make
             Rockford reviews more useful, local business discovery easier, and
             community recommendations more reliable.
           </p>
           <p className="breeze-text">
             We look forward to standing alongside you as we support local right
-            here in beautiful Rockford, IL.
+            here in beautiful Rockford, MI.
           </p>
         </div>
         <div className={styles.spacer}></div>
@@ -128,7 +128,7 @@ export default function AboutMission() {
           <h2 className="breeze-text">Why Rockford Reviewed Exists</h2>
           <p className="breeze-text">
             Residents know that Rockford is growing, and so is the number of
-            businesses serving the area. That’s a good thing, but it can also
+            businesses serving the area. That s a good thing, but it can also
             make it harder to know who to trust, where to go, and which local
             spots are truly worth recommending.
           </p>
@@ -141,8 +141,8 @@ export default function AboutMission() {
           <p className="breeze-text">
             We wanted to build a cleaner, more helpful local resource where
             people can find real recommendations without digging through online
-            noise. Instead of endless arguments, spam, and random posts, Cape
-            Coral Reviewed focuses on:
+            noise. Instead of endless arguments, spam, and random posts, Rockford
+            Reviewed focuses on:
           </p>
           <ul className={styles.list}>
             <li className="breeze-text">Useful local information</li>

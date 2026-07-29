@@ -14,7 +14,7 @@ export default function AboutHero() {
     const ctx = gsap.context(() => {
       const split = new SplitText(textRef.current, { type: "lines,words" });
 
-      // The "Ocean Swell" Reveal
+      // The "River Swell" Reveal
       gsap.fromTo(
         split.words,
         { y: 50, opacity: 0, rotationX: -20 },
