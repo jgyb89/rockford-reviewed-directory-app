@@ -1,5 +1,6 @@
 import React from "react";
 import EventsClient from "./EventsClient";
+import EventsSEO from "@/components/events/EventsSEO"; // Import the new SEO component
 import { getEvents } from "@/lib/graphql/events";
 import { getCurrentViewer } from "@/lib/actions";
 import { BASE_URL } from "@/lib/constants";
@@ -20,7 +21,6 @@ export async function generateMetadata({ params }) {
 
 export default async function EventsPage({ params }) {
   const { locale } = await params;
-  
   // Fetch data concurrently for performance
   const [events, currentUser] = await Promise.all([
     getEvents(),
@@ -29,7 +29,11 @@ export default async function EventsPage({ params }) {
 
   return (
     <main style={{ backgroundColor: "#fdfdfd", minHeight: "100vh" }}>
+      {/* Interactive Client Feed */}
       <EventsClient events={events} currentUser={currentUser} locale={locale} />
+      
+      {/* New SEO Animated Content Block */}
+      <EventsSEO />
     </main>
   );
 }
