@@ -12,13 +12,20 @@ export async function POST(request) {
       );
     }
 
+    const headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'User-Agent': 'CCR-NextJS-Frontend-Proxy/1.0',
+    };
+
+    const authHeader = request.headers.get('authorization');
+    if (authHeader) {
+      headers['Authorization'] = authHeader;
+    }
+
     const res = await fetch(GRAPHQL_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'User-Agent': 'CCR-NextJS-Frontend-Proxy/1.0',
-      },
+      headers,
       body: JSON.stringify(body),
     });
 
