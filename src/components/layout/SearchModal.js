@@ -120,7 +120,7 @@ export default function SearchModal({
     `;
 
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_WORDPRESS_API_URL, {
+      const response = await fetch("/api/graphql", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

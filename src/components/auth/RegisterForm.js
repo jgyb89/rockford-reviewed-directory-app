@@ -93,7 +93,7 @@ export default function RegisterForm({ dict = {}, locale = "en" }) {
     setIsLoading(true);
     setGeneralError(null);
 
-    const GRAPHQL_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
+    const GRAPHQL_URL = "/api/graphql";
 
     const fieldValues = [
       { id: 15, value: formData.firstName },
@@ -148,7 +148,11 @@ export default function RegisterForm({ dict = {}, locale = "en" }) {
 
       router.push(`/check-email`);
     } catch (err) {
-      setGeneralError(err.message || "An unexpected error occurred.");
+      if (err.message === "Load failed" || err.message === "Failed to fetch") {
+        setGeneralError("We couldn't connect to our servers. Please disable any ad-blockers or privacy extensions and try again.");
+      } else {
+        setGeneralError(err.message || "An unexpected error occurred.");
+      }
     } finally {
       setIsLoading(false);
     }
