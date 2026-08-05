@@ -251,3 +251,44 @@
 .pillScrollRight {
   right: -12px;
 }
+
+.staticHeroContainer {
+  position: relative;
+  width: 100%;
+  height: 70vh;
+  min-height: 500px;
+  overflow: hidden;
+}
+
+.staticHeroOverlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.65);
+  z-index: 1;
+}
+
+.staticHeroContent {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  color: white;
+  text-align: center;
+}
+
+.staticHeroTitle {
+  font-size: 3.5rem;
+  font-weight: bold;
+  margin: 0 0 16px 0;
+  color: #fff;
+}
+
+.staticHeroSubtitle {
+  font-size: 1.5rem;
+  margin: 0;
+  color: #fff;
+}
+

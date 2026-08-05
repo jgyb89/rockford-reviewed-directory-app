@@ -12,29 +12,29 @@ import { ALL_CATEGORIES, getLocalizedUrl } from "@/lib/constants";
 import styles from "./HeroSlideshow.module.css";
 
 const PILLS = [
-  { label: 'All', slug: 'all' },
-  { label: 'Restaurants', slug: 'restaurants' },
-  { label: 'Bars & Nightlife', slug: 'bars-nightlife' },
-  { label: 'Cafes & Bakeries', slug: 'cafes-bakeries' },
-  { label: 'Medical & Dental', slug: 'medical-dental' },
-  { label: 'Contractors & Repair', slug: 'contractors-repair' },
-  { label: 'Beauty & Spas', slug: 'beauty-spas' },
-  { label: 'Real Estate', slug: 'real-estate' }
+  { label: "All", slug: "all" },
+  { label: "Restaurants", slug: "restaurants" },
+  { label: "Bars & Nightlife", slug: "bars-nightlife" },
+  { label: "Cafes & Bakeries", slug: "cafes-bakeries" },
+  { label: "Medical & Dental", slug: "medical-dental" },
+  { label: "Contractors & Repair", slug: "contractors-repair" },
+  { label: "Beauty & Spas", slug: "beauty-spas" },
+  { label: "Real Estate", slug: "real-estate" },
 ];
 
 const getCategoryRoute = (slug) => {
   if (slug === "all") return "/directory";
-  const category = ALL_CATEGORIES.find(c => c.slug === slug);
-  if (!category) return '/directory';
+  const category = ALL_CATEGORIES.find((c) => c.slug === slug);
+  if (!category) return "/directory";
 
-  const sanitizedSlug = category.slug.replace(/-en$/, '');
+  const sanitizedSlug = category.slug.replace(/-en$/, "");
 
   if (category.directoryType) {
     return `/directory/${category.directoryType}/${sanitizedSlug}`;
   }
 
   if (category.parentSlug) {
-    const parent = ALL_CATEGORIES.find(p => p.slug === category.parentSlug);
+    const parent = ALL_CATEGORIES.find((p) => p.slug === category.parentSlug);
     if (parent && parent.directoryType) {
       return `/directory/${parent.directoryType}/${sanitizedSlug}`;
     }
@@ -43,7 +43,10 @@ const getCategoryRoute = (slug) => {
   return `/directory`; // Fallback
 };
 
-export default function HeroSlideshow({ featuredListings = [], locale = "en" }) {
+export default function HeroSlideshow({
+  featuredListings = [],
+  locale = "en",
+}) {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [isPlaying, setIsPlaying] = useState(true);
@@ -54,7 +57,8 @@ export default function HeroSlideshow({ featuredListings = [], locale = "en" }) 
 
   const handlePillsScroll = () => {
     if (pillsContainerRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = pillsContainerRef.current;
+      const { scrollLeft, scrollWidth, clientWidth } =
+        pillsContainerRef.current;
       setShowLeftScroll(scrollLeft > 2);
       setShowRightScroll(scrollLeft < scrollWidth - clientWidth - 2);
     }
@@ -62,26 +66,29 @@ export default function HeroSlideshow({ featuredListings = [], locale = "en" }) 
 
   const scrollPillsLeft = () => {
     if (pillsContainerRef.current) {
-      pillsContainerRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+      pillsContainerRef.current.scrollBy({ left: -200, behavior: "smooth" });
     }
   };
 
   const scrollPillsRight = () => {
     if (pillsContainerRef.current) {
-      pillsContainerRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+      pillsContainerRef.current.scrollBy({ left: 200, behavior: "smooth" });
     }
   };
 
   useEffect(() => {
     handlePillsScroll();
-    window.addEventListener('resize', handlePillsScroll);
-    return () => window.removeEventListener('resize', handlePillsScroll);
+    window.addEventListener("resize", handlePillsScroll);
+    return () => window.removeEventListener("resize", handlePillsScroll);
   }, []);
 
-  const handlePillClick = useCallback((slug) => {
-    const route = getCategoryRoute(slug);
-    router.push(getLocalizedUrl(route, locale));
-  }, [locale, router]);
+  const handlePillClick = useCallback(
+    (slug) => {
+      const route = getCategoryRoute(slug);
+      router.push(getLocalizedUrl(route, locale));
+    },
+    [locale, router],
+  );
 
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
     Autoplay({ delay: 5000, stopOnInteraction: false }),
@@ -120,15 +127,21 @@ export default function HeroSlideshow({ featuredListings = [], locale = "en" }) 
     }
   }, [emblaApi]);
 
-  const handleSearch = useCallback((e) => {
-    e.preventDefault();
-    if (searchTerm.trim()) {
-      router.push(`/${locale}/directory?search=${encodeURIComponent(searchTerm.trim())}`);
-    } else {
-      router.push(`/${locale}/directory`);
-    }
-  }, [searchTerm, locale, router]);
+  const handleSearch = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (searchTerm.trim()) {
+        router.push(
+          `/${locale}/directory?search=${encodeURIComponent(searchTerm.trim())}`,
+        );
+      } else {
+        router.push(`/${locale}/directory`);
+      }
+    },
+    [searchTerm, locale, router],
+  );
 
+  /*
   if (!featuredListings || featuredListings.length === 0) {
     return (
       <div className={styles.emptyState}>
@@ -136,9 +149,29 @@ export default function HeroSlideshow({ featuredListings = [], locale = "en" }) 
       </div>
     );
   }
+  */
 
   return (
     <section className={styles.heroSection}>
+      {/* Temporary Static Hero Module */}
+      <div className={styles.staticHeroContainer}>
+        <Image
+          src="/rockford-michigan-city-view.jpg"
+          alt="Rockford Reviewed"
+          fill
+          priority
+          style={{ objectFit: "cover" }}
+        />
+        <div className={styles.staticHeroOverlay} />
+        <div className={styles.staticHeroContent}>
+          <h1 className={styles.staticHeroTitle}>Rockford Reviewed</h1>
+          <p className={styles.staticHeroSubtitle}>
+            Your Local Guide to Rockford Businesses
+          </p>
+        </div>
+      </div>
+
+      {/* 
       <div ref={emblaRef} className={styles.carouselViewport}>
         <div className={styles.carouselContainer}>
           {featuredListings.map((listing, index) => {
@@ -196,11 +229,13 @@ export default function HeroSlideshow({ featuredListings = [], locale = "en" }) 
       >
         <ChevronRight size={24} />
       </button>
+      */}
 
       <div className={styles.searchCard}>
-        <h3 className={styles.searchCardTitle}>
-          Rockford Reviewed: Your Local Guide to Rockford, Michigan Businesses
-        </h3>
+        {/* <h3 className={styles.searchCardTitle}>
+          Rockford Reviewed: Your Local Guide to Rockford, Michigan
+          Businesses
+        </h3> */}
 
         <form onSubmit={handleSearch} className={styles.searchForm}>
           <span className={`material-symbols-outlined ${styles.searchIcon}`}>
@@ -216,9 +251,13 @@ export default function HeroSlideshow({ featuredListings = [], locale = "en" }) 
         </form>
 
         <div className={styles.pillsSection}>
-          <div ref={pillsContainerRef} onScroll={handlePillsScroll} className={styles.pillsTrack}>
+          <div
+            ref={pillsContainerRef}
+            onScroll={handlePillsScroll}
+            className={styles.pillsTrack}
+          >
             {PILLS.map((pill) => {
-              const isActive = pill.slug === 'all';
+              const isActive = pill.slug === "all";
               return (
                 <button
                   key={pill.slug}
