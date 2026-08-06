@@ -20,7 +20,10 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
   }, [propCurrentUser]);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && document.cookie.includes("hasSession=true")) {
+    if (
+      typeof window !== "undefined" &&
+      document.cookie.includes("hasSession=true")
+    ) {
       async function fetchUser() {
         try {
           const viewer = await getCurrentViewer();
@@ -90,25 +93,29 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
 
   const submitAction = getSubmitAction();
 
-  const userRoles = user?.roles?.nodes?.map((node) => node.name.toLowerCase()) || [];
-  const isBusinessOrAdmin = userRoles.includes("business") || userRoles.includes("administrator");
-
+  const userRoles =
+    user?.roles?.nodes?.map((node) => node.name.toLowerCase()) || [];
+  const isBusinessOrAdmin =
+    userRoles.includes("business") || userRoles.includes("administrator");
 
   return (
     <>
-      <nav className={styles['main-nav']}>
-        <Link href={getLocalizedUrl("/", locale)} className={styles['nav-brand']}>
+      <nav className={styles["main-nav"]}>
+        <Link
+          href={getLocalizedUrl("/", locale)}
+          className={styles["nav-brand"]}
+        >
           <Image
             src={rockfordLogo}
             alt="Rockford Reviewed Logo"
-            className={styles['nav-logo']}
+            className={styles["nav-logo"]}
             priority // Recommended for logos/above-the-fold content
           />
         </Link>
 
-        <div className={styles['mobile-actions']}>
+        <div className={styles["mobile-actions"]}>
           <button
-            className={styles['mobile-search-btn']}
+            className={styles["mobile-search-btn"]}
             onClick={() => setIsSearchModalOpen(true)}
             aria-label="Open Search"
           >
@@ -116,7 +123,7 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
           </button>
 
           <button
-            className={styles['mobile-menu-btn']}
+            className={styles["mobile-menu-btn"]}
             onClick={() =>
               isMobileOpen ? closeMobileMenu() : setIsMobileOpen(true)
             }
@@ -127,10 +134,12 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
           </button>
         </div>
 
-        <div className={`${styles['nav-links']} ${isMobileOpen ? styles['mobile-open'] : ""}`}>
+        <div
+          className={`${styles["nav-links"]} ${isMobileOpen ? styles["mobile-open"] : ""}`}
+        >
           <button
             onClick={() => setIsSearchModalOpen(true)}
-            className={styles['nav-link']}
+            className={styles["nav-link"]}
           >
             <span
               className="material-symbols-outlined"
@@ -142,43 +151,51 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
           </button>
 
           <div
-            className={`${styles['nav-link']} ${styles['nav-link--all-listings']}`}
+            className={`${styles["nav-link"]} ${styles["nav-link--all-listings"]}`}
             onMouseEnter={() => setIsListingsOpen(true)}
             onMouseLeave={() => setIsListingsOpen(false)}
             tabIndex={0}
             onFocus={() => setIsListingsOpen(true)}
             onBlur={() => setIsListingsOpen(false)}
           >
-            <Link 
-              href={getLocalizedUrl("/directory", locale)} 
-              className={`${styles['nav-link']} ${styles['nav-link__trigger']}`}
+            <Link
+              href={getLocalizedUrl("/directory", locale)}
+              className={`${styles["nav-link"]} ${styles["nav-link__trigger"]}`}
               onClick={() => {
-                if (typeof setIsListingsOpen === 'function') setIsListingsOpen(false);
-                if (typeof setActiveSubMenu === 'function') setActiveSubMenu(null);
-                if (typeof setMobileLevel === 'function') setMobileLevel(1);
-                if (typeof setIsMobileOpen === 'function') setIsMobileOpen(false);
+                if (typeof setIsListingsOpen === "function")
+                  setIsListingsOpen(false);
+                if (typeof setActiveSubMenu === "function")
+                  setActiveSubMenu(null);
+                if (typeof setMobileLevel === "function") setMobileLevel(1);
+                if (typeof setIsMobileOpen === "function")
+                  setIsMobileOpen(false);
               }}
             >
               {t.allListings || "All Listings"}{" "}
-              <span className={`material-symbols-outlined ${styles['nav-link__icon']}`}>
+              <span
+                className={`material-symbols-outlined ${styles["nav-link__icon"]}`}
+              >
                 expand_more
               </span>
             </Link>
-            
+
             {isListingsOpen && (
-              <div className={styles['mega-menu']}>
-                <div className={styles['mega-menu-grid']}>
+              <div className={styles["mega-menu"]}>
+                <div className={styles["mega-menu-grid"]}>
                   {categories.map((cat) => (
-                    <div key={cat.slug} className={styles['mega-menu-column']}>
-                      <h4 className={styles['mega-menu-title']}>
+                    <div key={cat.slug} className={styles["mega-menu-column"]}>
+                      <h4 className={styles["mega-menu-title"]}>
                         {cat.icon} {cat.title}
                       </h4>
-                      <div className={styles['mega-menu-subs']}>
+                      <div className={styles["mega-menu-subs"]}>
                         {cat.subs.map((sub) => (
                           <Link
                             key={sub.slug}
-                            href={getLocalizedUrl(`/directory/${cat.slug}/${sub.slug}`, locale)}
-                            className={styles['mega-menu-sub-link']}
+                            href={getLocalizedUrl(
+                              `/directory/${cat.slug}/${sub.slug}`,
+                              locale,
+                            )}
+                            className={styles["mega-menu-sub-link"]}
                             onClick={() => setIsListingsOpen(false)}
                           >
                             {sub.icon} {sub.name}
@@ -188,10 +205,10 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
                     </div>
                   ))}
                 </div>
-                <div className={styles['mega-menu-footer']}>
-                  <Link 
-                    href={getLocalizedUrl("/directory", locale)} 
-                    className={styles['mega-menu-all-link']} 
+                <div className={styles["mega-menu-footer"]}>
+                  <Link
+                    href={getLocalizedUrl("/directory", locale)}
+                    className={styles["mega-menu-all-link"]}
                     onClick={() => setIsListingsOpen(false)}
                   >
                     {t.viewAllDirectory || "View All Directory"}
@@ -201,24 +218,36 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
             )}
           </div>
 
-          <Link href={getLocalizedUrl("/blog", locale)} className={styles['nav-link']}>
+          <Link
+            href={getLocalizedUrl("/blog", locale)}
+            className={styles["nav-link"]}
+          >
             {t.news || "News & Reviews"}
           </Link>
 
-          <Link href={getLocalizedUrl("/events", locale)} className={styles['nav-link']}>
+          <Link
+            href={getLocalizedUrl("/events", locale)}
+            className={styles["nav-link"]}
+          >
             {t.events || "Events"}
           </Link>
 
-          <Link href={getLocalizedUrl("/about", locale)} className={styles['nav-link']}>
+          <Link
+            href={getLocalizedUrl("/about", locale)}
+            className={styles["nav-link"]}
+          >
             {t.about || "About"}
           </Link>
 
-          <div className={styles['locale-toggle-container']} style={{ display: 'none' }}>
-            <button 
-              className={`${styles['locale-btn']} ${locale === 'en' ? styles['active'] : ''}`}
+          <div
+            className={styles["locale-toggle-container"]}
+            style={{ display: "none" }}
+          >
+            <button
+              className={`${styles["locale-btn"]} ${locale === "en" ? styles["active"] : ""}`}
               onClick={toggleLocale}
             >
-              {locale === 'en' ? 'ES' : 'EN'}
+              {locale === "en" ? "ES" : "EN"}
             </button>
           </div>
 
@@ -226,26 +255,43 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
             // LOGGED IN STATE
             <>
               <div
-                className={styles['nav-link']}
+                className={styles["nav-link"]}
                 onMouseEnter={() => setIsAccountOpen(true)}
                 onMouseLeave={() => setIsAccountOpen(false)}
                 tabIndex={0}
                 onFocus={() => setIsAccountOpen(true)}
                 onBlur={() => setIsAccountOpen(false)}
               >
-                <div className={styles['nav-link__trigger']}>
+                <div className={styles["nav-link__trigger"]}>
                   {t.myAccount || "My Account"}{" "}
-                  <span className={`material-symbols-outlined ${styles['nav-link__icon']}`}>
+                  <span
+                    className={`material-symbols-outlined ${styles["nav-link__icon"]}`}
+                  >
                     expand_more
                   </span>
                 </div>
                 {isAccountOpen && (
-                  <div className={styles['nav-dropdown']}>
-                    <Link href={getLocalizedUrl("/dashboard", locale)}>{t.profile || "Profile"}</Link>
-                    <Link href={getLocalizedUrl("/dashboard/favorites", locale)}>{t.favorites || "Favorites"}</Link>
-                    <Link href={getLocalizedUrl("/dashboard/reviews", locale)}>{t.myReviews || "My Reviews"}</Link>
+                  <div className={styles["nav-dropdown"]}>
+                    <Link href={getLocalizedUrl("/dashboard", locale)}>
+                      {t.profile || "Profile"}
+                    </Link>
+                    <Link
+                      href={getLocalizedUrl("/dashboard/favorites", locale)}
+                    >
+                      {t.favorites || "Favorites"}
+                    </Link>
+                    <Link href={getLocalizedUrl("/dashboard/reviews", locale)}>
+                      {t.myReviews || "My Reviews"}
+                    </Link>
+                    <Link href={getLocalizedUrl("/dashboard/events", locale)}>
+                      {t.myEvents || "My Events"}
+                    </Link>
                     {isBusinessOrAdmin && (
-                      <Link href={getLocalizedUrl("/dashboard/listings", locale)}>{t.myListings || "My Listings"}</Link>
+                      <Link
+                        href={getLocalizedUrl("/dashboard/listings", locale)}
+                      >
+                        {t.myListings || "My Listings"}
+                      </Link>
                     )}
                     <button onClick={() => setIsLogoutModalOpen(true)}>
                       {t.signOut || "Sign Out"}
@@ -253,7 +299,7 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
                   </div>
                 )}
               </div>
-              <div className={styles['business-signup']}>
+              <div className={styles["business-signup"]}>
                 <Link href={submitAction.href}>{submitAction.label}</Link>
               </div>
             </>
@@ -262,14 +308,16 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
             <>
               <button
                 onClick={() => setIsLoginModalOpen(true)}
-                className={`${styles['nav-link']} ${styles['nav-login-btn']}`}
+                className={`${styles["nav-link"]} ${styles["nav-login-btn"]}`}
               >
                 {t.login || "Log in"}
               </button>
-              <div className={styles['sign-up-button']}>
-                <Link href={getLocalizedUrl("/register", locale)}>{t.joinCommunity || "Join Community"}</Link>
+              <div className={styles["sign-up-button"]}>
+                <Link href={getLocalizedUrl("/register", locale)}>
+                  {t.joinCommunity || "Join Community"}
+                </Link>
               </div>
-              <div className={styles['business-signup']}>
+              <div className={styles["business-signup"]}>
                 <Link href={submitAction.href}>{submitAction.label}</Link>
               </div>
             </>
@@ -278,9 +326,9 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
       </nav>
 
       {/* MOBILE FLYOUT MENU */}
-      <div className={styles['mobile-flyout']}>
+      <div className={styles["mobile-flyout"]}>
         <div
-          className={`${styles['flyout-overlay']} ${isMobileOpen ? styles['open'] : ""}`}
+          className={`${styles["flyout-overlay"]} ${isMobileOpen ? styles["open"] : ""}`}
           onClick={closeMobileMenu}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
@@ -293,74 +341,87 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
         />
 
         <aside
-          className={`${styles['flyout-drawer']} ${isMobileOpen ? styles['open'] : ""}`}
+          className={`${styles["flyout-drawer"]} ${isMobileOpen ? styles["open"] : ""}`}
           data-level={mobileLevel}
         >
-          <div className={styles['flyout-header']}>
-            <Link href={getLocalizedUrl("/", locale)} className={styles['flyout-brand']} onClick={closeMobileMenu}>
+          <div className={styles["flyout-header"]}>
+            <Link
+              href={getLocalizedUrl("/", locale)}
+              className={styles["flyout-brand"]}
+              onClick={closeMobileMenu}
+            >
               Rockford Directory
             </Link>
-            <button className={styles['flyout-close']} onClick={closeMobileMenu}>
+            <button
+              className={styles["flyout-close"]}
+              onClick={closeMobileMenu}
+            >
               <span className="material-symbols-outlined">close</span>
             </button>
           </div>
 
-          <div className={styles['flyout-panels']}>
+          <div className={styles["flyout-panels"]}>
             {/* LEVEL 1: Main Menu */}
-            <section className={`${styles['flyout-panel']} ${styles['panel-1']}`}>
-              <ul className={styles['flyout-list']}>
-                <li className={styles['flyout-item']}>
+            <section
+              className={`${styles["flyout-panel"]} ${styles["panel-1"]}`}
+            >
+              <ul className={styles["flyout-list"]}>
+                <li className={styles["flyout-item"]}>
                   <button
-                    className={`${styles['flyout-link']} ${styles['flyout-link--search']}`}
+                    className={`${styles["flyout-link"]} ${styles["flyout-link--search"]}`}
                     onClick={() => {
                       closeMobileMenu();
                       setIsSearchModalOpen(true);
                     }}
                   >
                     <span>
-                      <span className={`material-symbols-outlined ${styles['flyout-icon--search']}`}>
+                      <span
+                        className={`material-symbols-outlined ${styles["flyout-icon--search"]}`}
+                      >
                         search
                       </span>
                       {t.search || "Search"}
                     </span>
                   </button>
                 </li>
-                <li className={styles['flyout-item']}>
+                <li className={styles["flyout-item"]}>
                   <button
-                    className={styles['flyout-action']}
+                    className={styles["flyout-action"]}
                     onClick={() => {
                       setMobileLevel(2);
                       setActiveSubMenu("listings");
                     }}
                   >
                     {t.allListings || "All Listings"}{" "}
-                    <span className={`material-symbols-outlined ${styles['flyout-icon']}`}>
+                    <span
+                      className={`material-symbols-outlined ${styles["flyout-icon"]}`}
+                    >
                       chevron_right
                     </span>
                   </button>
                 </li>
-                <li className={styles['flyout-item']}>
+                <li className={styles["flyout-item"]}>
                   <Link
                     href={getLocalizedUrl("/blog", locale)}
-                    className={styles['flyout-link']}
+                    className={styles["flyout-link"]}
                     onClick={closeMobileMenu}
                   >
                     {t.news || "News & Reviews"}
                   </Link>
                 </li>
-                <li className={styles['flyout-item']}>
+                <li className={styles["flyout-item"]}>
                   <Link
                     href={getLocalizedUrl("/events", locale)}
-                    className={styles['flyout-link']}
+                    className={styles["flyout-link"]}
                     onClick={closeMobileMenu}
                   >
                     {t.events || "Events"}
                   </Link>
                 </li>
-                <li className={styles['flyout-item']}>
+                <li className={styles["flyout-item"]}>
                   <Link
                     href={getLocalizedUrl("/about", locale)}
-                    className={styles['flyout-link']}
+                    className={styles["flyout-link"]}
                     onClick={closeMobileMenu}
                   >
                     {t.about || "About"}
@@ -368,24 +429,26 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
                 </li>
 
                 {user ? (
-                  <li className={styles['flyout-item']}>
+                  <li className={styles["flyout-item"]}>
                     <button
-                      className={styles['flyout-action']}
+                      className={styles["flyout-action"]}
                       onClick={() => {
                         setMobileLevel(2);
                         setActiveSubMenu("account");
                       }}
                     >
                       {t.myAccount || "My Account"}{" "}
-                      <span className={`material-symbols-outlined ${styles['flyout-icon']}`}>
+                      <span
+                        className={`material-symbols-outlined ${styles["flyout-icon"]}`}
+                      >
                         chevron_right
                       </span>
                     </button>
                   </li>
                 ) : (
-                  <li className={styles['flyout-item']}>
+                  <li className={styles["flyout-item"]}>
                     <button
-                      className={styles['flyout-link']}
+                      className={styles["flyout-link"]}
                       onClick={() => {
                         closeMobileMenu();
                         setIsLoginModalOpen(true);
@@ -396,26 +459,32 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
                   </li>
                 )}
 
-                <li className={styles['flyout-item']}>
+                <li className={styles["flyout-item"]}>
                   <button
-                    className={styles['flyout-link']}
+                    className={styles["flyout-link"]}
                     onClick={toggleLocale}
                   >
-                    Language: {locale.toUpperCase() === 'EN' ? 'Spanish (ES)' : 'English (EN)'}
+                    Language:{" "}
+                    {locale.toUpperCase() === "EN"
+                      ? "Spanish (ES)"
+                      : "English (EN)"}
                   </button>
                 </li>
               </ul>
 
               {/* Bottom CTAs */}
-              <div className={styles['flyout-cta-wrap']}>
+              <div className={styles["flyout-cta-wrap"]}>
                 {!user && (
-                  <div className={styles['sign-up-button']}>
-                    <Link href={getLocalizedUrl("/register", locale)} onClick={closeMobileMenu}>
+                  <div className={styles["sign-up-button"]}>
+                    <Link
+                      href={getLocalizedUrl("/register", locale)}
+                      onClick={closeMobileMenu}
+                    >
                       {t.joinCommunity || "Join Community"}
                     </Link>
                   </div>
                 )}
-                <div className={styles['business-signup']}>
+                <div className={styles["business-signup"]}>
                   <Link href={submitAction.href} onClick={closeMobileMenu}>
                     {submitAction.label}
                   </Link>
@@ -424,9 +493,16 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
             </section>
 
             {/* LEVEL 2: Sub Menus */}
-            <section className={`${styles['flyout-panel']} ${styles['panel-2']}`}>
-              <button className={styles['flyout-back']} onClick={() => setMobileLevel(1)}>
-                <span className={`material-symbols-outlined ${styles['flyout-back-icon']}`}>
+            <section
+              className={`${styles["flyout-panel"]} ${styles["panel-2"]}`}
+            >
+              <button
+                className={styles["flyout-back"]}
+                onClick={() => setMobileLevel(1)}
+              >
+                <span
+                  className={`material-symbols-outlined ${styles["flyout-back-icon"]}`}
+                >
                   chevron_left
                 </span>{" "}
                 Back
@@ -434,30 +510,32 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
 
               {activeSubMenu === "listings" && (
                 <>
-                  <h3 className={styles['flyout-panel-title']}>Categories</h3>
-                  <ul className={styles['flyout-list']}>
-                    <li className={styles['flyout-item']}>
+                  <h3 className={styles["flyout-panel-title"]}>Categories</h3>
+                  <ul className={styles["flyout-list"]}>
+                    <li className={styles["flyout-item"]}>
                       <Link
                         href={getLocalizedUrl("/directory", locale)}
-                        className={styles['flyout-link']}
+                        className={styles["flyout-link"]}
                         onClick={closeMobileMenu}
                       >
                         {t.viewAllDirectory || "View All Directory"}
                       </Link>
                     </li>
                     {categories.map((cat) => (
-                      <li key={cat.slug} className={styles['flyout-item']}>
+                      <li key={cat.slug} className={styles["flyout-item"]}>
                         <button
-                          className={styles['flyout-action']}
+                          className={styles["flyout-action"]}
                           onClick={() => {
                             setMobileLevel(3);
                             setActiveCategory(cat);
                           }}
                         >
-                          <span className={styles['flyout-category-btn']}>
+                          <span className={styles["flyout-category-btn"]}>
                             {cat.icon} {cat.title}
                           </span>
-                          <span className={`material-symbols-outlined ${styles['flyout-icon']}`}>
+                          <span
+                            className={`material-symbols-outlined ${styles["flyout-icon"]}`}
+                          >
                             chevron_right
                           </span>
                         </button>
@@ -469,49 +547,58 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
 
               {activeSubMenu === "account" && (
                 <>
-                  <h3 className={styles['flyout-panel-title']}>Dashboard</h3>
-                  <ul className={styles['flyout-list']}>
-                    <li className={styles['flyout-item']}>
+                  <h3 className={styles["flyout-panel-title"]}>Dashboard</h3>
+                  <ul className={styles["flyout-list"]}>
+                    <li className={styles["flyout-item"]}>
                       <Link
                         href={getLocalizedUrl("/dashboard", locale)}
-                        className={styles['flyout-link']}
+                        className={styles["flyout-link"]}
                         onClick={closeMobileMenu}
                       >
                         {t.profile || "Profile Settings"}
                       </Link>
                     </li>
-                    <li className={styles['flyout-item']}>
+                    <li className={styles["flyout-item"]}>
                       <Link
                         href={getLocalizedUrl("/dashboard/favorites", locale)}
-                        className={styles['flyout-link']}
+                        className={styles["flyout-link"]}
                         onClick={closeMobileMenu}
                       >
                         {t.favorites || "Favorite Listings"}
                       </Link>
                     </li>
-                    <li className={styles['flyout-item']}>
+                    <li className={styles["flyout-item"]}>
                       <Link
                         href={getLocalizedUrl("/dashboard/reviews", locale)}
-                        className={styles['flyout-link']}
+                        className={styles["flyout-link"]}
                         onClick={closeMobileMenu}
                       >
                         {t.myReviews || "My Reviews"}
                       </Link>
                     </li>
+                    <li className={styles["flyout-item"]}>
+                      <Link
+                        href={getLocalizedUrl("/dashboard/events", locale)}
+                        className={styles["flyout-link"]}
+                        onClick={closeMobileMenu}
+                      >
+                        {t.myEvents || "My Events"}
+                      </Link>
+                    </li>
                     {isBusinessOrAdmin && (
-                      <li className={styles['flyout-item']}>
+                      <li className={styles["flyout-item"]}>
                         <Link
                           href={getLocalizedUrl("/dashboard/listings", locale)}
-                          className={styles['flyout-link']}
+                          className={styles["flyout-link"]}
                           onClick={closeMobileMenu}
                         >
                           {t.myListings || "My Listings"}
                         </Link>
                       </li>
                     )}
-                    <li className={styles['flyout-item']}>
+                    <li className={styles["flyout-item"]}>
                       <button
-                        className={styles['flyout-link']}
+                        className={styles["flyout-link"]}
                         onClick={() => {
                           closeMobileMenu();
                           setIsLogoutModalOpen(true);
@@ -526,9 +613,16 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
             </section>
 
             {/* LEVEL 3: Categories */}
-            <section className={`${styles['flyout-panel']} ${styles['panel-3']}`}>
-              <button className={styles['flyout-back']} onClick={() => setMobileLevel(2)}>
-                <span className={`material-symbols-outlined ${styles['flyout-back-icon']}`}>
+            <section
+              className={`${styles["flyout-panel"]} ${styles["panel-3"]}`}
+            >
+              <button
+                className={styles["flyout-back"]}
+                onClick={() => setMobileLevel(2)}
+              >
+                <span
+                  className={`material-symbols-outlined ${styles["flyout-back-icon"]}`}
+                >
                   chevron_left
                 </span>{" "}
                 Back
@@ -536,29 +630,40 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
 
               {activeCategory && (
                 <>
-                  <h3 className={styles['flyout-panel-title']}>{activeCategory.title}</h3>
-                  <ul className={styles['flyout-list']}>
+                  <h3 className={styles["flyout-panel-title"]}>
+                    {activeCategory.title}
+                  </h3>
+                  <ul className={styles["flyout-list"]}>
                     {/* NEW: View All Category Link */}
-                    <li className={styles['flyout-item']}>
+                    <li className={styles["flyout-item"]}>
                       <Link
-                        href={getLocalizedUrl(`/directory/${activeCategory.slug}`, locale)}
-                        className={styles['flyout-link']}
+                        href={getLocalizedUrl(
+                          `/directory/${activeCategory.slug}`,
+                          locale,
+                        )}
+                        className={styles["flyout-link"]}
                         onClick={closeMobileMenu}
                       >
-                        <span className={styles['flyout-category-btn']} style={{ fontWeight: 700, color: '#e57007' }}>
+                        <span
+                          className={styles["flyout-category-btn"]}
+                          style={{ fontWeight: 700, color: "#e57007" }}
+                        >
                           View All {activeCategory.title}
                         </span>
                       </Link>
                     </li>
-                    
+
                     {activeCategory.subs.map((sub) => (
-                      <li key={sub.slug} className={styles['flyout-item']}>
+                      <li key={sub.slug} className={styles["flyout-item"]}>
                         <Link
-                          href={getLocalizedUrl(`/directory/${activeCategory.slug}/${sub.slug}`, locale)}
-                          className={styles['flyout-link']}
+                          href={getLocalizedUrl(
+                            `/directory/${activeCategory.slug}/${sub.slug}`,
+                            locale,
+                          )}
+                          className={styles["flyout-link"]}
                           onClick={closeMobileMenu}
                         >
-                          <span className={styles['flyout-category-btn']}>
+                          <span className={styles["flyout-category-btn"]}>
                             {sub.icon} {sub.name}
                           </span>
                         </Link>
@@ -573,9 +678,9 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
       </div>
 
       {/* Search Modal */}
-      <SearchModal 
-        isOpen={isSearchModalOpen} 
-        onClose={() => setIsSearchModalOpen(false)} 
+      <SearchModal
+        isOpen={isSearchModalOpen}
+        onClose={() => setIsSearchModalOpen(false)}
         dict={dict}
         locale={locale}
       />
@@ -592,21 +697,21 @@ export default function Navbar({ currentUser: propCurrentUser, dict, locale }) {
 
       {/* Logout Confirmation Modal */}
       {isLogoutModalOpen && (
-        <div className={styles['logout-modal']}>
-          <div className={styles['logout-modal__dialog']}>
-            <p className={styles['logout-modal__text']}>
+        <div className={styles["logout-modal"]}>
+          <div className={styles["logout-modal__dialog"]}>
+            <p className={styles["logout-modal__text"]}>
               Are you sure you want to log out?
             </p>
-            <div className={styles['logout-modal__actions']}>
+            <div className={styles["logout-modal__actions"]}>
               <a
                 href={getLocalizedUrl("/logout", locale)}
-                className={`${styles['logout-modal__button']} ${styles['logout-modal__button--confirm']}`}
+                className={`${styles["logout-modal__button"]} ${styles["logout-modal__button--confirm"]}`}
               >
                 Yes, Log Out
               </a>
               <button
                 onClick={() => setIsLogoutModalOpen(false)}
-                className={`${styles['logout-modal__button']} ${styles['logout-modal__button--cancel']}`}
+                className={`${styles["logout-modal__button"]} ${styles["logout-modal__button--cancel"]}`}
               >
                 Cancel
               </button>
